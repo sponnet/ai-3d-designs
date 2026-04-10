@@ -1,0 +1,22 @@
+{
+  "name": "foamcutter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "staircase:stl": "cp designs/staircase/staircase.scad designs/staircase/staircase.jscad && jscad designs/staircase/staircase.jscad -o designs/staircase/staircase.stl",
+    "staircase:png": "node designs/staircase/render-png.js",
+    "foamcutter:stl": "jscad designs/foamcutter/foamcutter.jscad -o designs/foamcutter/foamcutter.stl",
+    "foamcutter:png": "node designs/foamcutter/render-png.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@jscad/cli": "^2.3.8",
+    "@jscad/modeling": "^2.13.0",
+    "@scalenc/stl-to-png": "^1.2.0"
+  }
+}

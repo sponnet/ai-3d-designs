@@ -1,0 +1,19 @@
+node_modules/
+.DS_Store
+openjscad-local/
+OpenJSCAD.org-master.zip
+
+# lockfiles
+package-lock.json
+npm-shrinkwrap.json
+yarn.lock
+pnpm-lock.yaml
+
+# JSCAD staircase build artifacts (regenerate with npm run staircase:stl / staircase:png)
+designs/staircase/staircase.jscad
+designs/staircase/staircase.stl
+designs/staircase/staircase.png
+
+# foamcutter build artifacts
+designs/foamcutter/foamcutter.stl
+designs/foamcutter/foamcutter.png
