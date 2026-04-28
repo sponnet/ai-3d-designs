@@ -18,3 +18,7 @@ Parametric U-turn staircase concept with landing, split into two renderable part
 
 - STL: [`staircase-with-landing.stl`](./staircase-with-landing.stl)
 - PNG preview: [`staircase-with-landing.png`](./staircase-with-landing.png)
+
+## Preview
+
+![Staircase with landing preview](./staircase-with-landing.png)

@@ -19,3 +19,7 @@ Replacement hammer for a Brompton bike bell.
 
 - STL: [`bell-hammer.stl`](./bell-hammer.stl)
 - PNG preview: [`bell-hammer.png`](./bell-hammer.png)
+
+## Preview
+
+![Bell hammer preview](./bell-hammer.png)

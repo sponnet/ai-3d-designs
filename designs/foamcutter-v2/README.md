@@ -25,3 +25,8 @@ Second iteration of the foam cutter fixture, including an X-Acto No. 11 profile 
 - PNG previews:
   - [`foamcutter-v2.png`](./foamcutter-v2.png)
   - [`xacto-no11-outline.png`](./xacto-no11-outline.png)
+
+## Previews
+
+![Foamcutter v2 preview](./foamcutter-v2.png)
+![X-Acto No. 11 outline preview](./xacto-no11-outline.png)

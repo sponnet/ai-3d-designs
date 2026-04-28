@@ -25,6 +25,7 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
 - Bell hammer STL/PNG:
   - [`designs/bell-hammer/bell-hammer.stl`](./designs/bell-hammer/bell-hammer.stl)
   - [`designs/bell-hammer/bell-hammer.png`](./designs/bell-hammer/bell-hammer.png)
+  - ![Bell hammer preview](./designs/bell-hammer/bell-hammer.png)
 - Boxmaker STLs:
   - [`designs/boxmaker/figure1.stl`](./designs/boxmaker/figure1.stl)
   - [`designs/boxmaker/figure2.stl`](./designs/boxmaker/figure2.stl)
@@ -36,8 +37,11 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
 - Foamcutter v2 STL/PNG:
   - [`designs/foamcutter-v2/foamcutter-v2.stl`](./designs/foamcutter-v2/foamcutter-v2.stl)
   - [`designs/foamcutter-v2/foamcutter-v2.png`](./designs/foamcutter-v2/foamcutter-v2.png)
+  - ![Foamcutter v2 preview](./designs/foamcutter-v2/foamcutter-v2.png)
   - [`designs/foamcutter-v2/xacto-no11-outline.stl`](./designs/foamcutter-v2/xacto-no11-outline.stl)
   - [`designs/foamcutter-v2/xacto-no11-outline.png`](./designs/foamcutter-v2/xacto-no11-outline.png)
+  - ![X-Acto No. 11 outline preview](./designs/foamcutter-v2/xacto-no11-outline.png)
 - Staircase with landing STL/PNG:
   - [`designs/starcase-with-landing/staircase-with-landing.stl`](./designs/starcase-with-landing/staircase-with-landing.stl)
   - [`designs/starcase-with-landing/staircase-with-landing.png`](./designs/starcase-with-landing/staircase-with-landing.png)
+  - ![Staircase with landing preview](./designs/starcase-with-landing/staircase-with-landing.png)
