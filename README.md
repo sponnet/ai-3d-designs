@@ -7,14 +7,10 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
 
 ## Design Summary
 
-- **Bell hammer**: replacement hammer for a Brompton bike bell with offset pocket, side bore, and stepped top.  
-  - Directory: [`designs/bell-hammer/`](./designs/bell-hammer/)
-- **Boxmaker**: set of open-top box and cylinder variants generated from measured figure dimensions.  
-  - Directory: [`designs/boxmaker/`](./designs/boxmaker/)
-- **Foamcutter v2**: updated foam cutter support assembly plus X-Acto No. 11 outline tooling model.  
-  - Directory: [`designs/foamcutter-v2/`](./designs/foamcutter-v2/)
-- **Staircase with landing**: parametric U-turn staircase model with landing and glue tabs.  
-  - Directory: [`designs/starcase-with-landing/`](./designs/starcase-with-landing/)
+- [**Bell hammer**](./designs/bell-hammer/): replacement hammer for a Brompton bike bell with offset pocket, side bore, and stepped top. ([OpenJSCAD](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/bell-hammer/bell-hammer.jscad#))
+- [**Boxmaker**](./designs/boxmaker/): set of open-top box and cylinder variants generated from measured figure dimensions. ([OpenJSCAD](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/boxmaker/boxmaker.jscad#))
+- [**Foamcutter v2**](./designs/foamcutter-v2/): updated foam cutter support assembly plus X-Acto No. 11 outline tooling model. ([OpenJSCAD fixture](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/foamcutter-v2/foamcutter-v2.jscad#), [OpenJSCAD outline](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/foamcutter-v2/xacto-no11-outline.jscad#))
+- [**Staircase with landing**](./designs/starcase-with-landing/): parametric U-turn staircase model with landing and glue tabs. ([OpenJSCAD](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/starcase-with-landing/staircase-with-landing.jscad#))
 
 ## Outputs At A Glance
 
