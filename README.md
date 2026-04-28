@@ -1,4 +1,4 @@
-# Foamcutter Designs
+# AI generated OpenJSCAD designs
 
 ## Overview
 
