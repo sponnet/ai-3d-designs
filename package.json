@@ -6,9 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "staircase:stl": "cp designs/staircase/staircase.scad designs/staircase/staircase.jscad && jscad designs/staircase/staircase.jscad -o designs/staircase/staircase.stl",
-    "staircase:png": "node designs/staircase/render-png.js",
+    "staircase:png": "${BLENDER_BIN:-/Applications/Blender.app/Contents/MacOS/Blender} --background --python designs/render-png-blender.py -- --stl designs/staircase/staircase.stl --out designs/staircase/staircase.png",
     "foamcutter:stl": "jscad designs/foamcutter/foamcutter.jscad -o designs/foamcutter/foamcutter.stl",
-    "foamcutter:png": "node designs/foamcutter/render-png.js"
+    "foamcutter:png": "${BLENDER_BIN:-/Applications/Blender.app/Contents/MacOS/Blender} --background --python designs/render-png-blender.py -- --stl designs/foamcutter/foamcutter.stl --out designs/foamcutter/foamcutter.png",
+    "renders:png": "${BLENDER_BIN:-/Applications/Blender.app/Contents/MacOS/Blender} --background --python designs/render-png-blender.py -- --all --designs-root designs"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +17,6 @@
   "type": "commonjs",
   "devDependencies": {
     "@jscad/cli": "^2.3.8",
-    "@jscad/modeling": "^2.13.0",
-    "@scalenc/stl-to-png": "^1.2.0"
+    "@jscad/modeling": "^2.13.0"
   }
 }

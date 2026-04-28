@@ -8,17 +8,13 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
 ## Design Summary
 
 - **Bell hammer**: replacement hammer for a Brompton bike bell with offset pocket, side bore, and stepped top.  
-  - Folder: [`designs/bell-hammer/`](./designs/bell-hammer/)
-  - README: [`designs/bell-hammer/README.md`](./designs/bell-hammer/README.md)
+  - Directory: [`designs/bell-hammer/`](./designs/bell-hammer/)
 - **Boxmaker**: set of open-top box and cylinder variants generated from measured figure dimensions.  
-  - Folder: [`designs/boxmaker/`](./designs/boxmaker/)
-  - README: [`designs/boxmaker/README.md`](./designs/boxmaker/README.md)
+  - Directory: [`designs/boxmaker/`](./designs/boxmaker/)
 - **Foamcutter v2**: updated foam cutter support assembly plus X-Acto No. 11 outline tooling model.  
-  - Folder: [`designs/foamcutter-v2/`](./designs/foamcutter-v2/)
-  - README: [`designs/foamcutter-v2/README.md`](./designs/foamcutter-v2/README.md)
+  - Directory: [`designs/foamcutter-v2/`](./designs/foamcutter-v2/)
 - **Staircase with landing**: parametric U-turn staircase model with landing and glue tabs.  
-  - Folder: [`designs/starcase-with-landing/`](./designs/starcase-with-landing/)
-  - README: [`designs/starcase-with-landing/README.md`](./designs/starcase-with-landing/README.md)
+  - Directory: [`designs/starcase-with-landing/`](./designs/starcase-with-landing/)
 
 ## Outputs At A Glance
 
