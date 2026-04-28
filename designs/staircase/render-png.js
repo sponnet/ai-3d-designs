@@ -7,6 +7,7 @@ const fs = require('fs')
 const path = require('path')
 const { execSync } = require('child_process')
 const { stl2png } = require('@scalenc/stl-to-png')
+const { PRETTY_RENDER_OPTIONS } = require('../render-style')
 
 const designDir = __dirname
 const repoRoot = path.join(designDir, '..', '..')
@@ -24,11 +25,6 @@ fs.copyFileSync(jscadSrc, jscadRun)
 execSync(`npx jscad "${jscadRun}" -o "${stlPath}"`, { cwd: repoRoot, stdio: 'inherit' })
 
 const stlBuf = fs.readFileSync(stlPath)
-const pngBuf = stl2png(stlBuf, {
-  width: 1024,
-  height: 768,
-  backgroundColor: 0xffffff,
-  backgroundAlpha: 1
-})
+const pngBuf = stl2png(stlBuf, PRETTY_RENDER_OPTIONS)
 fs.writeFileSync(pngPath, pngBuf)
 console.log('Wrote', pngPath)
