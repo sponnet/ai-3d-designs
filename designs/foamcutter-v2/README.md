@@ -15,7 +15,9 @@ Second iteration of the foam cutter fixture, including an X-Acto No. 11 profile 
 ## Source
 
 - Fixture JSCAD: [`foamcutter-v2.jscad`](./foamcutter-v2.jscad)
+- OpenJSCAD fixture: [Open `foamcutter-v2.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/foamcutter-v2/foamcutter-v2.jscad#)
 - Blade outline JSCAD: [`xacto-no11-outline.jscad`](./xacto-no11-outline.jscad)
+- OpenJSCAD outline: [Open `xacto-no11-outline.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/foamcutter-v2/xacto-no11-outline.jscad#)
 
 ## Outputs
 

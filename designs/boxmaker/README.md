@@ -14,6 +14,7 @@ Collection of open-top box and cylinder variants generated from figure dimension
 ## Source
 
 - JSCAD: [`boxmaker.jscad`](./boxmaker.jscad)
+- OpenJSCAD: [Open `boxmaker.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/boxmaker/boxmaker.jscad#)
 
 ## Outputs
 

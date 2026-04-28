@@ -14,6 +14,7 @@ Replacement hammer for a Brompton bike bell.
 ## Source
 
 - JSCAD: [`bell-hammer.jscad`](./bell-hammer.jscad)
+- OpenJSCAD: [Open `bell-hammer.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/bell-hammer/bell-hammer.jscad#)
 
 ## Outputs
 

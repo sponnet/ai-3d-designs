@@ -13,6 +13,7 @@ Parametric U-turn staircase concept with landing, split into two renderable part
 ## Source
 
 - JSCAD: [`staircase-with-landing.jscad`](./staircase-with-landing.jscad)
+- OpenJSCAD: [Open `staircase-with-landing.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/starcase-with-landing/staircase-with-landing.jscad#)
 
 ## Outputs
 
