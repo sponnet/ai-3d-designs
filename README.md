@@ -11,6 +11,7 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
 - [**Boxmaker**](./designs/boxmaker/): set of open-top box and cylinder variants generated from measured figure dimensions.
 - [**Foamcutter v2**](./designs/foamcutter-v2/): updated foam cutter support assembly plus X-Acto No. 11 outline tooling model.
 - [**Staircase with landing**](./designs/starcase-with-landing/): parametric U-turn staircase model with landing and glue tabs.
+- [**Mounting hook**](./designs/mounting-hook/): 48 mm hook-profile part from sketch, extruded 20 mm.
 
 ## Outputs At A Glance
 
@@ -51,3 +52,7 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
   - [`designs/starcase-with-landing/staircase-with-landing.stl`](./designs/starcase-with-landing/staircase-with-landing.stl)
   - [`designs/starcase-with-landing/staircase-with-landing.png`](./designs/starcase-with-landing/staircase-with-landing.png)
   - ![Staircase with landing preview](./designs/starcase-with-landing/staircase-with-landing.png)
+- Mounting hook STL/PNG:
+  - [`designs/mounting-hook/mounting-hook.stl`](./designs/mounting-hook/mounting-hook.stl)
+  - [`designs/mounting-hook/mounting-hook.png`](./designs/mounting-hook/mounting-hook.png)
+  - ![Mounting hook preview](./designs/mounting-hook/mounting-hook.png)

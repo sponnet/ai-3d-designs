@@ -11,5 +11,7 @@ Each subdirectory is a self-contained JSCAD design (source + optional `render-pn
 | Boxmaker (open-top boxes/cylinders) | [`boxmaker/`](boxmaker/) |
 | Foamcutter v2 | [`foamcutter-v2/`](foamcutter-v2/) |
 | Staircase with landing | [`starcase-with-landing/`](starcase-with-landing/) |
+| Mounting hook | [`mounting-hook/`](mounting-hook/) |
+| Focus rotaty knob | [`focus-rotaty-knob/`](focus-rotaty-knob/) |
 
 Shared tooling and conventions: [`../OPENJSCAD_SKILL.md`](../OPENJSCAD_SKILL.md).
