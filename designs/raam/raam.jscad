@@ -1,5 +1,5 @@
 const { polygon, rectangle } = require('@jscad/modeling').primitives
-const { union } = require('@jscad/modeling').booleans
+const { subtract, union } = require('@jscad/modeling').booleans
 const { extrudeLinear } = require('@jscad/modeling').extrusions
 const { translate, rotate, scale } = require('@jscad/modeling').transforms
 const { colorize } = require('@jscad/modeling').colors
@@ -18,63 +18,53 @@ const getParameterDefinitions = () => [
   { name: 'schaal',        type: 'float',    initial: 50,            caption: 'Schaal (1/x)'       },
 ]
 
-// Pentagon cross-section profile.
-// outerPos: position of the outer face along the width axis
-// innerPos: position of the inner (glass-side) face
-// d: depth (dikte)
-// The 45°-cut corner sits at the outer-back edge.
-const pentagonProfiel = (outerPos, innerPos, d) => polygon({ points: [
-  [outerPos,                       0    ],  // outer-front
-  [innerPos,                       0    ],  // inner-front
-  [innerPos,                       d    ],  // inner-back
-  [(outerPos + innerPos) / 2,      d    ],  // mid-back  (halfway → 45° cut)
-  [outerPos,                       d / 2],  // outer-mid-back
-]})
-
-// Bottom member: runs along X, outer face at y = -H/2.
-// rotate([π/2, 0, π/2]) maps (x,y,z) → (z, x, y):
-//   extrusion Z → new X (breedte), profile X → new Y (hoogte), profile Y → new Z (dikte)
-const bottomMember = (B, H, kb, d) => {
-  const prof = pentagonProfiel(-H/2, -H/2 + kb, d)
-  return translate([-B/2, 0, 0],
-    rotate([Math.PI/2, 0, Math.PI/2],
-      extrudeLinear({ height: B }, prof)))
-}
-
-// Top member: runs along X, outer face at y = +H/2.
-const topMember = (B, H, kb, d) => {
-  const prof = pentagonProfiel(H/2, H/2 - kb, d)
-  return translate([-B/2, 0, 0],
-    rotate([Math.PI/2, 0, Math.PI/2],
-      extrudeLinear({ height: B }, prof)))
-}
-
-// Left member: runs along Y, outer face at x = -B/2.
-// rotate([π/2, 0, 0]) maps (x,y,z) → (x, -z, y):
-//   extrusion Z → new Y (hoogte, after translate), profile X → new X, profile Y → new Z (dikte)
-const leftMember = (B, H, kb, d) => {
-  const prof = pentagonProfiel(-B/2, -B/2 + kb, d)
-  return translate([0, H/2, 0],
-    rotate([Math.PI/2, 0, 0],
-      extrudeLinear({ height: H }, prof)))
-}
-
-// Right member: runs along Y, outer face at x = +B/2.
-const rightMember = (B, H, kb, d) => {
-  const prof = pentagonProfiel(B/2, B/2 - kb, d)
-  return translate([0, H/2, 0],
-    rotate([Math.PI/2, 0, 0],
-      extrudeLinear({ height: H }, prof)))
+// Build a triangular prism for the 45°-cut at the inner-back edge of one member.
+// innerFace : coordinate of the inner face (glass side) along the member's width axis
+// midPoint  : halfway between inner and outer face (determines 45° angle)
+// d         : dikte (depth)
+// extrudeLen: length of the member (prism length)
+// rot/transl: positioning in 3D
+const cutPrism = (innerFace, midPoint, d, extrudeLen, rot, transl) => {
+  // Triangle: inner-mid-depth → inner-full-depth → mid-full-depth
+  const tri = polygon({ points: [
+    [innerFace, d / 2],
+    [innerFace, d    ],
+    [midPoint,  d    ],
+  ]})
+  return translate(transl, rotate(rot, extrudeLinear({ height: extrudeLen }, tri)))
 }
 
 const makeFrame = ({ breedte, hoogte, dikte, kaderBreedte }) => {
-  const B = breedte, H = hoogte, kb = kaderBreedte, d = dikte
-  return union([
-    bottomMember(B, H, kb, d),
-    topMember(B, H, kb, d),
-    leftMember(B, H, kb, d),
-    rightMember(B, H, kb, d),
-  ])
+  const B = breedte, H = hoogte, d = dikte, kb = kaderBreedte
+
+  // Solid rectangular frame ring at full depth
+  const frameBox = extrudeLinear({ height: d },
+    subtract(
+      rectangle({ size: [B, H] }),
+      rectangle({ size: [B - 2 * kb, H - 2 * kb] })
+    )
+  )
+
+  // rotate([π/2, 0, π/2]) maps (x,y,z)→(z,x,y): extrusion Z becomes X, profile→YZ
+  // rotate([π/2, 0, 0])   maps (x,y,z)→(x,-z,y): extrusion Z becomes Y, profile→XZ
+
+  // Bottom member: inner face at y = -H/2+kb, mid at y = -H/2+kb/2
+  const cutBottom = cutPrism(-H/2 + kb, -H/2 + kb/2, d, B,
+    [Math.PI/2, 0, Math.PI/2], [-B/2, 0, 0])
+
+  // Top member: inner face at y = H/2-kb, mid at y = H/2-kb/2
+  const cutTop = cutPrism(H/2 - kb, H/2 - kb/2, d, B,
+    [Math.PI/2, 0, Math.PI/2], [-B/2, 0, 0])
+
+  // Left member: inner face at x = -B/2+kb, mid at x = -B/2+kb/2
+  const cutLeft = cutPrism(-B/2 + kb, -B/2 + kb/2, d, H,
+    [Math.PI/2, 0, 0], [0, H/2, 0])
+
+  // Right member: inner face at x = B/2-kb, mid at x = B/2-kb/2
+  const cutRight = cutPrism(B/2 - kb, B/2 - kb/2, d, H,
+    [Math.PI/2, 0, 0], [0, H/2, 0])
+
+  return subtract(frameBox, union([cutBottom, cutTop, cutLeft, cutRight]))
 }
 
 const makeGlas = ({ breedte, hoogte, dikte, kaderBreedte }) => {
