@@ -1,20 +1,22 @@
-// Keukeneiland - holle balk, open bovenzijde
-// Afmetingen: 60mm x 24mm x 18mm, wanddikte 1mm
+const { subtract } = require('@jscad/modeling').booleans
+const { cuboid } = require('@jscad/modeling').primitives
+const { translate } = require('@jscad/modeling').transforms
 
-length = 60;
-width  = 24;
-height = 18;
-wall   = 1;
+const length = 60
+const width  = 24
+const height = 18
+const wall   = 1
 
-module keukeneiland() {
-    difference() {
-        // Buitenkant
-        cube([length, width, height]);
+function main() {
+  const outer = cuboid({ size: [length, width, height] })
 
-        // Binnenkant (open naar boven: begint op wall-hoogte, reikt tot boven)
-        translate([wall, wall, wall])
-            cube([length - 2*wall, width - 2*wall, height]);
-    }
+  // Inner void starts one wall-thickness above the bottom, punches through the open top
+  const inner = translate(
+    [0, 0, wall],
+    cuboid({ size: [length - 2 * wall, width - 2 * wall, height] })
+  )
+
+  return subtract(outer, inner)
 }
 
-keukeneiland();
+module.exports = { main }
