@@ -57,15 +57,15 @@ const makeFrame = ({ breedte, hoogte, dikte, kaderBreedte }) => {
       extrudeLinear({ height: B }, memberProfile(H/2 - kb, H/2, d))))
 
   // rotate([π/2,0,0]) maps (x,y,z)→(x,-z,y): extrusion Z→Y, profile X→X, profile Y→Z
-  // Left: outer x=-B/2, inner x=-B/2+kb, spans inner height only (inner > outer → reversed CCW)
-  const left = translate([0, H/2 - kb, 0],
+  // Left: outer x=-B/2, inner x=-B/2+kb, full height so corners connect cleanly
+  const left = translate([0, H/2, 0],
     rotate([Math.PI/2, 0, 0],
-      extrudeLinear({ height: H - 2 * kb }, memberProfile(-B/2 + kb, -B/2, d))))
+      extrudeLinear({ height: H }, memberProfile(-B/2 + kb, -B/2, d))))
 
-  // Right: outer x=+B/2, inner x=B/2-kb  (inner < outer → normal CCW)
-  const right = translate([0, H/2 - kb, 0],
+  // Right: outer x=+B/2, inner x=B/2-kb, full height
+  const right = translate([0, H/2, 0],
     rotate([Math.PI/2, 0, 0],
-      extrudeLinear({ height: H - 2 * kb }, memberProfile(B/2 - kb, B/2, d))))
+      extrudeLinear({ height: H }, memberProfile(B/2 - kb, B/2, d))))
 
   return union([bottom, top, left, right])
 }
