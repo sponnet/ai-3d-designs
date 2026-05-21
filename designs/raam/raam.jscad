@@ -1,7 +1,7 @@
-const { rectangle } = require('@jscad/modeling').primitives
+const { rectangle, polygon } = require('@jscad/modeling').primitives
 const { subtract } = require('@jscad/modeling').booleans
 const { extrudeLinear } = require('@jscad/modeling').extrusions
-const { translate } = require('@jscad/modeling').transforms
+const { translate, scale } = require('@jscad/modeling').transforms
 const { colorize } = require('@jscad/modeling').colors
 
 // Standaard afmetingen (mm)
@@ -16,7 +16,23 @@ const getParameterDefinitions = () => [
   { name: 'dikte',         type: 'float',    initial: DIKTE,         caption: 'Dikte (mm)'         },
   { name: 'kader_breedte', type: 'float',    initial: KADER_BREEDTE, caption: 'Kaderbreedte (mm)'  },
   { name: 'toon_glas',     type: 'checkbox', checked: true,          caption: 'Toon glas'          },
+  { name: 'schaal',        type: 'float',    initial: 50,            caption: 'Schaal (1/x)'       },
 ]
+
+// Buitenprofiel: rechthoek met 45°-afsnede linksbovenaan.
+// Bovenzijde = halve breedte (van rechts), linkerzijde = halve hoogte (van onder),
+// diagonaal verbindt die twee middelpunten.
+const buitenProfielVorm = (breedte, hoogte) => {
+  const W = breedte / 2
+  const H = hoogte  / 2
+  return polygon({ points: [
+    [-W, -H],   // linksonder
+    [ W, -H],   // rechtsonder
+    [ W,  H],   // rechtsboven
+    [ 0,  H],   // midden bovenkant (halve breedte)
+    [-W,  0],   // midden linkerkant (halve hoogte)
+  ]})
+}
 
 const makeFrame = ({ breedte, hoogte, dikte, kaderBreedte }) => {
   const glasBreedte = breedte - 2 * kaderBreedte
@@ -24,10 +40,10 @@ const makeFrame = ({ breedte, hoogte, dikte, kaderBreedte }) => {
 
   if (glasBreedte <= 0 || glasHoogte <= 0) {
     console.log('WAARSCHUWING: kaderbreedte te groot – glasopening is nul of negatief')
-    return extrudeLinear({ height: dikte }, rectangle({ size: [breedte, hoogte] }))
+    return extrudeLinear({ height: dikte }, buitenProfielVorm(breedte, hoogte))
   }
 
-  const buitenProfiel = rectangle({ size: [breedte, hoogte] })
+  const buitenProfiel = buitenProfielVorm(breedte, hoogte)
   const binnenProfiel = rectangle({ size: [glasBreedte, glasHoogte] })
   const kaderProfiel  = subtract(buitenProfiel, binnenProfiel)
 
@@ -51,18 +67,20 @@ const main = (params = {}) => {
   const dikte        = params.dikte         ?? DIKTE
   const kaderBreedte = params.kader_breedte ?? KADER_BREEDTE
   const toonGlas     = params.toon_glas !== undefined ? params.toon_glas : true
+  const schaalDeler  = params.schaal        ?? 50
+  const s            = 1 / schaalDeler
 
-  console.log(`Raam: ${breedte} x ${hoogte} mm | dikte: ${dikte} mm | kader: ${kaderBreedte} mm`)
+  console.log(`Raam: ${breedte} x ${hoogte} mm | dikte: ${dikte} mm | kader: ${kaderBreedte} mm | schaal: 1/${schaalDeler}`)
   console.log(`Glasopening: ${breedte - 2*kaderBreedte} x ${hoogte - 2*kaderBreedte} mm`)
 
   const frame = colorize([0.6, 0.4, 0.2, 1], makeFrame({ breedte, hoogte, dikte, kaderBreedte }))
 
-  if (!toonGlas) return frame
+  if (!toonGlas) return scale([s, s, s], frame)
 
   const glas = makeGlas({ breedte, hoogte, dikte, kaderBreedte })
-  if (!glas) return frame
+  if (!glas) return scale([s, s, s], frame)
 
-  return [frame, colorize([0.5, 0.8, 1.0, 0.5], glas)]
+  return scale([s, s, s], [frame, colorize([0.5, 0.8, 1.0, 0.5], glas)])
 }
 
 module.exports = { main, getParameterDefinitions }
