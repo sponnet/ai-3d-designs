@@ -1,14 +1,13 @@
-const { rectangle, polygon } = require('@jscad/modeling').primitives
-const { subtract } = require('@jscad/modeling').booleans
+const { polygon, rectangle } = require('@jscad/modeling').primitives
+const { union } = require('@jscad/modeling').booleans
 const { extrudeLinear } = require('@jscad/modeling').extrusions
-const { translate, scale } = require('@jscad/modeling').transforms
+const { translate, rotate, scale } = require('@jscad/modeling').transforms
 const { colorize } = require('@jscad/modeling').colors
 
-// Standaard afmetingen (mm)
-const BREEDTE       = 800   // totale buitenbreedte
-const HOOGTE        = 1200  // totale buitenhoogte
-const DIKTE         = 60    // diepte van het raamkader
-const KADER_BREEDTE = 50    // breedte van de kaderprofielen
+const BREEDTE       = 800
+const HOOGTE        = 1200
+const DIKTE         = 60
+const KADER_BREEDTE = 50
 
 const getParameterDefinitions = () => [
   { name: 'breedte',       type: 'float',    initial: BREEDTE,       caption: 'Breedte (mm)'       },
@@ -19,35 +18,63 @@ const getParameterDefinitions = () => [
   { name: 'schaal',        type: 'float',    initial: 50,            caption: 'Schaal (1/x)'       },
 ]
 
-// Buitenprofiel: rechthoek met 45°-afsnede linksbovenaan.
-// Bovenzijde = halve breedte (van rechts), linkerzijde = halve hoogte (van onder),
-// diagonaal verbindt die twee middelpunten.
-const buitenProfielVorm = (breedte, hoogte) => {
-  const W = breedte / 2
-  const H = hoogte  / 2
-  return polygon({ points: [
-    [-W, -H],   // linksonder
-    [ W, -H],   // rechtsonder
-    [ W,  H],   // rechtsboven
-    [ 0,  H],   // midden bovenkant (halve breedte)
-    [-W,  0],   // midden linkerkant (halve hoogte)
-  ]})
+// Pentagon cross-section profile.
+// outerPos: position of the outer face along the width axis
+// innerPos: position of the inner (glass-side) face
+// d: depth (dikte)
+// The 45°-cut corner sits at the outer-back edge.
+const pentagonProfiel = (outerPos, innerPos, d) => polygon({ points: [
+  [outerPos,                       0    ],  // outer-front
+  [innerPos,                       0    ],  // inner-front
+  [innerPos,                       d    ],  // inner-back
+  [(outerPos + innerPos) / 2,      d    ],  // mid-back  (halfway → 45° cut)
+  [outerPos,                       d / 2],  // outer-mid-back
+]})
+
+// Bottom member: runs along X, outer face at y = -H/2.
+// rotate([π/2, 0, π/2]) maps (x,y,z) → (z, x, y):
+//   extrusion Z → new X (breedte), profile X → new Y (hoogte), profile Y → new Z (dikte)
+const bottomMember = (B, H, kb, d) => {
+  const prof = pentagonProfiel(-H/2, -H/2 + kb, d)
+  return translate([-B/2, 0, 0],
+    rotate([Math.PI/2, 0, Math.PI/2],
+      extrudeLinear({ height: B }, prof)))
+}
+
+// Top member: runs along X, outer face at y = +H/2.
+const topMember = (B, H, kb, d) => {
+  const prof = pentagonProfiel(H/2, H/2 - kb, d)
+  return translate([-B/2, 0, 0],
+    rotate([Math.PI/2, 0, Math.PI/2],
+      extrudeLinear({ height: B }, prof)))
+}
+
+// Left member: runs along Y, outer face at x = -B/2.
+// rotate([π/2, 0, 0]) maps (x,y,z) → (x, -z, y):
+//   extrusion Z → new Y (hoogte, after translate), profile X → new X, profile Y → new Z (dikte)
+const leftMember = (B, H, kb, d) => {
+  const prof = pentagonProfiel(-B/2, -B/2 + kb, d)
+  return translate([0, H/2, 0],
+    rotate([Math.PI/2, 0, 0],
+      extrudeLinear({ height: H }, prof)))
+}
+
+// Right member: runs along Y, outer face at x = +B/2.
+const rightMember = (B, H, kb, d) => {
+  const prof = pentagonProfiel(B/2, B/2 - kb, d)
+  return translate([0, H/2, 0],
+    rotate([Math.PI/2, 0, 0],
+      extrudeLinear({ height: H }, prof)))
 }
 
 const makeFrame = ({ breedte, hoogte, dikte, kaderBreedte }) => {
-  const glasBreedte = breedte - 2 * kaderBreedte
-  const glasHoogte  = hoogte  - 2 * kaderBreedte
-
-  if (glasBreedte <= 0 || glasHoogte <= 0) {
-    console.log('WAARSCHUWING: kaderbreedte te groot – glasopening is nul of negatief')
-    return extrudeLinear({ height: dikte }, buitenProfielVorm(breedte, hoogte))
-  }
-
-  const buitenProfiel = buitenProfielVorm(breedte, hoogte)
-  const binnenProfiel = rectangle({ size: [glasBreedte, glasHoogte] })
-  const kaderProfiel  = subtract(buitenProfiel, binnenProfiel)
-
-  return extrudeLinear({ height: dikte }, kaderProfiel)
+  const B = breedte, H = hoogte, kb = kaderBreedte, d = dikte
+  return union([
+    bottomMember(B, H, kb, d),
+    topMember(B, H, kb, d),
+    leftMember(B, H, kb, d),
+    rightMember(B, H, kb, d),
+  ])
 }
 
 const makeGlas = ({ breedte, hoogte, dikte, kaderBreedte }) => {
