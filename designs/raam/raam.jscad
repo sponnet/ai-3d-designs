@@ -1,5 +1,5 @@
 const { polygon, rectangle } = require('@jscad/modeling').primitives
-const { subtract, union } = require('@jscad/modeling').booleans
+const { union } = require('@jscad/modeling').booleans
 const { extrudeLinear } = require('@jscad/modeling').extrusions
 const { translate, rotate, scale } = require('@jscad/modeling').transforms
 const { colorize } = require('@jscad/modeling').colors
@@ -18,62 +18,63 @@ const getParameterDefinitions = () => [
   { name: 'schaal',        type: 'float',    initial: 50,            caption: 'Schaal (1/x)'       },
 ]
 
-// Build a triangular prism for the 45°-cut at the inner-back edge of one member.
-// innerFace : coordinate of the inner face (glass side) along the member's width axis
-// midPoint  : halfway between inner and outer face (determines 45° angle)
-// d         : dikte (depth)
-// extrudeLen: length of the member (prism length)
-// rot/transl: positioning in 3D
-const cutPrism = (innerFace, midPoint, d, extrudeLen, rot, transl) => {
-  // Triangle: inner-mid-depth → inner-full-depth → mid-full-depth
-  const tri = polygon({ points: [
-    [innerFace, d / 2],
-    [innerFace, d    ],
-    [midPoint,  d    ],
+// Pentagon cross-section with 45° cut at the inner-back corner.
+// Winding order (CCW) depends on whether inner→outer is increasing or decreasing.
+const memberProfile = (innerPos, outerPos, d) => {
+  const mid = (innerPos + outerPos) / 2
+  if (innerPos > outerPos) {
+    // inner→outer is a decreasing direction: use reversed order for CCW
+    return polygon({ points: [
+      [innerPos, d / 2],
+      [mid,      d    ],
+      [outerPos, d    ],
+      [outerPos, 0    ],
+      [innerPos, 0    ],
+    ]})
+  }
+  // inner→outer is increasing: normal CCW
+  return polygon({ points: [
+    [innerPos, 0    ],
+    [outerPos, 0    ],
+    [outerPos, d    ],
+    [mid,      d    ],
+    [innerPos, d / 2],
   ]})
-  return translate(transl, rotate(rot, extrudeLinear({ height: extrudeLen }, tri)))
 }
 
 const makeFrame = ({ breedte, hoogte, dikte, kaderBreedte }) => {
   const B = breedte, H = hoogte, d = dikte, kb = kaderBreedte
 
-  // Solid rectangular frame ring at full depth
-  const frameBox = extrudeLinear({ height: d },
-    subtract(
-      rectangle({ size: [B, H] }),
-      rectangle({ size: [B - 2 * kb, H - 2 * kb] })
-    )
-  )
+  // rotate([π/2,0,π/2]) maps (x,y,z)→(z,x,y): extrusion Z→X, profile X→Y, profile Y→Z
+  // Bottom: outer y=-H/2, inner y=-H/2+kb  (inner > outer → reversed CCW)
+  const bottom = translate([-B/2, 0, 0],
+    rotate([Math.PI/2, 0, Math.PI/2],
+      extrudeLinear({ height: B }, memberProfile(-H/2 + kb, -H/2, d))))
 
-  // rotate([π/2, 0, π/2]) maps (x,y,z)→(z,x,y): extrusion Z becomes X, profile→YZ
-  // rotate([π/2, 0, 0])   maps (x,y,z)→(x,-z,y): extrusion Z becomes Y, profile→XZ
+  // Top: outer y=+H/2, inner y=H/2-kb  (inner < outer → normal CCW)
+  const top = translate([-B/2, 0, 0],
+    rotate([Math.PI/2, 0, Math.PI/2],
+      extrudeLinear({ height: B }, memberProfile(H/2 - kb, H/2, d))))
 
-  // Bottom member: inner face at y = -H/2+kb, mid at y = -H/2+kb/2
-  const cutBottom = cutPrism(-H/2 + kb, -H/2 + kb/2, d, B,
-    [Math.PI/2, 0, Math.PI/2], [-B/2, 0, 0])
+  // rotate([π/2,0,0]) maps (x,y,z)→(x,-z,y): extrusion Z→Y, profile X→X, profile Y→Z
+  // Left: outer x=-B/2, inner x=-B/2+kb, spans inner height only (inner > outer → reversed CCW)
+  const left = translate([0, H/2 - kb, 0],
+    rotate([Math.PI/2, 0, 0],
+      extrudeLinear({ height: H - 2 * kb }, memberProfile(-B/2 + kb, -B/2, d))))
 
-  // Top member: inner face at y = H/2-kb, mid at y = H/2-kb/2
-  const cutTop = cutPrism(H/2 - kb, H/2 - kb/2, d, B,
-    [Math.PI/2, 0, Math.PI/2], [-B/2, 0, 0])
+  // Right: outer x=+B/2, inner x=B/2-kb  (inner < outer → normal CCW)
+  const right = translate([0, H/2 - kb, 0],
+    rotate([Math.PI/2, 0, 0],
+      extrudeLinear({ height: H - 2 * kb }, memberProfile(B/2 - kb, B/2, d))))
 
-  // Left member: inner face at x = -B/2+kb, mid at x = -B/2+kb/2
-  const cutLeft = cutPrism(-B/2 + kb, -B/2 + kb/2, d, H,
-    [Math.PI/2, 0, 0], [0, H/2, 0])
-
-  // Right member: inner face at x = B/2-kb, mid at x = B/2-kb/2
-  const cutRight = cutPrism(B/2 - kb, B/2 - kb/2, d, H,
-    [Math.PI/2, 0, 0], [0, H/2, 0])
-
-  return subtract(frameBox, union([cutBottom, cutTop, cutLeft, cutRight]))
+  return union([bottom, top, left, right])
 }
 
 const makeGlas = ({ breedte, hoogte, dikte, kaderBreedte }) => {
   const glasBreedte = breedte - 2 * kaderBreedte
   const glasHoogte  = hoogte  - 2 * kaderBreedte
   const glasDikte   = 4
-
   if (glasBreedte <= 0 || glasHoogte <= 0) return null
-
   const glasPlaat = extrudeLinear({ height: glasDikte }, rectangle({ size: [glasBreedte, glasHoogte] }))
   return translate([0, 0, dikte / 2 - glasDikte / 2], glasPlaat)
 }
@@ -87,16 +88,10 @@ const main = (params = {}) => {
   const schaalDeler  = params.schaal        ?? 50
   const s            = 1 / schaalDeler
 
-  console.log(`Raam: ${breedte} x ${hoogte} mm | dikte: ${dikte} mm | kader: ${kaderBreedte} mm | schaal: 1/${schaalDeler}`)
-  console.log(`Glasopening: ${breedte - 2*kaderBreedte} x ${hoogte - 2*kaderBreedte} mm`)
-
   const frame = colorize([0.6, 0.4, 0.2, 1], makeFrame({ breedte, hoogte, dikte, kaderBreedte }))
-
   if (!toonGlas) return scale([s, s, s], frame)
-
   const glas = makeGlas({ breedte, hoogte, dikte, kaderBreedte })
   if (!glas) return scale([s, s, s], frame)
-
   return scale([s, s, s], [frame, colorize([0.5, 0.8, 1.0, 0.5], glas)])
 }
 
