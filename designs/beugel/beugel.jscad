@@ -8,7 +8,7 @@ const HOLE_R   = 4     // breed deel gatstraal (Ø 8 mm)
 const NARROW_R = 2     // smal deel gatstraal (Ø 4 mm) — aan ondervlak
 const LIP_H    = 5     // hoogte van het smalle deel (randje) mm
 const HOLE_INS = 20    // afstand gat tot kant mm
-const SEGS     = 128
+const SEGS     = 64
 
 // Straal berekend zodat koorde = CHORD mm (met /0.8 clip-formule)
 const RADIUS = (() => {
@@ -36,14 +36,14 @@ function holeCutter (y) {
   const narrowL  = RADIUS - X_CUT + 2
   const narrowCx = (X_CUT + RADIUS) / 2
   const narrow = translate([narrowCx, y, 0],
-    rotateY(Math.PI / 2, cylinder({ radius: NARROW_R, height: narrowL, segments: 64 }))
+    rotateY(Math.PI / 2, cylinder({ radius: NARROW_R, height: narrowL, segments: 32 }))
   )
 
   // Breed deel (Ø8mm): vanaf LIP_H mm binnen het platte vlak tot gebogen vlak
   const wideL  = RADIUS - (X_CUT + LIP_H) + 2
   const wideCx = (X_CUT + LIP_H + RADIUS) / 2
   const wide = translate([wideCx, y, 0],
-    rotateY(Math.PI / 2, cylinder({ radius: HOLE_R, height: wideL, segments: 64 }))
+    rotateY(Math.PI / 2, cylinder({ radius: HOLE_R, height: wideL, segments: 32 }))
   )
 
   return [narrow, wide]
