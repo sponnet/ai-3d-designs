@@ -230,6 +230,36 @@ These were learned while building `designs/sketched-plate/` from a hand sketch.
   - rule checks (e.g. riser/tread against min/max thresholds)
 - For threshold reporting, classify values as `WITHIN`, `UNDER`, or `ABOVE` and print both value and limits.
 
+## Case study learnings: scale models with separate printable parts (staircase-with-landing L-profile)
+
+### Scale inversion: real-mm from desired printed size
+
+- All JSCAD geometry is authored in **real mm**; `scale([s, s, s])` is applied once at the end of `main`.
+- To get a specific **printed thickness** (e.g. matching a foamboard sheet), back-calculate:
+  - `realMm = desiredPrintedMm / modelScale`
+  - Example: 3 mm foamboard at 1/50 scale → `3 / (1/50) = 150 mm` in the JSCAD file.
+- Keep this formula explicit in a comment or `console.log` so the relationship stays visible.
+
+### Placing separately-printed parts at an offset
+
+- When a secondary piece (jig, bracket, connector) should be **printed apart** from the main assembly, translate it outside the main footprint **in real-mm space** before the global `scale()` is applied.
+- Example: `translate([mainWidth + 500, 0, 0], cornerProfile)` — the 500 mm gap stays proportional after scaling.
+- This keeps a single `scale()` call at the top level and avoids double-scaling.
+
+### L-shaped (composite cross-section) connector geometry
+
+- Build an L-profile from two cuboids sharing a corner — **no boolean subtract needed**:
+  - Horizontal arm: `cuboid([legWidth, length, thickness])` at `z = thickness/2`
+  - Vertical arm: `cuboid([thickness, length, legWidth])` at `z = thickness + legWidth/2`
+  - The shared strip `[0..thickness, 0..thickness]` is covered by the horizontal arm; union merges cleanly.
+- `legWidth = 2 × thickness` gives a practical glue surface for scale-model brackets.
+- Length ("how far the L extends into the page") is the dimension the user perceives as the connector's size.
+
+### Guard derived dimensions against zero or negative values
+
+- When deriving a length from the difference of two parameters (e.g. `riser - 2 * treadThickness`), wrap in `Math.max(minSensibleValue, ...)` to prevent zero-length or negative solids that silently fail:
+  - `const lLength = Math.max(thickness, riser - 2 * thickness)`
+
 ## References
 
 - [JSCAD User Guide](https://openjscad.xyz/guide.html)
@@ -244,4 +274,4 @@ These were learned while building `designs/sketched-plate/` from a hand sketch.
 
 ---
 
-*Derived from staircase and pill-cutter iteration; design-specific geometry was generalized into the sections above.*
+*Derived from staircase, pill-cutter, and staircase-with-landing iteration; design-specific geometry was generalized into the sections above.*
