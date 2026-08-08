@@ -9,6 +9,8 @@
     "staircase:png": "${BLENDER_BIN:-/Applications/Blender.app/Contents/MacOS/Blender} --background --python designs/render-png-blender.py -- --stl designs/staircase/staircase.stl --out designs/staircase/staircase.png",
     "foamcutter:stl": "jscad designs/foamcutter/foamcutter.jscad -o designs/foamcutter/foamcutter.stl",
     "foamcutter:png": "${BLENDER_BIN:-/Applications/Blender.app/Contents/MacOS/Blender} --background --python designs/render-png-blender.py -- --stl designs/foamcutter/foamcutter.stl --out designs/foamcutter/foamcutter.png",
+    "dupont-connector-clamp:stl": "jscad designs/dupont-connector-clamp/dupont-connector-clamp.jscad -o designs/dupont-connector-clamp/dupont-connector-clamp.stl",
+    "dupont-connector-clamp:png": "${BLENDER_BIN:-/Applications/Blender.app/Contents/MacOS/Blender} --background --python designs/render-png-blender.py -- --stl designs/dupont-connector-clamp/dupont-connector-clamp.stl --out designs/dupont-connector-clamp/dupont-connector-clamp.png",
     "renders:png": "${BLENDER_BIN:-/Applications/Blender.app/Contents/MacOS/Blender} --background --python designs/render-png-blender.py -- --all --designs-root designs",
     "serve": "node serve.js"
   },

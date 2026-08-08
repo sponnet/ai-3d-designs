@@ -12,6 +12,7 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
 - [**Foamcutter v2**](./designs/foamcutter-v2/): updated foam cutter support assembly plus X-Acto No. 11 outline tooling model.
 - [**Staircase with landing**](./designs/starcase-with-landing/): parametric U-turn staircase model with landing and glue tabs.
 - [**Mounting hook**](./designs/mounting-hook/): 48 mm hook-profile part from sketch, extruded 20 mm.
+- [**Dupont connector clamp**](./designs/dupont-connector-clamp/): parametric clamp holding a row of keyed Dupont connector housings side by side (connector count defaults to 8).
 
 ## Outputs At A Glance
 
@@ -56,3 +57,7 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
   - [`designs/mounting-hook/mounting-hook.stl`](./designs/mounting-hook/mounting-hook.stl)
   - [`designs/mounting-hook/mounting-hook.png`](./designs/mounting-hook/mounting-hook.png)
   - ![Mounting hook preview](./designs/mounting-hook/mounting-hook.png)
+- Dupont connector clamp STL/PNG:
+  - [`designs/dupont-connector-clamp/dupont-connector-clamp.stl`](./designs/dupont-connector-clamp/dupont-connector-clamp.stl)
+  - [`designs/dupont-connector-clamp/dupont-connector-clamp.png`](./designs/dupont-connector-clamp/dupont-connector-clamp.png)
+  - ![Dupont connector clamp preview](./designs/dupont-connector-clamp/dupont-connector-clamp.png)
