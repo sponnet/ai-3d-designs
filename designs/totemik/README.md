@@ -4,7 +4,9 @@
 
 Circular ring band modeled from a hand sketch: a plain band with a small
 notch cut at the top and two bar-shaped blocks sitting on the outer surface,
-one on each side of the notch.
+one on each side of the notch. Each block has a small retaining lip at its
+top so a cord tied around the two blocks (to pinch the notch shut) can't
+slide up and off.
 
 ## Geometry
 
@@ -12,15 +14,19 @@ one on each side of the notch.
 - Wall thickness: `1 mm` (outer diameter `53 mm`)
 - Extrusion height (band height): `10 mm`
 - Top notch: `5 mm` wide, cut fully through the wall
-- Blocks: `5 mm` wide x `5 mm` tall, one flush against each notch edge,
-  centered on the band height
+- Blocks: `2 mm` wide, full band height (`10 mm` tall), one flush against
+  each notch edge
 - Block protrusion beyond the outer surface: `3 mm` (not given in the
   sketch/spec — assumed; adjust `BLOCK_DEPTH` if a different depth is
   wanted)
+- Retaining lip: `1 mm` tall, at the top of each block, overhanging `1.5 mm`
+  further outward than the block itself (not specified — assumed; adjust
+  `LIP_HEIGHT` / `LIP_PROTRUSION` if a different size is wanted) so a cord
+  wrapped around the blocks catches under the lip instead of sliding off
 
-The blocks are built as lobes added to the outer cylinder before the inner
-hole is cut, so they fuse cleanly into the wall and the 51 mm bore stays
-true (not obstructed) under the blocks.
+The blocks and lips are built as lobes added to the outer cylinder before the
+inner hole is cut, so they fuse cleanly into the wall and the 51 mm bore
+stays true (not obstructed) under the blocks.
 
 ## Source
 
