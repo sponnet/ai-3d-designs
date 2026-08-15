@@ -4,17 +4,18 @@ const { subtract, union } = require('@jscad/modeling').booleans
 // mm, Z up, band centered on the finger axis (Z), band footprint in XY
 // Sketch: circular band with a notch cut at the top; two bar-shaped blocks
 // sit on the outer surface, one on each side of the notch. Each block carries
-// a small lip at its top that overhangs further outward than the block
-// itself, so a cord tied around the two blocks (to pinch the notch shut)
-// can't slide up over the top and fall off.
+// a flat retaining lip on top, lying in the horizontal (X-Y) plane and
+// sticking out sideways (away from the notch) rather than continuing the
+// block's own vertical face outward — so a cord tied around the two blocks
+// (to pinch the notch shut) catches under the lip instead of sliding off.
 const INNER_DIAMETER = 51 // ring inner diameter
 const WALL_THICKNESS = 1 // radial band thickness
 const BAND_HEIGHT = 10 // extrusion height (band width worn on the finger)
 const NOTCH_WIDTH = 5 // width of the cutout at the top of the band
 const BLOCK_WIDTH = 2 // block width, tangential, flush against each notch edge
 const BLOCK_DEPTH = 3 // block protrusion beyond the outer surface (not specified in sketch, assumed)
-const LIP_HEIGHT = 1 // height (Z) of the retaining lip at the top of each block
-const LIP_PROTRUSION = 1.5 // how far the lip overhangs beyond the block's outer face (not specified, assumed)
+const LIP_HEIGHT = 1 // thickness (Z) of the flat retaining lip, sitting on top of the block
+const LIP_PROTRUSION = 1.5 // how far the lip sticks out sideways beyond the block's width (not specified, assumed)
 const CYLINDER_SEGMENTS = 128
 
 const main = (params = {}) => {
@@ -39,18 +40,25 @@ const main = (params = {}) => {
   // blocks too.
   const outerCyl = cylinder({ height: bandHeight, radius: outerR, segments: CYLINDER_SEGMENTS, center: [0, 0, bandHeight / 2] })
 
-  const blockY = (outerR + blockDepth) / 2
-  const lipY = (outerR + (outerR + blockDepth + lipProtrusion)) / 2
-  const lipYSize = blockDepth + lipProtrusion
-  const lipZ = bandHeight - lipHeight / 2
+  // blockPillarY centers a pillar that runs from the ring's axis out to the
+  // block's outer tip (see the comment above), while lipY centers just the
+  // protruding cap segment (outerR .. outerR + blockDepth) that the lip sits on.
+  const blockPillarY = (outerR + blockDepth) / 2
+  const lipY = outerR + blockDepth / 2
+  const lipZ = bandHeight + lipHeight / 2 // flat cap sitting on top of the block
 
-  const makeBlock = (x) => cuboid({ size: [blockWidth, outerR + blockDepth, blockHeight], center: [x, blockY, bandHeight / 2] })
-  const makeLip = (x) => cuboid({ size: [blockWidth, lipYSize, lipHeight], center: [x, lipY, lipZ] })
+  const makeBlock = (x) => cuboid({ size: [blockWidth, outerR + blockDepth, blockHeight], center: [x, blockPillarY, bandHeight / 2] })
+  // Lip: flush with the block on the notch-facing side, extends sideways
+  // (away from the notch, in +/-X) beyond the block's outward-facing side.
+  const makeLip = (x, sign) => cuboid({
+    size: [blockWidth + lipProtrusion, blockDepth, lipHeight],
+    center: [x + sign * (lipProtrusion / 2), lipY, lipZ]
+  })
 
   const leftX = -(notchWidth / 2 + blockWidth / 2)
   const rightX = notchWidth / 2 + blockWidth / 2
 
-  const outerWithLobes = union(outerCyl, makeBlock(leftX), makeBlock(rightX), makeLip(leftX), makeLip(rightX))
+  const outerWithLobes = union(outerCyl, makeBlock(leftX), makeBlock(rightX), makeLip(leftX, -1), makeLip(rightX, 1))
 
   const inner = cylinder({ height: bandHeight + 2, radius: innerR, segments: CYLINDER_SEGMENTS, center: [0, 0, bandHeight / 2] })
   const bandWithBlocks = subtract(outerWithLobes, inner)
