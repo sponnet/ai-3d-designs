@@ -23,14 +23,11 @@ into its base at each end, sized to push-fit over a ridge from
   typical FDM printing error (holes print undersize, pegs print oversize)
   still leaves a snug push-on fit rather than one that's impossible to
   assemble or too loose to grip
-- Top ridge: scalloped along its full length with `1 mm` diameter
-  (`NOTCH_DIAMETER`) half-cylinder notches, crosswise to the ridge, spaced
-  `2 mm` apart (`NOTCH_SPACING`). Each notch is `1 mm` deep total
-  (`NOTCH_DEPTH`, not specified in the brief — assumed; twice the diameter's
-  own radius) — the rounded half-cylinder forms the top of the notch, and a
-  straight-walled extension of the same diameter continues down to the full
-  depth, so the notch prints bigger without widening its footprint or
-  changing the spacing pattern
+- Top ridge: scalloped along its full length with `1 mm` wide
+  (`NOTCH_WIDTH`) rectangular notches, crosswise to the ridge, spaced `2 mm`
+  apart (`NOTCH_SPACING`). Each notch is `1 mm` deep (`NOTCH_DEPTH`, not
+  specified in the brief — assumed) — a plain straight-walled cut, so depth
+  can be set to anything independent of width
 
 ## Source
 
@@ -57,6 +54,6 @@ Close-up of one end (slot open at the tip, stopping after 6 mm):
 
 ![Partition slot detail](./partition-detail.png)
 
-Close-up of the top ridge (scalloped, one notch every 2 mm):
+Close-up of the top ridge (rectangular notches, one every 2 mm):
 
 ![Partition top-ridge notch detail](./partition-top-detail.png)
