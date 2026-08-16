@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // PNG preview renderer for partition.stl using @scalenc/stl-to-png.
-// Produces a full-length overview and a zoomed-in slice (from below) that
-// shows the slot / bridge detail, since the full 150mm part renders too
-// small at that scale to see the 1.5mm slot.
+// Produces a full-length overview and a zoomed-in slice of one end (from
+// below) that shows the short end-slot, since the full 150mm part renders
+// too small at that scale to see the 1.5mm slot.
 const fs = require('fs')
 const path = require('path')
 const { stl2png, makeStandardMaterial, makeEdgeMaterial, makeAmbientLight, makeDirectionalLight } = require('@scalenc/stl-to-png')
@@ -35,16 +35,18 @@ function toBuffer(shape) {
   return Buffer.concat(raw.map((ab) => Buffer.from(ab)))
 }
 
-// 24mm slice (spans one bridge + two slot segments), viewed from underneath
-const sliced = intersect(main(), cuboid({ size: [24, 10, 15], center: [12, 0, 5] }))
+// Slice from x=-1 to x=12: keeps the part's real end cap (x=0) intact and
+// cuts only on the far, already-solid side, so the render shows the actual
+// end-slot geometry without an artificial cut face confusing the picture.
+const sliced = intersect(main(), cuboid({ size: [13, 10, 15], center: [5.5, 0, 5] }))
 const detailPng = stl2png(toBuffer(sliced), {
   width: 1100,
   height: 800,
   backgroundColor: 0xffffff,
-  cameraPosition: [12, 40, -18],
+  cameraPosition: [-15, 25, -16],
   materials: [makeStandardMaterial(1, 0x3a7bd5)],
   edgeMaterials: [makeEdgeMaterial(1.5, 0x000000)],
   lights: [makeAmbientLight(0xffffff, 0.7), makeDirectionalLight(0, -1, -1, 0xffffff, 0.7)]
 })
 fs.writeFileSync(path.join(__dirname, 'partition-detail.png'), detailPng)
-console.log('Wrote partition-detail.png (24mm slice from below, showing the slot + a bridge)')
+console.log('Wrote partition-detail.png (end slice from below, showing the end-slot)')
