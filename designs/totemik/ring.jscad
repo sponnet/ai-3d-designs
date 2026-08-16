@@ -16,8 +16,8 @@ const WALL_THICKNESS = 1 // radial band thickness; also block thickness and lip 
 const BAND_HEIGHT = 10 // extrusion height (band width worn on the finger); also lip height
 const NOTCH_WIDTH = 5 // width of the cutout at the top of the band
 const BLOCK_HEIGHT = 10 // block height along Z, from the band's bottom (z=0)
-const BLOCK_DEPTH = 3 // block protrusion beyond the outer surface (not specified in sketch, assumed)
-const LIP_DEPTH = 3 // how far the lip reaches inward from the block's outer end (not specified, assumed)
+const BLOCK_DEPTH = 4 // block protrusion beyond the outer surface (not specified in sketch, assumed)
+const LIP_DEPTH = 1 // how far the lip reaches inward from the block's outer end (not specified, assumed)
 const RIDGE_COUNT = 8 // number of ridges, evenly spaced around the full circle
 const RIDGE_WIDTH = 1.5 // ridge width, tangential
 const RIDGE_PROTRUSION = 3 // ridge protrusion beyond the outer surface
@@ -105,8 +105,8 @@ const getParameterDefinitions = () => [
   { name: 'BAND_HEIGHT', type: 'float', initial: 10, caption: 'Extrusion height / band height (mm) — also lip height' },
   { name: 'NOTCH_WIDTH', type: 'float', initial: 5, caption: 'Top notch width (mm)' },
   { name: 'BLOCK_HEIGHT', type: 'float', initial: 10, caption: 'Block height (mm)' },
-  { name: 'BLOCK_DEPTH', type: 'float', initial: 3, caption: 'Block protrusion beyond outer surface (mm)' },
-  { name: 'LIP_DEPTH', type: 'float', initial: 3, caption: 'Lip reach inward from the block\'s outer end (mm)' },
+  { name: 'BLOCK_DEPTH', type: 'float', initial: 4, caption: 'Block protrusion beyond outer surface (mm)' },
+  { name: 'LIP_DEPTH', type: 'float', initial: 1, caption: 'Lip reach inward from the block\'s outer end (mm)' },
   { name: 'RIDGE_COUNT', type: 'int', initial: 8, caption: 'Number of ridges around the circle' },
   { name: 'RIDGE_WIDTH', type: 'float', initial: 1.5, caption: 'Ridge width, tangential (mm)' },
   { name: 'RIDGE_PROTRUSION', type: 'float', initial: 3, caption: 'Ridge protrusion beyond outer surface (mm)' }

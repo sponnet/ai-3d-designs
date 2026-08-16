@@ -20,11 +20,11 @@ so it can't slide off.
 - Blocks: thickness always equals the wall thickness, `10 mm` tall
   (independent `BLOCK_HEIGHT`, from the band's bottom), one flush against
   each notch edge
-- Block protrusion beyond the outer surface: `3 mm` (not given in the
+- Block protrusion beyond the outer surface: `4 mm` (not given in the
   sketch/spec — assumed; adjust `BLOCK_DEPTH` if a different depth is
   wanted)
 - Retaining lip: always flush with the block's outer end (moves with
-  `BLOCK_DEPTH`), reaching `3 mm` inward from that end (independent
+  `BLOCK_DEPTH`), reaching `1 mm` inward from that end (independent
   `LIP_DEPTH`, not given in the sketch/spec — assumed), `10 mm` tall (=
   extrusion height, regardless of `BLOCK_HEIGHT`) and sticking out `1 mm`
   sideways (= wall thickness) beyond the block's outward-facing side, flush
