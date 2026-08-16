@@ -25,7 +25,12 @@ into its base at each end, sized to push-fit over a ridge from
   assemble or too loose to grip
 - Top ridge: scalloped along its full length with `1 mm` diameter
   (`NOTCH_DIAMETER`) half-cylinder notches, crosswise to the ridge, spaced
-  `2 mm` apart (`NOTCH_SPACING`)
+  `2 mm` apart (`NOTCH_SPACING`). Each notch is `1 mm` deep total
+  (`NOTCH_DEPTH`, not specified in the brief — assumed; twice the diameter's
+  own radius) — the rounded half-cylinder forms the top of the notch, and a
+  straight-walled extension of the same diameter continues down to the full
+  depth, so the notch prints bigger without widening its footprint or
+  changing the spacing pattern
 
 ## Source
 
