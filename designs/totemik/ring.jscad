@@ -3,17 +3,20 @@ const { subtract, union } = require('@jscad/modeling').booleans
 
 // mm, Z up, band centered on the finger axis (Z), band footprint in XY
 // A plain band with a notch cut at the top and two bar-shaped blocks on the
-// outer surface flanking it. Each block carries a small retaining lip flush
-// with its own top (its "tip") — the lip always tracks the block's own top,
-// however tall BLOCK_HEIGHT is set to — sized wall_thickness x wall_thickness
-// (both its Z height and its sideways overhang beyond the block), so a cord
-// tied around the two blocks to pinch the notch shut catches under it.
+// outer surface flanking it. Each block carries a small retaining lip that
+// always hangs off its outer end (radially, away from the ring) — the lip
+// tracks that end dynamically as LIP_DEPTH or BLOCK_DEPTH change. The lip's
+// own Z height always matches the band's extrusion height (not the block's,
+// which is independently adjustable), and its sideways overhang always
+// matches the wall thickness, so a cord tied around the two blocks to pinch
+// the notch shut catches under it.
 const INNER_DIAMETER = 51 // ring inner diameter
-const WALL_THICKNESS = 1 // radial band thickness; also block thickness and lip height/overhang
-const BAND_HEIGHT = 10 // extrusion height (band width worn on the finger)
+const WALL_THICKNESS = 1 // radial band thickness; also block thickness and lip overhang
+const BAND_HEIGHT = 10 // extrusion height (band width worn on the finger); also lip height
 const NOTCH_WIDTH = 5 // width of the cutout at the top of the band
 const BLOCK_HEIGHT = 10 // block height along Z, from the band's bottom (z=0)
 const BLOCK_DEPTH = 3 // block protrusion beyond the outer surface (not specified in sketch, assumed)
+const LIP_DEPTH = 3 // how far the lip reaches inward from the block's outer end (not specified, assumed)
 const CYLINDER_SEGMENTS = 128
 
 const main = (params = {}) => {
@@ -23,11 +26,12 @@ const main = (params = {}) => {
   const notchWidth = params.NOTCH_WIDTH ?? NOTCH_WIDTH
   const blockHeight = params.BLOCK_HEIGHT ?? BLOCK_HEIGHT
   const blockDepth = params.BLOCK_DEPTH ?? BLOCK_DEPTH
+  const lipDepth = params.LIP_DEPTH ?? LIP_DEPTH
 
   const innerR = innerDiameter / 2
   const outerR = innerR + wall
   const blockWidth = wall // block thickness always matches the wall thickness
-  const lipHeight = wall // lip Z-thickness always matches the wall thickness
+  const lipHeight = bandHeight // lip Z-height always matches the extrusion height
   const lipProtrusion = wall // lip sideways overhang always matches the wall thickness
 
   // Add the two block lobes (plus their lips) to the solid outer cylinder
@@ -40,19 +44,19 @@ const main = (params = {}) => {
   // band's own height.
   const outerCyl = cylinder({ height: bandHeight, radius: outerR, segments: CYLINDER_SEGMENTS, center: [0, 0, bandHeight / 2] })
 
+  const blockTipY = outerR + blockDepth // the block's outer end
   // blockPillarY centers a pillar that runs from the ring's axis out to the
-  // block's outer tip (see the comment above), while lipY centers just the
-  // protruding segment (outerR .. outerR + blockDepth) that the lip covers.
-  const blockPillarY = (outerR + blockDepth) / 2
-  const lipY = outerR + blockDepth / 2
-  const lipZ = blockHeight - lipHeight / 2 // flush with the block's own top, whatever BLOCK_HEIGHT is
+  // block's outer end, while lipY centers just the lipDepth-deep segment
+  // that ends exactly at that same outer end, however LIP_DEPTH is set.
+  const blockPillarY = blockTipY / 2
+  const lipY = blockTipY - lipDepth / 2
 
-  const makeBlock = (x) => cuboid({ size: [blockWidth, outerR + blockDepth, blockHeight], center: [x, blockPillarY, blockHeight / 2] })
+  const makeBlock = (x) => cuboid({ size: [blockWidth, blockTipY, blockHeight], center: [x, blockPillarY, blockHeight / 2] })
   // Lip: flush with the block on the notch-facing side, extends sideways
   // (away from the notch, in +/-X) beyond the block's outward-facing side.
   const makeLip = (x, sign) => cuboid({
-    size: [blockWidth + lipProtrusion, blockDepth, lipHeight],
-    center: [x + sign * (lipProtrusion / 2), lipY, lipZ]
+    size: [blockWidth + lipProtrusion, lipDepth, lipHeight],
+    center: [x + sign * (lipProtrusion / 2), lipY, lipHeight / 2]
   })
 
   const leftX = -(notchWidth / 2 + blockWidth / 2)
@@ -75,11 +79,12 @@ const main = (params = {}) => {
 
 const getParameterDefinitions = () => [
   { name: 'INNER_DIAMETER', type: 'float', initial: 51, caption: 'Inner diameter (mm)' },
-  { name: 'WALL_THICKNESS', type: 'float', initial: 1, caption: 'Wall thickness (mm) — also block thickness and lip height/overhang' },
-  { name: 'BAND_HEIGHT', type: 'float', initial: 10, caption: 'Extrusion height / band height (mm)' },
+  { name: 'WALL_THICKNESS', type: 'float', initial: 1, caption: 'Wall thickness (mm) — also block thickness and lip overhang' },
+  { name: 'BAND_HEIGHT', type: 'float', initial: 10, caption: 'Extrusion height / band height (mm) — also lip height' },
   { name: 'NOTCH_WIDTH', type: 'float', initial: 5, caption: 'Top notch width (mm)' },
   { name: 'BLOCK_HEIGHT', type: 'float', initial: 10, caption: 'Block height (mm)' },
-  { name: 'BLOCK_DEPTH', type: 'float', initial: 3, caption: 'Block protrusion beyond outer surface (mm)' }
+  { name: 'BLOCK_DEPTH', type: 'float', initial: 3, caption: 'Block protrusion beyond outer surface (mm)' },
+  { name: 'LIP_DEPTH', type: 'float', initial: 3, caption: 'Lip reach inward from the block\'s outer end (mm)' }
 ]
 
 module.exports = { main, getParameterDefinitions }
