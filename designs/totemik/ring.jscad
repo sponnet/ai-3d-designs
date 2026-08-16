@@ -1,5 +1,6 @@
 const { cuboid, cylinder } = require('@jscad/modeling').primitives
 const { subtract, union } = require('@jscad/modeling').booleans
+const { rotateZ } = require('@jscad/modeling').transforms
 
 // mm, Z up, band centered on the finger axis (Z), band footprint in XY
 // A plain band with a notch cut at the top and two bar-shaped blocks on the
@@ -17,6 +18,9 @@ const NOTCH_WIDTH = 5 // width of the cutout at the top of the band
 const BLOCK_HEIGHT = 10 // block height along Z, from the band's bottom (z=0)
 const BLOCK_DEPTH = 3 // block protrusion beyond the outer surface (not specified in sketch, assumed)
 const LIP_DEPTH = 3 // how far the lip reaches inward from the block's outer end (not specified, assumed)
+const RIDGE_COUNT = 8 // number of ridges, evenly spaced around the full circle
+const RIDGE_WIDTH = 1.5 // ridge width, tangential
+const RIDGE_PROTRUSION = 3 // ridge protrusion beyond the outer surface
 const CYLINDER_SEGMENTS = 128
 
 const main = (params = {}) => {
@@ -27,6 +31,9 @@ const main = (params = {}) => {
   const blockHeight = params.BLOCK_HEIGHT ?? BLOCK_HEIGHT
   const blockDepth = params.BLOCK_DEPTH ?? BLOCK_DEPTH
   const lipDepth = params.LIP_DEPTH ?? LIP_DEPTH
+  const ridgeCount = params.RIDGE_COUNT ?? RIDGE_COUNT
+  const ridgeWidth = params.RIDGE_WIDTH ?? RIDGE_WIDTH
+  const ridgeProtrusion = params.RIDGE_PROTRUSION ?? RIDGE_PROTRUSION
 
   const innerR = innerDiameter / 2
   const outerR = innerR + wall
@@ -62,7 +69,18 @@ const main = (params = {}) => {
   const leftX = -(notchWidth / 2 + blockWidth / 2)
   const rightX = notchWidth / 2 + blockWidth / 2
 
-  const outerWithLobes = union(outerCyl, makeBlock(leftX), makeBlock(rightX), makeLip(leftX, -1), makeLip(rightX, 1))
+  // Ridges: N spokes evenly spaced around the full circle, built the same
+  // way as the blocks (a pillar running from the ring's axis out to its own
+  // tip) and rotated into place, so they also fuse cleanly and stay clear
+  // of the bore after the inner-cylinder subtraction below.
+  const ridgeTipY = outerR + ridgeProtrusion
+  const ridgePillar = cuboid({ size: [ridgeWidth, ridgeTipY, bandHeight], center: [0, ridgeTipY / 2, bandHeight / 2] })
+  const ridges = []
+  for (let i = 0; i < ridgeCount; i++) {
+    ridges.push(rotateZ((2 * Math.PI * i) / ridgeCount, ridgePillar))
+  }
+
+  const outerWithLobes = union(outerCyl, makeBlock(leftX), makeBlock(rightX), makeLip(leftX, -1), makeLip(rightX, 1), ...ridges)
 
   const innerHeight = Math.max(bandHeight, blockHeight)
   const inner = cylinder({ height: innerHeight + 4, radius: innerR, segments: CYLINDER_SEGMENTS, center: [0, 0, innerHeight / 2] })
@@ -84,7 +102,10 @@ const getParameterDefinitions = () => [
   { name: 'NOTCH_WIDTH', type: 'float', initial: 5, caption: 'Top notch width (mm)' },
   { name: 'BLOCK_HEIGHT', type: 'float', initial: 10, caption: 'Block height (mm)' },
   { name: 'BLOCK_DEPTH', type: 'float', initial: 3, caption: 'Block protrusion beyond outer surface (mm)' },
-  { name: 'LIP_DEPTH', type: 'float', initial: 3, caption: 'Lip reach inward from the block\'s outer end (mm)' }
+  { name: 'LIP_DEPTH', type: 'float', initial: 3, caption: 'Lip reach inward from the block\'s outer end (mm)' },
+  { name: 'RIDGE_COUNT', type: 'int', initial: 8, caption: 'Number of ridges around the circle' },
+  { name: 'RIDGE_WIDTH', type: 'float', initial: 1.5, caption: 'Ridge width, tangential (mm)' },
+  { name: 'RIDGE_PROTRUSION', type: 'float', initial: 3, caption: 'Ridge protrusion beyond outer surface (mm)' }
 ]
 
 module.exports = { main, getParameterDefinitions }
