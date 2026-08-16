@@ -35,13 +35,12 @@ block shorter than the band sits flush with the band's bottom; taller rises
 above the band's top surface. The lip's height always matches the band
 regardless.
 
-- Ridges: `8` ridges (`RIDGE_COUNT`), evenly spaced around the full circle
-  starting at 0°, each `1.5 mm` wide (`RIDGE_WIDTH`), `3 mm` protrusion
-  beyond the outer surface (`RIDGE_PROTRUSION`), full band height. With the
-  default 8-way spacing, one ridge lands at 90° — the same position as the
-  notch — and shows up as a small tooth between the two blocks; adjust
-  `RIDGE_COUNT` or the start angle in the source if that overlap isn't
-  wanted.
+- Ridges: `8` ridges (`RIDGE_COUNT`), evenly spaced around the full circle,
+  each `1.5 mm` wide (`RIDGE_WIDTH`), `3 mm` protrusion beyond the outer
+  surface (`RIDGE_PROTRUSION`), full band height. The pattern is offset by
+  half the angular spacing from the notch (at 90°), so the notch always
+  falls exactly centered between two ridges — never on top of one — however
+  `RIDGE_COUNT` is set.
 
 The blocks, lips, and ridges are all built as lobes added to the outer
 cylinder before the inner hole is cut, so they fuse cleanly into the wall

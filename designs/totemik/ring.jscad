@@ -72,12 +72,16 @@ const main = (params = {}) => {
   // Ridges: N spokes evenly spaced around the full circle, built the same
   // way as the blocks (a pillar running from the ring's axis out to its own
   // tip) and rotated into place, so they also fuse cleanly and stay clear
-  // of the bore after the inner-cylinder subtraction below.
+  // of the bore after the inner-cylinder subtraction below. Offset by half
+  // the angular spacing from the notch (at +Y, 90°) so the notch always
+  // falls exactly centered between two ridges, never on top of one.
   const ridgeTipY = outerR + ridgeProtrusion
   const ridgePillar = cuboid({ size: [ridgeWidth, ridgeTipY, bandHeight], center: [0, ridgeTipY / 2, bandHeight / 2] })
+  const ridgeStep = (2 * Math.PI) / ridgeCount
+  const ridgeStartAngle = Math.PI / 2 + ridgeStep / 2
   const ridges = []
   for (let i = 0; i < ridgeCount; i++) {
-    ridges.push(rotateZ((2 * Math.PI * i) / ridgeCount, ridgePillar))
+    ridges.push(rotateZ(ridgeStartAngle + i * ridgeStep, ridgePillar))
   }
 
   const outerWithLobes = union(outerCyl, makeBlock(leftX), makeBlock(rightX), makeLip(leftX, -1), makeLip(rightX, 1), ...ridges)
