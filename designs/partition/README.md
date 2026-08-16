@@ -23,6 +23,9 @@ into its base at each end, sized to push-fit over a ridge from
   typical FDM printing error (holes print undersize, pegs print oversize)
   still leaves a snug push-on fit rather than one that's impossible to
   assemble or too loose to grip
+- Top ridge: scalloped along its full length with `1 mm` diameter
+  (`NOTCH_DIAMETER`) half-cylinder notches, crosswise to the ridge, spaced
+  `2 mm` apart (`NOTCH_SPACING`)
 
 ## Source
 
@@ -35,13 +38,20 @@ into its base at each end, sized to push-fit over a ridge from
 - PNG preview (full length): [`partition-iso.png`](./partition-iso.png)
 - PNG preview (one end, from underneath, showing the end-slot):
   [`partition-detail.png`](./partition-detail.png)
+- PNG preview (middle section, showing the top-ridge notches):
+  [`partition-top-detail.png`](./partition-top-detail.png)
 
 ## Preview
 
-Full length (150 mm — the 1.5 mm slot isn't visible at this scale):
+Full length (150 mm — the 1.5 mm slot and 1 mm notches aren't visible at
+this scale):
 
 ![Partition full length](./partition-iso.png)
 
 Close-up of one end (slot open at the tip, stopping after 6 mm):
 
 ![Partition slot detail](./partition-detail.png)
+
+Close-up of the top ridge (scalloped, one notch every 2 mm):
+
+![Partition top-ridge notch detail](./partition-top-detail.png)

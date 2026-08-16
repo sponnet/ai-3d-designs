@@ -50,3 +50,18 @@ const detailPng = stl2png(toBuffer(sliced), {
 })
 fs.writeFileSync(path.join(__dirname, 'partition-detail.png'), detailPng)
 console.log('Wrote partition-detail.png (end slice from below, showing the end-slot)')
+
+// Middle slice, from the top/side: shows the scalloped notch pattern along
+// the top ridge.
+const topSliced = intersect(main(), cuboid({ size: [8, 10, 15], center: [50, 0, 5] }))
+const topDetailPng = stl2png(toBuffer(topSliced), {
+  width: 1200,
+  height: 800,
+  backgroundColor: 0xffffff,
+  cameraPosition: [50, -12, 15],
+  materials: [makeStandardMaterial(1, 0x3a7bd5)],
+  edgeMaterials: [makeEdgeMaterial(1, 0x000000)],
+  lights: [makeAmbientLight(0xffffff, 0.7), makeDirectionalLight(0, -1, 1, 0xffffff, 0.7)]
+})
+fs.writeFileSync(path.join(__dirname, 'partition-top-detail.png'), topDetailPng)
+console.log('Wrote partition-top-detail.png (middle slice, showing the top-ridge notches)')
