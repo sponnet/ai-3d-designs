@@ -14,5 +14,6 @@ Each subdirectory is a self-contained JSCAD design (source + optional `render-pn
 | Mounting hook | [`mounting-hook/`](mounting-hook/) |
 | Focus rotaty knob | [`focus-rotaty-knob/`](focus-rotaty-knob/) |
 | Totemik ring | [`totemik/`](totemik/) |
+| Partition | [`partition/`](partition/) |
 
 Shared tooling and conventions: [`../OPENJSCAD_SKILL.md`](../OPENJSCAD_SKILL.md).
