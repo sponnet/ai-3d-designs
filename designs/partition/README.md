@@ -2,9 +2,9 @@
 
 ## Overview
 
-A long, thin, standing triangular partition — an isoceles triangle in
-cross-section, base at the bottom, apex at the top — with a short slot cut
-into its base at each end, sized to push-fit over a ridge from
+A long, thin, standing trapezoidal partition — an isoceles trapezoid in
+cross-section, wide base at the bottom, flat blunt top — with a short slot
+cut into its base at each end, sized to push-fit over a ridge from
 [`designs/totemik/ring.jscad`](../totemik/ring.jscad) (`RIDGE_WIDTH` x
 `RIDGE_PROTRUSION`). The middle of the length stays solid; only the last
 `SLOT_END_LENGTH` at each end is slotted.
@@ -12,8 +12,10 @@ into its base at each end, sized to push-fit over a ridge from
 ## Geometry
 
 - Overall length: `150 mm`
-- Triangle height (apex above the base): `10 mm`
-- Triangle base width: `5 mm`
+- Trapezoid height (top above the base): `10 mm`
+- Trapezoid base width: `5 mm`
+- Flat top width: `2 mm` (`TOP_WIDTH`) — the top is cut blunt/flat first,
+  and the notches (below) are cut into that flat top afterward
 - Slot: `6 mm` long (`SLOT_END_LENGTH`) at each end of the part, nominally
   `1.5 mm` wide / `3 mm` deep — matching the ring's `RIDGE_WIDTH` /
   `RIDGE_PROTRUSION`
@@ -23,7 +25,7 @@ into its base at each end, sized to push-fit over a ridge from
   typical FDM printing error (holes print undersize, pegs print oversize)
   still leaves a snug push-on fit rather than one that's impossible to
   assemble or too loose to grip
-- Top ridge: scalloped along its full length with `1 mm` wide
+- Top: scalloped along its full length with `1 mm` wide
   (`NOTCH_WIDTH`) rectangular notches, crosswise to the ridge, spaced `2 mm`
   apart (`NOTCH_SPACING`). Each notch is `1 mm` deep (`NOTCH_DEPTH`, not
   specified in the brief — assumed) — a plain straight-walled cut, so depth
