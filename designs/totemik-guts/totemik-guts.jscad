@@ -26,7 +26,7 @@ const NOTCH_MARGIN = 1
 // gives 2 halves whose thinned top sections face opposite ways, so they
 // nest together into a full-depth lap joint when assembled.
 const BEAM_WIDTH = 27
-const BEAM_DEPTH = 5
+const BEAM_DEPTH = 2.5
 const BEAM_DEPTH_TOP = BEAM_DEPTH / 2
 const BEAM_HEIGHT = 100
 

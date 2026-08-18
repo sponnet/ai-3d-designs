@@ -19,7 +19,7 @@ carries 2 through-holes.
 
 ### Beam
 
-- Base footprint: `27 mm x 5 mm`, extrusion height (Z) `100 mm`, base at
+- Base footprint: `27 mm x 2.5 mm`, extrusion height (Z) `100 mm`, base at
   `z = 0` — same base plane as the ring, so the ring sits at the bottom of
   the beam
 - Positioned so its `27 mm` edge forms a chord at `~19.24 mm` from the ring
@@ -28,10 +28,10 @@ carries 2 through-holes.
   `24.5 mm`), so those 2 corners are embedded in solid ring material
   instead of just touching the inner surface. Placed opposite the 0°
   notch (along +Y) so the two features don't clash.
-- Bottom half (`z = 0` to `50 mm`, against the ring): full `5 mm` depth,
+- Bottom half (`z = 0` to `50 mm`, against the ring): full `2.5 mm` depth,
   keeping the overlap with the ring wall.
 - Top half (`z = 50` to `100 mm`, away from the ring): depth halved to
-  `2.5 mm`.
+  `1.25 mm`.
 - 2 through-holes in that thinned top half, `3 mm` diameter, axis along Y
   (perpendicular to the ring's Z axis), stacked one above the other along
   Z, `±7 mm` either side of the top half's mid-height (`z = 75 mm`).
