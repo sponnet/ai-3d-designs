@@ -18,14 +18,15 @@ const NOTCH_MARGIN = 1
 // The beam is 2 stacked blocks sharing the same outer (wall-facing) Y
 // edge: the bottom half (ring-side) keeps the full depth for that
 // overlap, the top half (away from the ring) is trimmed to half depth,
-// and gets 2 through-holes perpendicular to the ring's Z axis.
+// and gets 2 through-holes perpendicular to the ring's Z axis, stacked
+// one above the other.
 const BEAM_WIDTH = 27
 const BEAM_DEPTH = 5
 const BEAM_DEPTH_TOP = BEAM_DEPTH / 2
-const BEAM_HEIGHT = 10
+const BEAM_HEIGHT = 100
 
 const HOLE_DIAMETER = 3
-const HOLE_OFFSET_X = 7
+const HOLE_OFFSET_Z = 7
 const HOLE_SEGMENTS = 48
 const HOLE_OVERSHOOT = 2
 
@@ -63,15 +64,14 @@ const beamTop2D = () => {
   return rectangle({ size: [BEAM_WIDTH, BEAM_DEPTH_TOP], center: [0, centerY] })
 }
 
-const beamTopHole = (x) => {
+const beamTopHole = (z) => {
   const centerY = BEAM_CONTACT_OFFSET - BEAM_DEPTH_TOP / 2
-  const centerZ = (BEAM_HEIGHT / 2 + BEAM_HEIGHT) / 2
   const bore = cylinder({
     radius: HOLE_DIAMETER / 2,
     height: BEAM_DEPTH_TOP + HOLE_OVERSHOOT,
     segments: HOLE_SEGMENTS
   })
-  return translate([x, centerY, centerZ], rotateX(Math.PI / 2, bore))
+  return translate([0, centerY, z], rotateX(Math.PI / 2, bore))
 }
 
 const main = () => {
@@ -85,8 +85,13 @@ const main = () => {
     extrudeLinear({ height: BEAM_HEIGHT / 2 }, beamTop2D())
   )
 
+  const topCenterZ = (BEAM_HEIGHT / 2 + BEAM_HEIGHT) / 2
   const solid = union(ring, beamBottom, beamTop)
-  return subtract(solid, beamTopHole(-HOLE_OFFSET_X), beamTopHole(HOLE_OFFSET_X))
+  return subtract(
+    solid,
+    beamTopHole(topCenterZ - HOLE_OFFSET_Z),
+    beamTopHole(topCenterZ + HOLE_OFFSET_Z)
+  )
 }
 
 module.exports = { main, ring2D, beamBottom2D, beamTop2D }
