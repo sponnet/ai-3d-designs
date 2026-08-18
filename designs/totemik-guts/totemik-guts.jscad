@@ -1,7 +1,6 @@
 const { circle, rectangle } = require('@jscad/modeling').primitives
 const { subtract } = require('@jscad/modeling').booleans
 const { extrudeLinear } = require('@jscad/modeling').extrusions
-const { translate } = require('@jscad/modeling').transforms
 
 const OUTER_DIAMETER = 49
 const WALL_THICKNESS = 2
@@ -45,11 +44,10 @@ const beam2D = () => {
 }
 
 const main = () => {
+  // Both extrusions start at z = 0, so the ring and beam share the same
+  // base plane at the bottom.
   const ring = extrudeLinear({ height: RING_HEIGHT }, ring2D())
-  const beam = translate(
-    [0, 0, RING_HEIGHT / 2 - BEAM_HEIGHT / 2],
-    extrudeLinear({ height: BEAM_HEIGHT }, beam2D())
-  )
+  const beam = extrudeLinear({ height: BEAM_HEIGHT }, beam2D())
   return [ring, beam]
 }
 

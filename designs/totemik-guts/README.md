@@ -17,8 +17,8 @@ Z direction, touching the ring's inner wall at exactly 2 points.
 ### Beam
 
 - Base footprint: `27 mm x 5 mm`
-- Extrusion height (Z): `200 mm`, centered on the ring's mid-height so it
-  protrudes equally above and below the ring
+- Extrusion height (Z): `200 mm`, base at `z = 0` — same base plane as the
+  ring, so the ring sits at the bottom of the beam
 - Positioned so its `27 mm` edge forms a chord of the inner circle
   (radius `22.5 mm`) at `18 mm` from the ring center — the 2 endpoints of
   that edge land exactly on the inner wall (`13.5-18-22.5` is a `3-4-5`
