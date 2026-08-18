@@ -3,7 +3,9 @@
 ## Overview
 
 Open ring (split-ring) profile with a long beam standing through it in the
-Z direction, touching the ring's inner wall at exactly 2 points.
+Z direction. The beam is pushed sideways so 2 corners of its long edge sit
+inside the ring wall, giving real solid overlap (not just a tangent touch)
+for a reliably connected 3D print.
 
 ## Geometry
 
@@ -19,12 +21,15 @@ Z direction, touching the ring's inner wall at exactly 2 points.
 - Base footprint: `27 mm x 5 mm`
 - Extrusion height (Z): `200 mm`, base at `z = 0` — same base plane as the
   ring, so the ring sits at the bottom of the beam
-- Positioned so its `27 mm` edge forms a chord of the inner circle
-  (radius `22.5 mm`) at `18 mm` from the ring center — the 2 endpoints of
-  that edge land exactly on the inner wall (`13.5-18-22.5` is a `3-4-5`
-  triangle scaled by `4.5`), giving exactly 2 touch points. The beam then
-  extends `5 mm` further inward, staying clear of the wall everywhere else.
-  Placed opposite the 0° notch (along +Y) so the two features don't clash.
+- Positioned so its `27 mm` edge forms a chord at `~19.24 mm` from the ring
+  center — the 2 endpoints of that edge land on the middle of the ring
+  wall (radius `23.5 mm`, halfway between inner `22.5 mm` and outer
+  `24.5 mm`), so those 2 corners are embedded in solid ring material
+  instead of just touching the inner surface. The beam then extends
+  `5 mm` further inward. Placed opposite the 0° notch (along +Y) so the
+  two features don't clash.
+- Ring and beam are unioned into a single printable solid (they genuinely
+  overlap, not just touch).
 
 ## Source
 
