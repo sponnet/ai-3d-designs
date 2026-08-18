@@ -15,15 +15,24 @@ const NOTCH_MARGIN = 1
 // just tangent to the inner radius), so there is real solid overlap
 // between beam and ring for a printable, connected contact.
 //
-// The beam is 2 stacked blocks sharing the same outer (wall-facing) Y
-// edge: the bottom half (ring-side) keeps the full depth for that
-// overlap, the top half (away from the ring) is trimmed to half depth,
-// and gets 2 through-holes perpendicular to the ring's Z axis, stacked
-// one above the other.
+// The beam is 2 stacked blocks: the bottom half (ring-side) keeps the
+// full depth for that overlap, the top half (away from the ring) is
+// trimmed to half depth and gets 2 through-holes perpendicular to the
+// ring's Z axis, stacked one above the other.
+//
+// BEAM_NOTCH_SIDE picks which side of the top half gets trimmed away:
+// 'inner' (default) removes material toward the ring center, 'outer'
+// removes it toward the ring wall instead. Printing one piece of each
+// gives 2 halves whose thinned top sections face opposite ways, so they
+// nest together into a full-depth lap joint when assembled.
 const BEAM_WIDTH = 27
 const BEAM_DEPTH = 5
 const BEAM_DEPTH_TOP = BEAM_DEPTH / 2
 const BEAM_HEIGHT = 100
+
+const NOTCH_SIDE_VALUES = ['inner', 'outer']
+const NOTCH_SIDE_CAPTIONS = ['Inner (toward ring center)', 'Outer (toward ring wall)']
+const BEAM_NOTCH_SIDE_DEFAULT = NOTCH_SIDE_VALUES[0]
 
 const HOLE_DIAMETER = 3
 const HOLE_OFFSET_Z = 7
@@ -38,6 +47,24 @@ const WALL_MID_RADIUS = (OUTER_RADIUS + INNER_RADIUS) / 2
 // (BEAM_WIDTH-long) edge, chosen so that edge's 2 endpoints land on
 // WALL_MID_RADIUS -> those 2 corners sit inside the ring wall.
 const BEAM_CONTACT_OFFSET = Math.sqrt(WALL_MID_RADIUS ** 2 - (BEAM_WIDTH / 2) ** 2)
+
+const getParameterDefinitions = () => [
+  {
+    name: 'beamNotchSide',
+    type: 'choice',
+    caption: 'Beam top-half notch side',
+    values: NOTCH_SIDE_VALUES,
+    captions: NOTCH_SIDE_CAPTIONS,
+    initial: BEAM_NOTCH_SIDE_DEFAULT
+  }
+]
+
+// Choice widgets may hand back the string value or its numeric index
+// depending on host (CLI vs openjscad.xyz) -> normalize here.
+const resolveNotchSide = (raw) => {
+  if (typeof raw === 'number') return NOTCH_SIDE_VALUES[raw] ?? BEAM_NOTCH_SIDE_DEFAULT
+  return NOTCH_SIDE_VALUES.includes(raw) ? raw : BEAM_NOTCH_SIDE_DEFAULT
+}
 
 const ring2D = () => {
   const outer = circle({ radius: OUTER_RADIUS, segments: CIRCLE_SEGMENTS })
@@ -59,13 +86,24 @@ const beamBottom2D = () => {
   return rectangle({ size: [BEAM_WIDTH, BEAM_DEPTH], center: [0, centerY] })
 }
 
-const beamTop2D = () => {
-  const centerY = BEAM_CONTACT_OFFSET - BEAM_DEPTH_TOP / 2
+// Y-center of the trimmed top half, for the given notch side: 'inner'
+// keeps the outer (wall-facing) edge fixed and trims from the center
+// side; 'outer' keeps the inner edge fixed and trims from the wall side.
+const beamTopCenterY = (notchSide) => {
+  if (notchSide === 'outer') {
+    const innerEdge = BEAM_CONTACT_OFFSET - BEAM_DEPTH
+    return innerEdge + BEAM_DEPTH_TOP / 2
+  }
+  return BEAM_CONTACT_OFFSET - BEAM_DEPTH_TOP / 2
+}
+
+const beamTop2D = (notchSide = BEAM_NOTCH_SIDE_DEFAULT) => {
+  const centerY = beamTopCenterY(notchSide)
   return rectangle({ size: [BEAM_WIDTH, BEAM_DEPTH_TOP], center: [0, centerY] })
 }
 
-const beamTopHole = (z) => {
-  const centerY = BEAM_CONTACT_OFFSET - BEAM_DEPTH_TOP / 2
+const beamTopHole = (z, notchSide) => {
+  const centerY = beamTopCenterY(notchSide)
   const bore = cylinder({
     radius: HOLE_DIAMETER / 2,
     height: BEAM_DEPTH_TOP + HOLE_OVERSHOOT,
@@ -74,7 +112,9 @@ const beamTopHole = (z) => {
   return translate([0, centerY, z], rotateX(Math.PI / 2, bore))
 }
 
-const main = () => {
+const main = (params = {}) => {
+  const notchSide = resolveNotchSide(params.beamNotchSide)
+
   // All 3 pieces share z = 0 as their base plane. The beam is split at
   // half its height: full-depth bottom half against the ring, half-depth
   // top half further out.
@@ -82,16 +122,16 @@ const main = () => {
   const beamBottom = extrudeLinear({ height: BEAM_HEIGHT / 2 }, beamBottom2D())
   const beamTop = translate(
     [0, 0, BEAM_HEIGHT / 2],
-    extrudeLinear({ height: BEAM_HEIGHT / 2 }, beamTop2D())
+    extrudeLinear({ height: BEAM_HEIGHT / 2 }, beamTop2D(notchSide))
   )
 
   const topCenterZ = (BEAM_HEIGHT / 2 + BEAM_HEIGHT) / 2
   const solid = union(ring, beamBottom, beamTop)
   return subtract(
     solid,
-    beamTopHole(topCenterZ - HOLE_OFFSET_Z),
-    beamTopHole(topCenterZ + HOLE_OFFSET_Z)
+    beamTopHole(topCenterZ - HOLE_OFFSET_Z, notchSide),
+    beamTopHole(topCenterZ + HOLE_OFFSET_Z, notchSide)
   )
 }
 
-module.exports = { main, ring2D, beamBottom2D, beamTop2D }
+module.exports = { main, getParameterDefinitions, ring2D, beamBottom2D, beamTop2D }

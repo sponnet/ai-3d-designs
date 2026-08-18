@@ -31,13 +31,28 @@ carries 2 through-holes.
 - Bottom half (`z = 0` to `50 mm`, against the ring): full `5 mm` depth,
   keeping the overlap with the ring wall.
 - Top half (`z = 50` to `100 mm`, away from the ring): depth halved to
-  `2.5 mm`, trimmed from the inner (center-facing) side — the outer,
-  wall-facing edge stays put.
+  `2.5 mm`.
 - 2 through-holes in that thinned top half, `3 mm` diameter, axis along Y
   (perpendicular to the ring's Z axis), stacked one above the other along
   Z, `±7 mm` either side of the top half's mid-height (`z = 75 mm`).
 - Ring and beam are unioned, then the 2 holes subtracted, into a single
   printable solid.
+
+### `beamNotchSide` parameter — printing 2 interlocking halves
+
+The top half's depth reduction can be trimmed from either side:
+
+- `inner` (default): removes material toward the ring center, keeping the
+  outer (wall-facing) edge fixed.
+- `outer`: removes material toward the ring wall instead, keeping the
+  inner (center-facing) edge fixed — the mirror image of `inner`.
+
+Printing one piece with each setting gives 2 halves whose thinned top
+sections face opposite directions, so they nest into a full-depth lap
+joint when assembled. The parameter is exposed via
+`getParameterDefinitions()`, so it shows up as a choice field in the
+openjscad.xyz UI, and can be set from the CLI with
+`--beamNotchSide inner` / `--beamNotchSide outer`.
 
 ## Source
 
@@ -46,9 +61,12 @@ carries 2 through-holes.
 
 ## Outputs
 
-- STL: [`totemik-guts.stl`](./totemik-guts.stl)
+- STL (`beamNotchSide: inner`, default): [`totemik-guts.stl`](./totemik-guts.stl)
 - PNG preview: [`totemik-guts.png`](./totemik-guts.png)
+- STL (`beamNotchSide: outer`): [`totemik-guts-outer.stl`](./totemik-guts-outer.stl)
+- PNG preview: [`totemik-guts-outer.png`](./totemik-guts-outer.png)
 
 ## Preview
 
-![Totemik guts preview](./totemik-guts.png)
+![Totemik guts preview, inner notch side](./totemik-guts.png)
+![Totemik guts preview, outer notch side](./totemik-guts-outer.png)
