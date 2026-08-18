@@ -2,14 +2,29 @@
 
 ## Overview
 
-Open ring (split-ring) profile, extruded into a printable band.
+Open ring (split-ring) profile with a long beam standing through it in the
+Z direction, touching the ring's inner wall at exactly 2 points.
 
 ## Geometry
+
+### Ring
 
 - Outer diameter: `49 mm`
 - Wall thickness (radial): `2 mm` (inner diameter `45 mm`)
 - Notch/opening at 0°: `3 mm` wide, cut fully through the wall
 - Extrusion height: `5 mm`
+
+### Beam
+
+- Base footprint: `27 mm x 5 mm`
+- Extrusion height (Z): `200 mm`, centered on the ring's mid-height so it
+  protrudes equally above and below the ring
+- Positioned so its `27 mm` edge forms a chord of the inner circle
+  (radius `22.5 mm`) at `18 mm` from the ring center — the 2 endpoints of
+  that edge land exactly on the inner wall (`13.5-18-22.5` is a `3-4-5`
+  triangle scaled by `4.5`), giving exactly 2 touch points. The beam then
+  extends `5 mm` further inward, staying clear of the wall everywhere else.
+  Placed opposite the 0° notch (along +Y) so the two features don't clash.
 
 ## Source
 
