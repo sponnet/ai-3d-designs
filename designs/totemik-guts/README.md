@@ -2,10 +2,11 @@
 
 ## Overview
 
-Open ring (split-ring) profile with a long beam standing through it in the
-Z direction. The beam is pushed sideways so 2 corners of its long edge sit
+Open ring (split-ring) profile with a short beam standing on it in the Z
+direction. The beam is pushed sideways so 2 corners of its long edge sit
 inside the ring wall, giving real solid overlap (not just a tangent touch)
-for a reliably connected 3D print.
+for a reliably connected 3D print. The beam's top half is thinned down and
+carries 2 through-holes.
 
 ## Geometry
 
@@ -18,18 +19,25 @@ for a reliably connected 3D print.
 
 ### Beam
 
-- Base footprint: `27 mm x 5 mm`
-- Extrusion height (Z): `200 mm`, base at `z = 0` — same base plane as the
-  ring, so the ring sits at the bottom of the beam
+- Base footprint: `27 mm x 5 mm`, extrusion height (Z) `10 mm`, base at
+  `z = 0` — same base plane as the ring, so the ring sits at the bottom of
+  the beam
 - Positioned so its `27 mm` edge forms a chord at `~19.24 mm` from the ring
   center — the 2 endpoints of that edge land on the middle of the ring
   wall (radius `23.5 mm`, halfway between inner `22.5 mm` and outer
   `24.5 mm`), so those 2 corners are embedded in solid ring material
-  instead of just touching the inner surface. The beam then extends
-  `5 mm` further inward. Placed opposite the 0° notch (along +Y) so the
-  two features don't clash.
-- Ring and beam are unioned into a single printable solid (they genuinely
-  overlap, not just touch).
+  instead of just touching the inner surface. Placed opposite the 0°
+  notch (along +Y) so the two features don't clash.
+- Bottom half (`z = 0` to `5 mm`, against the ring): full `5 mm` depth,
+  keeping the overlap with the ring wall.
+- Top half (`z = 5` to `10 mm`, away from the ring): depth halved to
+  `2.5 mm`, trimmed from the inner (center-facing) side — the outer,
+  wall-facing edge stays put.
+- 2 through-holes in that thinned top half, `3 mm` diameter, axis along Y
+  (perpendicular to the ring's Z axis), centered vertically in the top
+  half (`z = 7.5 mm`) and spaced `±7 mm` either side of center in X.
+- Ring and beam are unioned, then the 2 holes subtracted, into a single
+  printable solid.
 
 ## Source
 
