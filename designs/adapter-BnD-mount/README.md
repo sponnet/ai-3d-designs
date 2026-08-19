@@ -40,8 +40,9 @@ Since several dimensions weren't specified, these are the assumptions
 baked into the parametric source (`adapter.jscad`) — all named constants,
 easy to change:
 
-- **Plate**: `65 × 60 mm`, `4 mm` thick, holes as above (through-holes,
-  no threads — use your own bolts/nuts or the BnD mount's own screws).
+- **Plate**: `65 × 60 mm`, `4 mm` thick, corners rounded with a `7 mm`
+  radius, holes as above (through-holes, no threads — use your own
+  bolts/nuts or the BnD mount's own screws).
   Rotated 90° from the plate's own natural orientation: its `65 mm` side
   (was the BnD mount's plate *height*) runs along the tube axis (matching
   the shell length), its `60 mm` side (was the BnD mount's plate *width*)

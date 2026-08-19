@@ -1,4 +1,4 @@
-const { circle, rectangle, cylinder, cuboid } = require('@jscad/modeling').primitives
+const { circle, rectangle, roundedRectangle, cylinder, cuboid } = require('@jscad/modeling').primitives
 const { subtract, union, intersect } = require('@jscad/modeling').booleans
 const { extrudeLinear } = require('@jscad/modeling').extrusions
 const { translate, rotateX, rotateY } = require('@jscad/modeling').transforms
@@ -24,6 +24,7 @@ const { translate, rotateX, rotateY } = require('@jscad/modeling').transforms
 const PLATE_WIDTH = 65 // X, matches BnD mount height & shell length
 const PLATE_LENGTH = 60 // Y, matches BnD mount plate width, tube's tangent direction
 const PLATE_THICKNESS = 4
+const PLATE_CORNER_RADIUS = 7
 const PLATE_HOLES = [
   { x: 59.1, yFromEdge: 6.0, diameter: 5.0 },
   { x: 59.1, yFromEdge: 54.0, diameter: 5.0 }, // mirrored
@@ -58,7 +59,12 @@ const HOLE_OVERSHOOT = 2
 // direction) -- this is what makes the plate lie flat, lengthwise along
 // the tube, instead of standing up off it.
 const plate2D = () => {
-  const base = rectangle({ size: [PLATE_WIDTH, PLATE_LENGTH], center: [PLATE_WIDTH / 2, 0] })
+  const base = roundedRectangle({
+    size: [PLATE_WIDTH, PLATE_LENGTH],
+    center: [PLATE_WIDTH / 2, 0],
+    roundRadius: PLATE_CORNER_RADIUS,
+    segments: 32
+  })
   const holes = PLATE_HOLES.map((h) =>
     circle({ radius: h.diameter / 2, segments: 48, center: [h.x, h.yFromEdge - PLATE_LENGTH / 2] })
   )
