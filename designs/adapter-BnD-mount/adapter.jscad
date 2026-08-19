@@ -43,12 +43,14 @@ const SHELL_SEGMENTS = 96
 // access behind the plate there to get a nut onto a bolt through it.
 const SHELL_START_X = 15
 
-// --- End flanges (one at each of the shell's 2 edges, Y = +/-SHELL_OUTER_R) ---
-const EAR_WIDTH = 12 // radial extent beyond the shell's outer surface
+// --- End flanges (one at each of the shell's 2 edges, Y = +/-SHELL_OUTER_R).
+// Span the same X range as the shell itself (SHELL_START_X..SHELL_LENGTH),
+// not the full plate length, so they don't stick out past the shell. ---
+const EAR_WIDTH = 8 // radial extent beyond the shell's outer surface
 const EAR_THICKNESS = 3 // this piece's own contribution; mates with an identical
 // piece's ear (rotated 180 deg) to form EAR_THICKNESS*2 of clamped material
-const EAR_HOLE_DIAMETER = 4.5 // M4 clearance
-const EAR_HOLE_X = [15, SHELL_LENGTH - 15] // 2 holes, 15mm in from each end
+const EAR_HOLE_DIAMETER = 3 // M3 clearance
+const EAR_HOLE_X = [SHELL_START_X + 10, SHELL_LENGTH - 10] // 10mm in from each end
 const HOLE_OVERSHOOT = 2
 
 // Plate profile drawn directly in global (X,Y): X 0..PLATE_WIDTH (tube
@@ -115,18 +117,28 @@ const earHoles = () =>
     )
   )
 
-// One ear at Y=+SHELL_OUTER_R edge, one (mirrored in u) at Y=-SHELL_OUTER_R edge.
+// One ear at Y=+SHELL_OUTER_R edge, one (mirrored in u) at Y=-SHELL_OUTER_R
+// edge, both spanning SHELL_START_X..SHELL_LENGTH -- same X range as the
+// shell itself, so they don't overhang past where the shell ends.
 const ears3D = () => {
-  const earPos = extrudeLinear({ height: SHELL_LENGTH }, ear2D())
-  const earPosGlobal = rotateX(Math.PI / 2, rotateY(Math.PI / 2, earPos))
+  const earSpan = SHELL_LENGTH - SHELL_START_X
+
+  const earPos = extrudeLinear({ height: earSpan }, ear2D())
+  const earPosGlobal = translate(
+    [SHELL_START_X, 0, 0],
+    rotateX(Math.PI / 2, rotateY(Math.PI / 2, earPos))
+  )
   const earPosHoled = subtract(earPosGlobal, ...earHoles())
 
   const earNeg2D = rectangle({
     size: [EAR_WIDTH, EAR_THICKNESS],
     center: [-(SHELL_OUTER_R + EAR_WIDTH / 2), EAR_THICKNESS / 2]
   })
-  const earNeg = extrudeLinear({ height: SHELL_LENGTH }, earNeg2D)
-  const earNegGlobal = rotateX(Math.PI / 2, rotateY(Math.PI / 2, earNeg))
+  const earNeg = extrudeLinear({ height: earSpan }, earNeg2D)
+  const earNegGlobal = translate(
+    [SHELL_START_X, 0, 0],
+    rotateX(Math.PI / 2, rotateY(Math.PI / 2, earNeg))
+  )
   const earNegHoles = EAR_HOLE_X.map((x) =>
     translate(
       [x, -(SHELL_OUTER_R + EAR_WIDTH / 2), EAR_THICKNESS / 2],

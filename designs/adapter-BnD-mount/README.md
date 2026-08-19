@@ -62,13 +62,15 @@ easy to change:
   plate's outer edges the shell curves away underneath it (a normal,
   expected overhang for a flat bracket on a round tube — the same as most
   pipe-mount plates).
-- **Tube clamp shell**: inner radius `25.5 mm` (Ø51mm tube), wall
-  `3 mm` (assumed — not specified), length `65 mm` (matches the plate's
-  X extent, `PLATE_WIDTH`).
-- **End flanges**: `12 mm` radial width beyond the shell (assumed), each
-  piece contributes `3 mm` thickness (mates with the other piece's `3 mm`
-  to form `6 mm` combined at each bolted joint — assumed), 2 holes per
-  flange, Ø`4.5 mm` (M4 clearance, assumed), spaced 30mm apart.
+- **Tube clamp shell**: inner radius `25.5 mm` (Ø51mm tube), wall `3 mm`,
+  spans `SHELL_START_X`..`65 mm` (i.e. `50 mm` long, cut back at the
+  single-hole end — see above).
+- **End flanges**: span the same X range as the shell (not the plate), so
+  they don't overhang past it. `8 mm` radial width beyond the shell
+  (assumed), each piece contributes `3 mm` thickness (mates with the
+  other piece's `3 mm` to form `6 mm` combined at each bolted joint —
+  assumed), 2 holes per flange, Ø`3 mm`, spaced 10mm in from each end of
+  the flange.
 
 **If any of the assumed dimensions (wall thickness, flange size, bolt
 size) don't match what you need, they're single constants at the top of
