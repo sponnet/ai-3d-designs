@@ -6,7 +6,9 @@ const { translate, rotateX, rotateY } = require('@jscad/modeling').transforms
 // Adapter that lets a "BnD 20Vmax mount v6" tool holder (its flat
 // 60x65mm back plate, measured from BnD_20Vmax_mount_v6_2017.stl) clamp
 // onto a 51mm-diameter tube instead of a wall. One printed piece =
-// 1) a flat plate matching the mount's 3-hole pattern, and
+// 1) a flat plate matching the mount's 3-hole pattern, lying flat along
+//    the tube (tangent at the top of the shell, sunk into the shell wall
+//    for a solid printed bond), and
 // 2) a 180 degree half-shell that cradles half the tube.
 // Two of these pieces, the 2nd rotated 180 degrees around the tube axis
 // (X), sandwich the tube; their end flanges (2 holes each) bolt together.
@@ -16,13 +18,14 @@ const { translate, rotateX, rotateY } = require('@jscad/modeling').transforms
 
 // --- BnD mount back-plate hole pattern (measured from the STL,
 // y=3 back face, symmetrized) ---
-const PLATE_WIDTH = 60 // X, matches BnD mount width
-const PLATE_HEIGHT = 65 // Z (once standing on the shell), matches BnD mount plate height
+const PLATE_WIDTH = 60 // X, matches BnD mount width & shell length
+const PLATE_LENGTH = 65 // Y, matches BnD mount plate height -- now runs
+// lengthwise along the tube's tangent direction instead of standing up
 const PLATE_THICKNESS = 4
 const PLATE_HOLES = [
-  { x: 6.0, zFromBottom: 59.1, diameter: 9.5 }, // top-left, matches BnD hole (measured d=9.3)
-  { x: 54.0, zFromBottom: 59.1, diameter: 9.5 }, // top-right (mirrored)
-  { x: 30.0, zFromBottom: 3.8, diameter: 5.0 } // bottom-center, matches BnD hole (measured d=4.8)
+  { x: 6.0, yFromEdge: 59.1, diameter: 9.5 }, // matches BnD hole (measured d=9.3)
+  { x: 54.0, yFromEdge: 59.1, diameter: 9.5 }, // mirrored
+  { x: 30.0, yFromEdge: 3.8, diameter: 5.0 } // matches BnD hole (measured d=4.8)
 ]
 
 // --- Tube clamp shell ---
@@ -42,23 +45,26 @@ const EAR_HOLE_DIAMETER = 4.5 // M4 clearance
 const EAR_HOLE_X = [15, 45] // 2 holes along the shell length
 const HOLE_OVERSHOOT = 2
 
+// Plate profile drawn directly in global (X,Y): X 0..PLATE_WIDTH (tube
+// axis, unchanged), Y centered on 0 (the tube's tangent/top direction) --
+// this is what makes the plate lie flat, lengthwise along the tube,
+// instead of standing up off it.
 const plate2D = () => {
-  const base = rectangle({ size: [PLATE_WIDTH, PLATE_HEIGHT], center: [PLATE_WIDTH / 2, PLATE_HEIGHT / 2] })
+  const base = rectangle({ size: [PLATE_WIDTH, PLATE_LENGTH], center: [PLATE_WIDTH / 2, 0] })
   const holes = PLATE_HOLES.map((h) =>
-    circle({ radius: h.diameter / 2, segments: 48, center: [h.x, h.zFromBottom] })
+    circle({ radius: h.diameter / 2, segments: 48, center: [h.x, h.yFromEdge - PLATE_LENGTH / 2] })
   )
   return subtract(base, union(...holes))
 }
 
-// Plate stands on top of the shell (Y=0, tangent to the top of the arc)
-// spanning X 0..PLATE_WIDTH, Z from the shell's outer radius upward.
+// extrudeLinear extrudes the (X,Y) profile along +Z, which is already the
+// right axis here (plate thickness = Z). Sink the bottom face down to the
+// shell's inner radius so the plate shares the full wall thickness with
+// the shell at Y=0 -- solid overlap, not just a tangent line, for a
+// strong bond between plate and shell in the print.
 const plate3D = () => {
   const plate = extrudeLinear({ height: PLATE_THICKNESS }, plate2D())
-  // extrudeLinear extrudes the XY profile along +Z; here that "height"
-  // axis is the plate's own thickness, which should point along global Y.
-  // Rotate the profile plane (X,Y) -> (X,Z) then push it out along Y.
-  const standing = rotateX(Math.PI / 2, plate)
-  return translate([0, -PLATE_THICKNESS / 2, SHELL_OUTER_R], standing)
+  return translate([0, 0, SHELL_INNER_R], plate)
 }
 
 // 180 degree half-annulus (Z >= 0 half), profile drawn in a local (u,v)
