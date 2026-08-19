@@ -21,7 +21,12 @@ const { translate, rotateX, rotateY } = require('@jscad/modeling').transforms
 // version: its 65mm side (was BnD's plate height) now runs along the
 // tube axis (X, = shell length), its 60mm side (was BnD's plate width)
 // runs across the tube's tangent direction (Y). ---
-const PLATE_WIDTH = 65 // X, matches BnD mount height & shell length
+// The shell/ear system is anchored to X = SHELL_TUBE_END_X (the "2 big
+// holes" end); the plate is now longer than that (PLATE_WIDTH) and
+// extends past X=0, further out beyond the single-hole end, while the
+// holes themselves keep their original X positions.
+const SHELL_TUBE_END_X = 65
+const PLATE_WIDTH = 84 // X, plate length (longer than SHELL_TUBE_END_X)
 const PLATE_LENGTH = 60 // Y, matches BnD mount plate width, tube's tangent direction
 const PLATE_THICKNESS = 4
 const PLATE_CORNER_RADIUS = 7
@@ -37,7 +42,7 @@ const TUBE_RADIUS = TUBE_DIAMETER / 2
 const SHELL_WALL = 3
 const SHELL_INNER_R = TUBE_RADIUS
 const SHELL_OUTER_R = TUBE_RADIUS + SHELL_WALL
-const SHELL_LENGTH = PLATE_WIDTH // shares the plate's X extent
+const SHELL_LENGTH = SHELL_TUBE_END_X // unaffected by the plate's extra length
 const SHELL_SEGMENTS = 96
 // The shell (not the plate, which stays the full BnD-matched length) is
 // cut back at the single-hole end, clear of that hole, so there's open
@@ -54,14 +59,16 @@ const EAR_HOLE_DIAMETER = 3 // M3 clearance
 const EAR_HOLE_X = [SHELL_START_X + 10, SHELL_LENGTH - 10] // 10mm in from each end
 const HOLE_OVERSHOOT = 2
 
-// Plate profile drawn directly in global (X,Y): X 0..PLATE_WIDTH (tube
-// axis, full BnD-matched length), Y centered on 0 (the tube's tangent/top
-// direction) -- this is what makes the plate lie flat, lengthwise along
-// the tube, instead of standing up off it.
+// Plate profile drawn directly in global (X,Y): X (SHELL_TUBE_END_X -
+// PLATE_WIDTH)..SHELL_TUBE_END_X (tube axis; right edge fixed at
+// SHELL_TUBE_END_X, extra length added by extending past X=0 on the
+// single-hole side -- hole positions are untouched), Y centered on 0
+// (the tube's tangent/top direction) -- this is what makes the plate lie
+// flat, lengthwise along the tube, instead of standing up off it.
 const plate2D = () => {
   const base = roundedRectangle({
     size: [PLATE_WIDTH, PLATE_LENGTH],
-    center: [PLATE_WIDTH / 2, 0],
+    center: [SHELL_TUBE_END_X - PLATE_WIDTH / 2, 0],
     roundRadius: PLATE_CORNER_RADIUS,
     segments: 32
   })

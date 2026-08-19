@@ -40,15 +40,20 @@ Since several dimensions weren't specified, these are the assumptions
 baked into the parametric source (`adapter.jscad`) — all named constants,
 easy to change:
 
-- **Plate**: `65 × 60 mm`, `4 mm` thick, corners rounded with a `7 mm`
+- **Plate**: `84 × 60 mm`, `4 mm` thick, corners rounded with a `7 mm`
   radius, holes as above (through-holes, no threads — use your own
   bolts/nuts or the BnD mount's own screws).
-  Rotated 90° from the plate's own natural orientation: its `65 mm` side
-  (was the BnD mount's plate *height*) runs along the tube axis (matching
-  the shell length), its `60 mm` side (was the BnD mount's plate *width*)
-  runs across the tube's tangent/top direction, centered over the shell.
-  This is why the 2 big holes now sit close together near one end
-  (along X) instead of spread across the width.
+  Rotated 90° from the plate's own natural orientation: its long side
+  (was the BnD mount's plate *height*, `65 mm`) runs along the tube axis
+  (matching the shell length), its `60 mm` side (was the BnD mount's
+  plate *width*) runs across the tube's tangent/top direction, centered
+  over the shell. This is why the 2 big holes now sit close together
+  near one end (along X) instead of spread across the width.
+- **Extra length at the single-hole end**: the plate's `84 mm` length is
+  `19 mm` longer than the BnD mount's own `65 mm` plate height. That
+  extra length is added past the single-hole end (`SHELL_TUBE_END_X`, the
+  2-big-holes end, stays fixed at `X = 65`) — the plate just extends
+  further out beyond `X = 0` there. The 3 hole positions are unchanged.
 - **Nut access at the single-hole end**: the plate keeps its full,
   BnD-matched length, but the *shell* is cut back there (`SHELL_START_X`,
   15mm in from that end — clear of the hole plus some margin) instead of
