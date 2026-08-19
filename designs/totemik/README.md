@@ -1,0 +1,209 @@
+# Totemik
+
+Three related explorations for the Totemik project:
+
+- **Ring** and **Partition**: a ring band with a push-fit partition strip
+  (see below).
+- **Totemik Guts**: a separate, independent exploration of a ring + beam
+  design (different dimensions from the Ring above — not interchangeable
+  with it).
+
+## Ring
+
+### Overview
+
+Circular ring band modeled from a hand sketch: a plain band with a small
+notch cut at the top and two bar-shaped blocks sitting on the outer surface,
+one on each side of the notch. Each block carries a small retaining lip that
+always hangs off its outer end ("tip", the end farthest from the ring) — the
+lip tracks that end dynamically as `LIP_DEPTH` or `BLOCK_DEPTH` change —
+meant to catch a cord tied around the two blocks (to pinch the notch shut)
+so it can't slide off.
+
+### Geometry
+
+- Inner diameter: `51 mm`
+- Wall thickness: `1 mm` (outer diameter `53 mm`) — also drives block
+  thickness and the lip's sideways overhang, see below
+- Extrusion height (band height): `10 mm` — also drives the lip's own height
+- Top notch: `5 mm` wide, cut fully through the wall
+- Blocks: thickness always equals the wall thickness, `10 mm` tall
+  (independent `BLOCK_HEIGHT`, from the band's bottom), one flush against
+  each notch edge
+- Block protrusion beyond the outer surface: `4 mm` (not given in the
+  sketch/spec — assumed; adjust `BLOCK_DEPTH` if a different depth is
+  wanted)
+- Retaining lip: always flush with the block's outer end (moves with
+  `BLOCK_DEPTH`), reaching `1 mm` inward from that end (independent
+  `LIP_DEPTH`, not given in the sketch/spec — assumed), `10 mm` tall (=
+  extrusion height, regardless of `BLOCK_HEIGHT`) and sticking out `1 mm`
+  sideways (= wall thickness) beyond the block's outward-facing side, flush
+  with the block on the notch-facing side
+
+`BLOCK_HEIGHT` is independent of `BAND_HEIGHT` and of the lip's own height: a
+block shorter than the band sits flush with the band's bottom; taller rises
+above the band's top surface. The lip's height always matches the band
+regardless.
+
+- Ridges: `8` ridges (`RIDGE_COUNT`), evenly spaced around the full circle,
+  each `1.5 mm` wide (`RIDGE_WIDTH`), `3 mm` protrusion beyond the outer
+  surface (`RIDGE_PROTRUSION`), full band height. The pattern is offset by
+  half the angular spacing from the notch (at 90°), so the notch always
+  falls exactly centered between two ridges — never on top of one — however
+  `RIDGE_COUNT` is set.
+
+The blocks, lips, and ridges are all built as lobes added to the outer
+cylinder before the inner hole is cut, so they fuse cleanly into the wall
+and the 51 mm bore stays true (not obstructed) under any of them.
+
+### Source
+
+- JSCAD: [`ring.jscad`](./ring.jscad)
+- OpenJSCAD: [Open `ring.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/ring.jscad#)
+
+### Outputs
+
+- STL: [`ring.stl`](./ring.stl)
+- PNG preview (top view, matches sketch orientation): [`ring.png`](./ring.png)
+- PNG preview (isometric): [`ring-iso.png`](./ring-iso.png)
+
+### Preview
+
+![Totemik ring top view](./ring.png)
+![Totemik ring isometric view](./ring-iso.png)
+
+## Partition
+
+### Overview
+
+A long, thin, standing trapezoidal partition — an isoceles trapezoid in
+cross-section, wide base at the bottom, flat blunt top — with a short slot
+cut into its base at each end, sized to push-fit over a ridge from
+[`ring.jscad`](./ring.jscad) (`RIDGE_WIDTH` x `RIDGE_PROTRUSION`). The
+middle of the length stays solid; only the last `SLOT_END_LENGTH` at each
+end is slotted.
+
+### Geometry
+
+- Overall length: `150 mm`
+- Trapezoid height (top above the base): `10 mm`
+- Trapezoid base width: `5 mm`
+- Flat top width: `2 mm` (`TOP_WIDTH`) — the top is cut blunt/flat first,
+  and the notches (below) are cut into that flat top afterward
+- Slot: `6 mm` long (`SLOT_END_LENGTH`) at each end of the part, nominally
+  `1.5 mm` wide / `3 mm` deep — matching the ring's `RIDGE_WIDTH` /
+  `RIDGE_PROTRUSION`
+- Push-fit tolerance: `0.15 mm` (`TOLERANCE`, not specified in the brief —
+  assumed) added to both the slot width and depth, so the actual cut is
+  `1.65 mm` wide x `3.15 mm` deep — sized a touch larger than the ridge so
+  typical FDM printing error (holes print undersize, pegs print oversize)
+  still leaves a snug push-on fit rather than one that's impossible to
+  assemble or too loose to grip
+- Top: scalloped along its full length with `1 mm` wide (`NOTCH_WIDTH`)
+  rectangular notches, crosswise to the ridge, spaced `2 mm` apart
+  (`NOTCH_SPACING`). Each notch is `1 mm` deep (`NOTCH_DEPTH`, not specified
+  in the brief — assumed) — a plain straight-walled cut, so depth can be set
+  to anything independent of width
+
+### Source
+
+- JSCAD: [`partition.jscad`](./partition.jscad)
+- OpenJSCAD: [Open `partition.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/partition.jscad#)
+
+### Outputs
+
+- STL: [`partition.stl`](./partition.stl)
+- PNG preview (full length): [`partition-iso.png`](./partition-iso.png)
+- PNG preview (one end, from underneath, showing the end-slot):
+  [`partition-detail.png`](./partition-detail.png)
+- PNG preview (middle section, showing the top notches):
+  [`partition-top-detail.png`](./partition-top-detail.png)
+
+### Preview
+
+Full length (150 mm — the 1.5 mm slot and 1 mm notches aren't visible at
+this scale):
+
+![Partition full length](./partition-iso.png)
+
+Close-up of one end (slot open at the tip, stopping after 6 mm):
+
+![Partition slot detail](./partition-detail.png)
+
+Close-up of the top (rectangular notches, one every 2 mm):
+
+![Partition top notch detail](./partition-top-detail.png)
+
+## Totemik Guts
+
+### Overview
+
+Open ring (split-ring) profile with a short beam standing on it in the Z
+direction. The beam is pushed sideways so 2 corners of its long edge sit
+inside the ring wall, giving real solid overlap (not just a tangent touch)
+for a reliably connected 3D print. The beam's top half is thinned down and
+carries 2 through-holes. This is a separate exploration from the Ring
+above — different dimensions, not interchangeable.
+
+### Geometry
+
+#### Ring
+
+- Outer diameter: `49 mm`
+- Wall thickness (radial): `2 mm` (inner diameter `45 mm`)
+- Notch/opening at 0°: `3 mm` wide, cut fully through the wall
+- Extrusion height: `5 mm`
+
+#### Beam
+
+- Base footprint: `27 mm x 2.5 mm`, extrusion height (Z) `100 mm`, base at
+  `z = 0` — same base plane as the ring, so the ring sits at the bottom of
+  the beam
+- Positioned so its `27 mm` edge forms a chord at `~19.24 mm` from the ring
+  center — the 2 endpoints of that edge land on the middle of the ring
+  wall (radius `23.5 mm`, halfway between inner `22.5 mm` and outer
+  `24.5 mm`), so those 2 corners are embedded in solid ring material
+  instead of just touching the inner surface. Placed opposite the 0°
+  notch (along +Y) so the two features don't clash.
+- Bottom half (`z = 0` to `50 mm`, against the ring): full `2.5 mm` depth,
+  keeping the overlap with the ring wall.
+- Top half (`z = 50` to `100 mm`, away from the ring): depth halved to
+  `1.25 mm`.
+- 2 through-holes in that thinned top half, `3 mm` diameter, axis along Y
+  (perpendicular to the ring's Z axis), stacked one above the other along
+  Z, `±7 mm` either side of the top half's mid-height (`z = 75 mm`).
+- Ring and beam are unioned, then the 2 holes subtracted, into a single
+  printable solid.
+
+#### `beamNotchSide` parameter — printing 2 interlocking halves
+
+The top half's depth reduction can be trimmed from either side:
+
+- `inner` (default): removes material toward the ring center, keeping the
+  outer (wall-facing) edge fixed.
+- `outer`: removes material toward the ring wall instead, keeping the
+  inner (center-facing) edge fixed — the mirror image of `inner`.
+
+Printing one piece with each setting gives 2 halves whose thinned top
+sections face opposite directions, so they nest into a full-depth lap
+joint when assembled. The parameter is exposed via
+`getParameterDefinitions()`, so it shows up as a choice field in the
+openjscad.xyz UI, and can be set from the CLI with
+`--beamNotchSide inner` / `--beamNotchSide outer`.
+
+### Source
+
+- JSCAD: [`totemik-guts.jscad`](./totemik-guts.jscad)
+- OpenJSCAD: [Open `totemik-guts.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/totemik-guts.jscad#)
+
+### Outputs
+
+- STL (`beamNotchSide: inner`, default): [`totemik-guts.stl`](./totemik-guts.stl)
+- PNG preview: [`totemik-guts.png`](./totemik-guts.png)
+- STL (`beamNotchSide: outer`): [`totemik-guts-outer.stl`](./totemik-guts-outer.stl)
+- PNG preview: [`totemik-guts-outer.png`](./totemik-guts-outer.png)
+
+### Preview
+
+![Totemik guts preview, inner notch side](./totemik-guts.png)
+![Totemik guts preview, outer notch side](./totemik-guts-outer.png)

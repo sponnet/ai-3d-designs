@@ -12,7 +12,7 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
 - [**Foamcutter v2**](./designs/foamcutter-v2/): updated foam cutter support assembly plus X-Acto No. 11 outline tooling model.
 - [**Staircase with landing**](./designs/starcase-with-landing/): parametric U-turn staircase model with landing and glue tabs.
 - [**Mounting hook**](./designs/mounting-hook/): 48 mm hook-profile part from sketch, extruded 20 mm.
-- [**Totemik guts**](./designs/totemik-guts/): open ring, 49 mm OD, 2 mm wall, 3 mm notch at 0°, extruded 5 mm.
+- [**Totemik**](./designs/totemik/): 51 mm inner-diameter ring band with a top notch and outer ridges, plus a 150 mm partition strip that push-fits onto the ring's ridges, plus a separate 49 mm ring + beam exploration ("totemik-guts").
 
 ## Outputs At A Glance
 
@@ -57,7 +57,15 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
   - [`designs/mounting-hook/mounting-hook.stl`](./designs/mounting-hook/mounting-hook.stl)
   - [`designs/mounting-hook/mounting-hook.png`](./designs/mounting-hook/mounting-hook.png)
   - ![Mounting hook preview](./designs/mounting-hook/mounting-hook.png)
-- Totemik guts STL/PNG:
-  - [`designs/totemik-guts/totemik-guts.stl`](./designs/totemik-guts/totemik-guts.stl)
-  - [`designs/totemik-guts/totemik-guts.png`](./designs/totemik-guts/totemik-guts.png)
-  - ![Totemik guts preview](./designs/totemik-guts/totemik-guts.png)
+- Totemik ring STL/PNG:
+  - [`designs/totemik/ring.stl`](./designs/totemik/ring.stl)
+  - [`designs/totemik/ring.png`](./designs/totemik/ring.png)
+  - ![Totemik ring preview](./designs/totemik/ring.png)
+- Totemik partition STL/PNG:
+  - [`designs/totemik/partition.stl`](./designs/totemik/partition.stl)
+  - [`designs/totemik/partition-detail.png`](./designs/totemik/partition-detail.png)
+  - ![Partition slot detail preview](./designs/totemik/partition-detail.png)
+- Totemik guts (ring + beam) STL/PNG:
+  - [`designs/totemik/totemik-guts.stl`](./designs/totemik/totemik-guts.stl)
+  - [`designs/totemik/totemik-guts.png`](./designs/totemik/totemik-guts.png)
+  - ![Totemik guts preview](./designs/totemik/totemik-guts.png)
