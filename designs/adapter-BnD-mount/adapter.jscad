@@ -25,10 +25,15 @@ const PLATE_WIDTH = 65 // X, matches BnD mount height & shell length
 const PLATE_LENGTH = 60 // Y, matches BnD mount plate width, tube's tangent direction
 const PLATE_THICKNESS = 4
 const PLATE_HOLES = [
-  { x: 59.1, yFromEdge: 6.0, diameter: 9.5 }, // matches BnD hole (measured d=9.3)
-  { x: 59.1, yFromEdge: 54.0, diameter: 9.5 }, // mirrored
-  { x: 3.8, yFromEdge: 30.0, diameter: 5.0 } // matches BnD hole (measured d=4.8)
+  { x: 59.1, yFromEdge: 6.0, diameter: 5.0 },
+  { x: 59.1, yFromEdge: 54.0, diameter: 5.0 }, // mirrored
+  { x: 3.8, yFromEdge: 30.0, diameter: 5.0 } // this one's end gets opened up, see PLATE_START_X below
 ]
+// The plate is shortened at the single-hole end, cut right at that hole's
+// own X center, so the hole opens into a keyhole-style slot at the edge
+// instead of staying a closed circle -- and the shell (which keeps its
+// full SHELL_LENGTH) sticks out from underneath the plate there.
+const PLATE_START_X = PLATE_HOLES[2].x
 
 // --- Tube clamp shell ---
 const TUBE_DIAMETER = 51
@@ -47,12 +52,16 @@ const EAR_HOLE_DIAMETER = 4.5 // M4 clearance
 const EAR_HOLE_X = [15, SHELL_LENGTH - 15] // 2 holes, 15mm in from each end
 const HOLE_OVERSHOOT = 2
 
-// Plate profile drawn directly in global (X,Y): X 0..PLATE_WIDTH (tube
-// axis, unchanged), Y centered on 0 (the tube's tangent/top direction) --
-// this is what makes the plate lie flat, lengthwise along the tube,
-// instead of standing up off it.
+// Plate profile drawn directly in global (X,Y): X PLATE_START_X..PLATE_WIDTH
+// (tube axis; shortened at the low end, see PLATE_START_X), Y centered on 0
+// (the tube's tangent/top direction) -- this is what makes the plate lie
+// flat, lengthwise along the tube, instead of standing up off it.
 const plate2D = () => {
-  const base = rectangle({ size: [PLATE_WIDTH, PLATE_LENGTH], center: [PLATE_WIDTH / 2, 0] })
+  const plateSpan = PLATE_WIDTH - PLATE_START_X
+  const base = rectangle({
+    size: [plateSpan, PLATE_LENGTH],
+    center: [PLATE_START_X + plateSpan / 2, 0]
+  })
   const holes = PLATE_HOLES.map((h) =>
     circle({ radius: h.diameter / 2, segments: 48, center: [h.x, h.yFromEdge - PLATE_LENGTH / 2] })
   )

@@ -31,9 +31,8 @@ vertices):
 | Top-right | 53.86 mm | 59.66 mm | 9.35 mm |
 | Bottom-center | 30.13 mm | 3.84 mm | 4.83 mm |
 
-The adapter symmetrizes these slightly (6.0/54.0 mm) and rounds the
-diameters up a touch for easy clearance (9.5 mm / 5.0 mm) — see
-`PLATE_HOLES` in the source.
+The adapter symmetrizes these slightly (6.0/54.0 mm) and uses a uniform
+`5 mm` diameter for all 3 holes — see `PLATE_HOLES` in the source.
 
 ## Geometry / assumptions
 
@@ -49,6 +48,11 @@ easy to change:
   runs across the tube's tangent/top direction, centered over the shell.
   This is why the 2 big holes now sit close together near one end
   (along X) instead of spread across the width.
+- **Open slot at the single-hole end**: the plate is shortened right at
+  that hole's own X center (`PLATE_START_X`), so instead of a closed
+  circle it becomes an open, keyhole-style semicircular notch at the
+  plate's edge — and the shell (which keeps its full length) sticks out
+  from underneath the plate there.
 - **Plate-to-shell bond**: a flat plate can only truly touch a round tube
   along one line, so the plate's underside is sunk down to the shell's
   *inner* radius — at the centerline it shares the full `3 mm` wall
