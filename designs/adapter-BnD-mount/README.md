@@ -48,11 +48,12 @@ easy to change:
   runs across the tube's tangent/top direction, centered over the shell.
   This is why the 2 big holes now sit close together near one end
   (along X) instead of spread across the width.
-- **Open slot at the single-hole end**: the plate is shortened right at
-  that hole's own X center (`PLATE_START_X`), so instead of a closed
-  circle it becomes an open, keyhole-style semicircular notch at the
-  plate's edge — and the shell (which keeps its full length) sticks out
-  from underneath the plate there.
+- **Nut access at the single-hole end**: the plate keeps its full,
+  BnD-matched length, but the *shell* is cut back there (`SHELL_START_X`,
+  15mm in from that end — clear of the hole plus some margin) instead of
+  running the full length. That leaves the area behind/under the single
+  hole open, so a nut can be got onto a bolt through it, rather than
+  being blocked by shell material directly behind the hole.
 - **Plate-to-shell bond**: a flat plate can only truly touch a round tube
   along one line, so the plate's underside is sunk down to the shell's
   *inner* radius — at the centerline it shares the full `3 mm` wall

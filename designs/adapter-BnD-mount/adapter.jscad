@@ -27,13 +27,8 @@ const PLATE_THICKNESS = 4
 const PLATE_HOLES = [
   { x: 59.1, yFromEdge: 6.0, diameter: 5.0 },
   { x: 59.1, yFromEdge: 54.0, diameter: 5.0 }, // mirrored
-  { x: 3.8, yFromEdge: 30.0, diameter: 5.0 } // this one's end gets opened up, see PLATE_START_X below
+  { x: 3.8, yFromEdge: 30.0, diameter: 5.0 } // the shell is cut back under this one, see SHELL_START_X
 ]
-// The plate is shortened at the single-hole end, cut right at that hole's
-// own X center, so the hole opens into a keyhole-style slot at the edge
-// instead of staying a closed circle -- and the shell (which keeps its
-// full SHELL_LENGTH) sticks out from underneath the plate there.
-const PLATE_START_X = PLATE_HOLES[2].x
 
 // --- Tube clamp shell ---
 const TUBE_DIAMETER = 51
@@ -43,6 +38,10 @@ const SHELL_INNER_R = TUBE_RADIUS
 const SHELL_OUTER_R = TUBE_RADIUS + SHELL_WALL
 const SHELL_LENGTH = PLATE_WIDTH // shares the plate's X extent
 const SHELL_SEGMENTS = 96
+// The shell (not the plate, which stays the full BnD-matched length) is
+// cut back at the single-hole end, clear of that hole, so there's open
+// access behind the plate there to get a nut onto a bolt through it.
+const SHELL_START_X = 15
 
 // --- End flanges (one at each of the shell's 2 edges, Y = +/-SHELL_OUTER_R) ---
 const EAR_WIDTH = 12 // radial extent beyond the shell's outer surface
@@ -52,16 +51,12 @@ const EAR_HOLE_DIAMETER = 4.5 // M4 clearance
 const EAR_HOLE_X = [15, SHELL_LENGTH - 15] // 2 holes, 15mm in from each end
 const HOLE_OVERSHOOT = 2
 
-// Plate profile drawn directly in global (X,Y): X PLATE_START_X..PLATE_WIDTH
-// (tube axis; shortened at the low end, see PLATE_START_X), Y centered on 0
-// (the tube's tangent/top direction) -- this is what makes the plate lie
-// flat, lengthwise along the tube, instead of standing up off it.
+// Plate profile drawn directly in global (X,Y): X 0..PLATE_WIDTH (tube
+// axis, full BnD-matched length), Y centered on 0 (the tube's tangent/top
+// direction) -- this is what makes the plate lie flat, lengthwise along
+// the tube, instead of standing up off it.
 const plate2D = () => {
-  const plateSpan = PLATE_WIDTH - PLATE_START_X
-  const base = rectangle({
-    size: [plateSpan, PLATE_LENGTH],
-    center: [PLATE_START_X + plateSpan / 2, 0]
-  })
+  const base = rectangle({ size: [PLATE_WIDTH, PLATE_LENGTH], center: [PLATE_WIDTH / 2, 0] })
   const holes = PLATE_HOLES.map((h) =>
     circle({ radius: h.diameter / 2, segments: 48, center: [h.x, h.yFromEdge - PLATE_LENGTH / 2] })
   )
@@ -92,10 +87,16 @@ const shellProfile2D = () => {
 }
 
 const shell3D = () => {
-  const extruded = extrudeLinear({ height: SHELL_LENGTH }, shellProfile2D())
-  // extruded: local X,Y = (Yg,Zg), local Z (0..SHELL_LENGTH) = length axis.
-  // Map local(x,y,z) -> global(Yg,Zg,Xg) = (x,y,z) via 2 rotations.
-  return rotateX(Math.PI / 2, rotateY(Math.PI / 2, extruded))
+  // Shell only spans SHELL_START_X..SHELL_LENGTH (cut back at the
+  // single-hole end) -- extrude just that shorter span, then shift it
+  // into position along X.
+  const shellSpan = SHELL_LENGTH - SHELL_START_X
+  const extruded = extrudeLinear({ height: shellSpan }, shellProfile2D())
+  // extruded: local X,Y = (Yg,Zg), local Z (0..shellSpan) = length axis.
+  // Map local(x,y,z) -> global(Yg,Zg,Xg) = (x,y,z) via 2 rotations, then
+  // slide along X to start at SHELL_START_X instead of 0.
+  const oriented = rotateX(Math.PI / 2, rotateY(Math.PI / 2, extruded))
+  return translate([SHELL_START_X, 0, 0], oriented)
 }
 
 const ear2D = () => {
