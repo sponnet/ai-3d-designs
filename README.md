@@ -12,8 +12,7 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
 - [**Foamcutter v2**](./designs/foamcutter-v2/): updated foam cutter support assembly plus X-Acto No. 11 outline tooling model.
 - [**Staircase with landing**](./designs/starcase-with-landing/): parametric U-turn staircase model with landing and glue tabs.
 - [**Mounting hook**](./designs/mounting-hook/): 48 mm hook-profile part from sketch, extruded 20 mm.
-- [**Totemik ring**](./designs/totemik/): 51 mm inner-diameter ring band with a top notch and two outer blocks flanking it.
-- [**Partition**](./designs/partition/): 150 mm triangular partition with a slot that clips over the totemik ring's ridges, interrupted every 10 mm for printability.
+- [**Totemik**](./designs/totemik/): 51 mm inner-diameter ring band with a top notch and outer ridges, plus a 150 mm partition strip that push-fits onto the ring's ridges.
 
 ## Outputs At A Glance
 
@@ -62,7 +61,7 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
   - [`designs/totemik/ring.stl`](./designs/totemik/ring.stl)
   - [`designs/totemik/ring.png`](./designs/totemik/ring.png)
   - ![Totemik ring preview](./designs/totemik/ring.png)
-- Partition STL/PNG:
-  - [`designs/partition/partition.stl`](./designs/partition/partition.stl)
-  - [`designs/partition/partition-detail.png`](./designs/partition/partition-detail.png)
-  - ![Partition slot detail preview](./designs/partition/partition-detail.png)
+- Totemik partition STL/PNG:
+  - [`designs/totemik/partition.stl`](./designs/totemik/partition.stl)
+  - [`designs/totemik/partition-detail.png`](./designs/totemik/partition-detail.png)
+  - ![Partition slot detail preview](./designs/totemik/partition-detail.png)
