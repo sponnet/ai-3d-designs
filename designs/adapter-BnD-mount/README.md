@@ -41,11 +41,14 @@ Since several dimensions weren't specified, these are the assumptions
 baked into the parametric source (`adapter.jscad`) — all named constants,
 easy to change:
 
-- **Plate**: `60 × 65 mm`, `4 mm` thick, holes as above (through-holes,
+- **Plate**: `65 × 60 mm`, `4 mm` thick, holes as above (through-holes,
   no threads — use your own bolts/nuts or the BnD mount's own screws).
-  Lies flat, its `60 mm` side along the tube axis (matching the shell
-  length) and its `65 mm` side running along the tube's tangent/top
-  direction, centered over the shell.
+  Rotated 90° from the plate's own natural orientation: its `65 mm` side
+  (was the BnD mount's plate *height*) runs along the tube axis (matching
+  the shell length), its `60 mm` side (was the BnD mount's plate *width*)
+  runs across the tube's tangent/top direction, centered over the shell.
+  This is why the 2 big holes now sit close together near one end
+  (along X) instead of spread across the width.
 - **Plate-to-shell bond**: a flat plate can only truly touch a round tube
   along one line, so the plate's underside is sunk down to the shell's
   *inner* radius — at the centerline it shares the full `3 mm` wall
@@ -55,8 +58,8 @@ easy to change:
   expected overhang for a flat bracket on a round tube — the same as most
   pipe-mount plates).
 - **Tube clamp shell**: inner radius `25.5 mm` (Ø51mm tube), wall
-  `3 mm` (assumed — not specified), length `60 mm` (matches the plate
-  width).
+  `3 mm` (assumed — not specified), length `65 mm` (matches the plate's
+  X extent, `PLATE_WIDTH`).
 - **End flanges**: `12 mm` radial width beyond the shell (assumed), each
   piece contributes `3 mm` thickness (mates with the other piece's `3 mm`
   to form `6 mm` combined at each bolted joint — assumed), 2 holes per

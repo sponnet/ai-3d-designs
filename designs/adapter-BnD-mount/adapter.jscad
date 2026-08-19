@@ -13,19 +13,21 @@ const { translate, rotateX, rotateY } = require('@jscad/modeling').transforms
 // Two of these pieces, the 2nd rotated 180 degrees around the tube axis
 // (X), sandwich the tube; their end flanges (2 holes each) bolt together.
 //
-// Coordinates: X = tube axis (= shell length = plate width, 0..60).
+// Coordinates: X = tube axis (= shell length = PLATE_WIDTH).
 // Y/Z = radial directions, tube centerline at Y=0,Z=0 for all X.
 
 // --- BnD mount back-plate hole pattern (measured from the STL,
-// y=3 back face, symmetrized) ---
-const PLATE_WIDTH = 60 // X, matches BnD mount width & shell length
-const PLATE_LENGTH = 65 // Y, matches BnD mount plate height -- now runs
-// lengthwise along the tube's tangent direction instead of standing up
+// y=3 back face, symmetrized), plate rotated 90 degrees from its first
+// version: its 65mm side (was BnD's plate height) now runs along the
+// tube axis (X, = shell length), its 60mm side (was BnD's plate width)
+// runs across the tube's tangent direction (Y). ---
+const PLATE_WIDTH = 65 // X, matches BnD mount height & shell length
+const PLATE_LENGTH = 60 // Y, matches BnD mount plate width, tube's tangent direction
 const PLATE_THICKNESS = 4
 const PLATE_HOLES = [
-  { x: 6.0, yFromEdge: 59.1, diameter: 9.5 }, // matches BnD hole (measured d=9.3)
-  { x: 54.0, yFromEdge: 59.1, diameter: 9.5 }, // mirrored
-  { x: 30.0, yFromEdge: 3.8, diameter: 5.0 } // matches BnD hole (measured d=4.8)
+  { x: 59.1, yFromEdge: 6.0, diameter: 9.5 }, // matches BnD hole (measured d=9.3)
+  { x: 59.1, yFromEdge: 54.0, diameter: 9.5 }, // mirrored
+  { x: 3.8, yFromEdge: 30.0, diameter: 5.0 } // matches BnD hole (measured d=4.8)
 ]
 
 // --- Tube clamp shell ---
@@ -34,7 +36,7 @@ const TUBE_RADIUS = TUBE_DIAMETER / 2
 const SHELL_WALL = 3
 const SHELL_INNER_R = TUBE_RADIUS
 const SHELL_OUTER_R = TUBE_RADIUS + SHELL_WALL
-const SHELL_LENGTH = PLATE_WIDTH // 60, shares the plate's X extent
+const SHELL_LENGTH = PLATE_WIDTH // shares the plate's X extent
 const SHELL_SEGMENTS = 96
 
 // --- End flanges (one at each of the shell's 2 edges, Y = +/-SHELL_OUTER_R) ---
@@ -42,7 +44,7 @@ const EAR_WIDTH = 12 // radial extent beyond the shell's outer surface
 const EAR_THICKNESS = 3 // this piece's own contribution; mates with an identical
 // piece's ear (rotated 180 deg) to form EAR_THICKNESS*2 of clamped material
 const EAR_HOLE_DIAMETER = 4.5 // M4 clearance
-const EAR_HOLE_X = [15, 45] // 2 holes along the shell length
+const EAR_HOLE_X = [15, SHELL_LENGTH - 15] // 2 holes, 15mm in from each end
 const HOLE_OVERSHOOT = 2
 
 // Plate profile drawn directly in global (X,Y): X 0..PLATE_WIDTH (tube
