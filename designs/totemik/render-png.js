@@ -88,3 +88,16 @@ for (const stlFile of gutsFiles) {
   fs.writeFileSync(path.join(__dirname, pngFile), png)
   console.log('Wrote', pngFile)
 }
+
+// --- bottom-plug.stl ---
+// Tube foot: push-fit plug + large hemisphere, unrelated to ring/partition.
+const bottomPlugStlData = fs.readFileSync(path.join(__dirname, 'bottom-plug.stl'))
+const bottomPlugViews = {
+  'bottom-plug-iso.png': [120, -120, 60],
+  'bottom-plug-front.png': [0, -200, 0]
+}
+for (const [file, cameraPosition] of Object.entries(bottomPlugViews)) {
+  const png = stl2png(bottomPlugStlData, { ...baseOptions, width: 900, height: 700, cameraPosition })
+  fs.writeFileSync(path.join(__dirname, file), png)
+  console.log('Wrote', file)
+}

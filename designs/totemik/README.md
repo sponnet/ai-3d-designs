@@ -1,12 +1,14 @@
 # Totemik
 
-Three related explorations for the Totemik project:
+Four related explorations for the Totemik project:
 
 - **Ring** and **Partition**: a ring band with a push-fit partition strip
   (see below).
 - **Totemik Guts**: a separate, independent exploration of a ring + beam
   design (different dimensions from the Ring above — not interchangeable
   with it).
+- **Bottom Plug**: a push-fit foot for the bottom of a 49mm-ID tube,
+  unrelated in dimensions to the other 3.
 
 ## Ring
 
@@ -207,3 +209,42 @@ openjscad.xyz UI, and can be set from the CLI with
 
 ![Totemik guts preview, inner notch side](./totemik-guts.png)
 ![Totemik guts preview, outer notch side](./totemik-guts-outer.png)
+
+## Bottom Plug
+
+### Overview
+
+Push-fit foot for the bottom of a tube: a short plug that fits up inside
+the tube's bottom opening, with a large rounded foot (a hemisphere) below
+it that ends up touching the ground once installed. Modeled with the foot
+at `Z < 0` (dome pointing down, flat equator face at `Z = 0`) and the plug
+at `Z > 0`, matching the piece's physical orientation once installed —
+for printing, reorienting plug-side-down in the slicer gives a flat base
+and a self-supporting dome with no overhangs. A separate exploration,
+unrelated in dimensions to the Ring/Partition/Totemik Guts above.
+
+### Geometry
+
+- Tube inner diameter: `49 mm`
+- Plug diameter: `48.6 mm` (`0.4 mm` push-fit clearance — assumed, not
+  specified; adjust `PLUG_CLEARANCE` for a tighter/looser fit)
+- Plug height: `20 mm` (assumed — "kort stukje", not specified)
+- Plug tip: `2 mm` tall lead-in chamfer, shrinking `2 mm` off the
+  diameter, to ease insertion (assumed)
+- Foot: hemisphere, radius `50 mm`, flat face flush with the plug's base
+
+### Source
+
+- JSCAD: [`bottom-plug.jscad`](./bottom-plug.jscad)
+- OpenJSCAD: [Open `bottom-plug.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/bottom-plug.jscad#)
+
+### Outputs
+
+- STL: [`bottom-plug.stl`](./bottom-plug.stl)
+- PNG preview (isometric): [`bottom-plug-iso.png`](./bottom-plug-iso.png)
+- PNG preview (front): [`bottom-plug-front.png`](./bottom-plug-front.png)
+
+### Preview
+
+![Bottom plug isometric](./bottom-plug-iso.png)
+![Bottom plug front](./bottom-plug-front.png)
