@@ -20,7 +20,7 @@ const PLUG_HEIGHT = 20 // assumed -- "kort stukje", not specified
 const PLUG_CHAMFER_HEIGHT = 2 // assumed lead-in chamfer, eases insertion
 const PLUG_CHAMFER_SHRINK = 2 // diameter reduction at the plug's tip
 
-const FOOT_RADIUS = 50
+const FOOT_RADIUS = 25
 const SEGMENTS = 96
 
 const plug3D = () => {

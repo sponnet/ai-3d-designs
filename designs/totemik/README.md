@@ -231,7 +231,7 @@ unrelated in dimensions to the Ring/Partition/Totemik Guts above.
 - Plug height: `20 mm` (assumed — "kort stukje", not specified)
 - Plug tip: `2 mm` tall lead-in chamfer, shrinking `2 mm` off the
   diameter, to ease insertion (assumed)
-- Foot: hemisphere, radius `50 mm`, flat face flush with the plug's base
+- Foot: hemisphere, radius `25 mm`, flat face flush with the plug's base
 
 ### Source
 
