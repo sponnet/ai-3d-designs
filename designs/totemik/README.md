@@ -255,24 +255,34 @@ unrelated in dimensions to the Ring/Partition/Totemik Guts above.
 
 ### Overview
 
-Minimalist bar with 4 Cherry MX switch cutouts side by side, plus 2
-mounting tabs (each with a screw hole) at the bottom corners, for
-screwing the whole keypad onto something. Hole size and plate thickness
-match the standard Cherry MX plate spec measured from the reference
-`3MechanicalButtons.3mf` (14x14mm square cutout, 1.8mm plate). A separate
-exploration, unrelated in dimensions to the other parts in this folder.
+Minimalist hollow beam, open on the bottom, with 4 Cherry MX switch
+cutouts side by side in the top wall — raising the switches up on the
+beam's 2 side walls, so there's clearance underneath for switch pins /
+hot-swap sockets / wiring instead of them sitting flush on whatever this
+is mounted to. 2 mounting tabs (each with a screw hole) sit within that
+open bottom face, one at each end, for screwing the whole keypad onto
+something. Hole size and top-wall thickness match the standard Cherry MX
+plate spec measured from the reference `3MechanicalButtons.3mf` (14x14mm
+square cutout, 1.8mm plate). A separate exploration, unrelated in
+dimensions to the other parts in this folder.
 
 ### Geometry
 
 - 4 square cutouts, `14 x 14 mm` each, spaced `19.05 mm` center-to-center
-  (the standard MX/1u-keycap pitch, so keycaps don't collide)
-- Plate: `4 mm` margin beyond the outer hole edges on every side (kept as
-  small as reasonably possible) → `79.15 x 22 mm` overall, `1.8 mm` thick,
-  `2 mm` corner radius
-- Mounting tabs: one at each end, aligned to the plate's bottom edge,
-  `10 x 10 mm` (rounded, `3 mm` corner radius), each with a `3 mm` screw
-  hole centered in it — sticking `9 mm` past the plate's end (`10 mm`
-  tab width minus `1 mm` overlap into the plate for a solid union)
+  (the standard MX/1u-keycap pitch, so keycaps don't collide), cut through
+  the top wall
+- Beam footprint: `4 mm` margin beyond the outer hole edges on every side
+  (kept as small as reasonably possible) → `79.15 x 22 mm`
+- Top wall: `1.8 mm` thick (matches the measured Cherry MX plate spec)
+- Side walls (front/back, full beam length): `2 mm` thick (assumed)
+- Beam height: `12 mm` (assumed — how far "up" the holes sit, giving
+  clearance underneath for switch pins/hot-swap sockets/wiring); bottom
+  and both lengthwise ends are open
+- Mounting tabs: one at each end, sitting *within* the open bottom face
+  (not sticking out past the beam's ends) — `10 mm` long, spanning the
+  full depth between the 2 side walls, `2 mm` thick, flush with the
+  bottom edge, each with a `3 mm` screw hole centered in it (all
+  assumed)
 
 ### Source
 
