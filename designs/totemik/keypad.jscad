@@ -6,7 +6,8 @@ const { translate } = require('@jscad/modeling').transforms
 // cutouts side by side in the top wall -- raising the switches up on the
 // beam's 2 side walls, so there's clearance underneath for switch pins /
 // hot-swap sockets / wiring instead of them sitting flush on whatever
-// this is mounted to. 2 mounting tabs (each with a 3mm screw hole) sit
+// this is mounted to. The 2 lengthwise ends are closed off too (only the
+// bottom is open). 2 mounting tabs (each with a 3mm screw hole) sit
 // within that open bottom face, one at each end.
 //
 // Hole size (14x14mm, square) and top-wall thickness (1.8mm) match the
@@ -71,6 +72,20 @@ const sideWalls3D = () => {
   return union(front, back)
 }
 
+// Closes off the beam's 2 lengthwise ends, same thickness as the side
+// walls -- only the bottom stays open.
+const endWalls3D = () => {
+  const left = translate(
+    [WALL_THICKNESS / 2, BEAM_DEPTH / 2, BEAM_HEIGHT / 2],
+    cuboid({ size: [WALL_THICKNESS, BEAM_DEPTH, BEAM_HEIGHT] })
+  )
+  const right = translate(
+    [BEAM_LENGTH - WALL_THICKNESS / 2, BEAM_DEPTH / 2, BEAM_HEIGHT / 2],
+    cuboid({ size: [WALL_THICKNESS, BEAM_DEPTH, BEAM_HEIGHT] })
+  )
+  return union(left, right)
+}
+
 // Sits within the open bottom face (not sticking out past the beam's
 // ends), bridging the 2 side walls, flush with the bottom edge.
 const endTab3D = (side) => {
@@ -86,6 +101,7 @@ const endTab3D = (side) => {
   return subtract(tab, hole)
 }
 
-const main = () => union(topWall3D(), sideWalls3D(), endTab3D('left'), endTab3D('right'))
+const main = () =>
+  union(topWall3D(), sideWalls3D(), endWalls3D(), endTab3D('left'), endTab3D('right'))
 
-module.exports = { main, topWall3D, sideWalls3D }
+module.exports = { main, topWall3D, sideWalls3D, endWalls3D }

@@ -255,16 +255,17 @@ unrelated in dimensions to the Ring/Partition/Totemik Guts above.
 
 ### Overview
 
-Minimalist hollow beam, open on the bottom, with 4 Cherry MX switch
+Minimalist hollow beam, open only on the bottom, with 4 Cherry MX switch
 cutouts side by side in the top wall — raising the switches up on the
-beam's 2 side walls, so there's clearance underneath for switch pins /
-hot-swap sockets / wiring instead of them sitting flush on whatever this
-is mounted to. 2 mounting tabs (each with a screw hole) sit within that
-open bottom face, one at each end, for screwing the whole keypad onto
-something. Hole size and top-wall thickness match the standard Cherry MX
-plate spec measured from the reference `3MechanicalButtons.3mf` (14x14mm
-square cutout, 1.8mm plate). A separate exploration, unrelated in
-dimensions to the other parts in this folder.
+beam's 4 closed sides (2 lengthwise side walls, 2 end walls), so there's
+clearance underneath for switch pins / hot-swap sockets / wiring instead
+of them sitting flush on whatever this is mounted to. 2 mounting tabs
+(each with a screw hole) sit within that open bottom face, one at each
+end, for screwing the whole keypad onto something. Hole size and top-wall
+thickness match the standard Cherry MX plate spec measured from the
+reference `3MechanicalButtons.3mf` (14x14mm square cutout, 1.8mm plate).
+A separate exploration, unrelated in dimensions to the other parts in
+this folder.
 
 ### Geometry
 
@@ -274,10 +275,11 @@ dimensions to the other parts in this folder.
 - Beam footprint: `4 mm` margin beyond the outer hole edges on every side
   (kept as small as reasonably possible) → `79.15 x 22 mm`
 - Top wall: `1.8 mm` thick (matches the measured Cherry MX plate spec)
-- Side walls (front/back, full beam length): `2 mm` thick (assumed)
+- Side walls (front/back, full beam length) and end walls (the 2
+  lengthwise ends): `2 mm` thick (assumed)
 - Beam height: `12 mm` (assumed — how far "up" the holes sit, giving
-  clearance underneath for switch pins/hot-swap sockets/wiring); bottom
-  and both lengthwise ends are open
+  clearance underneath for switch pins/hot-swap sockets/wiring); only the
+  bottom is open
 - Mounting tabs: one at each end, sitting *within* the open bottom face
   (not sticking out past the beam's ends) — `10 mm` long, spanning the
   full depth between the 2 side walls, `2 mm` thick, flush with the
