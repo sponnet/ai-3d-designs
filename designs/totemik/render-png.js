@@ -101,3 +101,16 @@ for (const [file, cameraPosition] of Object.entries(bottomPlugViews)) {
   fs.writeFileSync(path.join(__dirname, file), png)
   console.log('Wrote', file)
 }
+
+// --- keypad.stl ---
+// 4-key Cherry MX bar with mounting tabs, unrelated to the other parts.
+const keypadStlData = fs.readFileSync(path.join(__dirname, 'keypad.stl'))
+const keypadViews = {
+  'keypad-iso.png': [40, -80, 60],
+  'keypad-top.png': [40, 11, 200]
+}
+for (const [file, cameraPosition] of Object.entries(keypadViews)) {
+  const png = stl2png(keypadStlData, { ...baseOptions, width: 1100, height: 500, cameraPosition })
+  fs.writeFileSync(path.join(__dirname, file), png)
+  console.log('Wrote', file)
+}

@@ -1,6 +1,6 @@
 # Totemik
 
-Four related explorations for the Totemik project:
+Five related explorations for the Totemik project:
 
 - **Ring** and **Partition**: a ring band with a push-fit partition strip
   (see below).
@@ -8,7 +8,9 @@ Four related explorations for the Totemik project:
   design (different dimensions from the Ring above — not interchangeable
   with it).
 - **Bottom Plug**: a push-fit foot for the bottom of a 49mm-ID tube,
-  unrelated in dimensions to the other 3.
+  unrelated in dimensions to the other explorations.
+- **Keypad**: a minimalist 4-key Cherry MX switch bar with mounting tabs,
+  also unrelated in dimensions to the other explorations.
 
 ## Ring
 
@@ -248,3 +250,42 @@ unrelated in dimensions to the Ring/Partition/Totemik Guts above.
 
 ![Bottom plug isometric](./bottom-plug-iso.png)
 ![Bottom plug front](./bottom-plug-front.png)
+
+## Keypad
+
+### Overview
+
+Minimalist bar with 4 Cherry MX switch cutouts side by side, plus 2
+mounting tabs (each with a screw hole) at the bottom corners, for
+screwing the whole keypad onto something. Hole size and plate thickness
+match the standard Cherry MX plate spec measured from the reference
+`3MechanicalButtons.3mf` (14x14mm square cutout, 1.8mm plate). A separate
+exploration, unrelated in dimensions to the other parts in this folder.
+
+### Geometry
+
+- 4 square cutouts, `14 x 14 mm` each, spaced `19.05 mm` center-to-center
+  (the standard MX/1u-keycap pitch, so keycaps don't collide)
+- Plate: `4 mm` margin beyond the outer hole edges on every side (kept as
+  small as reasonably possible) → `79.15 x 22 mm` overall, `1.8 mm` thick,
+  `2 mm` corner radius
+- Mounting tabs: one at each end, aligned to the plate's bottom edge,
+  `10 x 10 mm` (rounded, `3 mm` corner radius), each with a `3 mm` screw
+  hole centered in it — sticking `9 mm` past the plate's end (`10 mm`
+  tab width minus `1 mm` overlap into the plate for a solid union)
+
+### Source
+
+- JSCAD: [`keypad.jscad`](./keypad.jscad)
+- OpenJSCAD: [Open `keypad.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/keypad.jscad#)
+
+### Outputs
+
+- STL: [`keypad.stl`](./keypad.stl)
+- PNG preview (isometric): [`keypad-iso.png`](./keypad-iso.png)
+- PNG preview (top): [`keypad-top.png`](./keypad-top.png)
+
+### Preview
+
+![Keypad isometric](./keypad-iso.png)
+![Keypad top view](./keypad-top.png)
