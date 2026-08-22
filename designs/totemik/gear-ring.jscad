@@ -43,11 +43,14 @@ const tooth2D = (angleDeg) => {
     size: [TOOTH_TIP_RADIUS - TOOTH_SUNK_RADIUS, TOOTH_WIDTH],
     center: [(TOOTH_SUNK_RADIUS + TOOTH_TIP_RADIUS) / 2, 0]
   })
+  // Points wound counter-clockwise -- required for subtract() to treat
+  // this as a hole rather than (as with clockwise winding) replacing the
+  // tooth with just the slot triangle itself.
   const slot = polygon({
     points: [
       [SLOT_START_RADIUS, 0],
-      [TOOTH_TIP_RADIUS, SLOT_WIDTH / 2],
-      [TOOTH_TIP_RADIUS, -SLOT_WIDTH / 2]
+      [TOOTH_TIP_RADIUS, -SLOT_WIDTH / 2],
+      [TOOTH_TIP_RADIUS, SLOT_WIDTH / 2]
     ]
   })
   const toothSlotted = subtract(tooth, slot)
