@@ -319,6 +319,15 @@ folder.
 - Teeth: `7`, evenly spaced (every `360/7 ≈ 51.43°`), each `7 mm` wide
   (tangential), sticking `10 mm` past the ring's outer edge (radial) —
   constant-width rectangular tabs, not wedges that widen with radius
+- Each tooth is sunk in to the ring's *inner* radius (not just touching
+  at the outer surface) — a solid overlap through the full ring wall for
+  a strong printed bond, instead of a knife-edge tangent line
+- V-shaped slot down the center of each tooth: `0 mm` wide where it
+  starts at the ring's outer edge, widening to `2 mm` wide at the tooth's
+  tip — cut clean through the tooth's `3 mm` height, splitting the
+  protruding part into 2 prongs joined only at their sunk-in root inside
+  the ring. Runs along the tooth's own radial line, centered
+  tangentially in the tooth's `7 mm` width.
 - Base extrusion height: `3 mm`
 - Collar: hollow cylinder centered on the ring's axis, sitting on top of
   the base (`Z = 3` to `Z = 8`), outer diameter `48.5 mm`, wall thickness

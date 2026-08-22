@@ -1,10 +1,17 @@
-const { circle, rectangle } = require('@jscad/modeling').primitives
+const { circle, rectangle, polygon } = require('@jscad/modeling').primitives
 const { subtract, union } = require('@jscad/modeling').booleans
 const { extrudeLinear } = require('@jscad/modeling').extrusions
 const { translate, rotateZ } = require('@jscad/modeling').transforms
 
 // Ring with 7 evenly-spaced square teeth sticking out radially, extruded
 // 3mm, with a raised hollow-cylinder collar centered on top of it.
+//
+// Each tooth is sunk all the way in to the ring's inner radius (not just
+// touching at the outer edge) for a solid printed bond, and has a
+// V-shaped slot cut through it: 0mm wide where it starts at the ring's
+// (original) outer edge, widening to SLOT_WIDTH at the tooth's tip --
+// splitting the protruding part of the tooth into 2 prongs, joined only
+// at their sunk-in root inside the ring.
 
 const RING_INNER_DIAMETER = 45
 const RING_OUTER_DIAMETER = 51
@@ -15,6 +22,12 @@ const BASE_HEIGHT = 3
 const TOOTH_COUNT = 7
 const TOOTH_WIDTH = 7 // tangential
 const TOOTH_PROTRUSION = 10 // radial, beyond the ring's outer edge
+const TOOTH_TIP_RADIUS = RING_OUTER_RADIUS + TOOTH_PROTRUSION
+const TOOTH_SUNK_RADIUS = RING_INNER_RADIUS // tooth's inner edge, sunk
+// through the full ring wall instead of just meeting the outer surface
+
+const SLOT_WIDTH = 2 // at the tooth's tip
+const SLOT_START_RADIUS = RING_OUTER_RADIUS // the V's point (0mm wide)
 
 const COLLAR_OUTER_DIAMETER = 48.5
 const COLLAR_WALL_THICKNESS = 3
@@ -27,10 +40,18 @@ const SEGMENTS = 128
 // One tooth, drawn pointing along +X, then rotated into place.
 const tooth2D = (angleDeg) => {
   const tooth = rectangle({
-    size: [TOOTH_PROTRUSION, TOOTH_WIDTH],
-    center: [RING_OUTER_RADIUS + TOOTH_PROTRUSION / 2, 0]
+    size: [TOOTH_TIP_RADIUS - TOOTH_SUNK_RADIUS, TOOTH_WIDTH],
+    center: [(TOOTH_SUNK_RADIUS + TOOTH_TIP_RADIUS) / 2, 0]
   })
-  return rotateZ((angleDeg * Math.PI) / 180, tooth)
+  const slot = polygon({
+    points: [
+      [SLOT_START_RADIUS, 0],
+      [TOOTH_TIP_RADIUS, SLOT_WIDTH / 2],
+      [TOOTH_TIP_RADIUS, -SLOT_WIDTH / 2]
+    ]
+  })
+  const toothSlotted = subtract(tooth, slot)
+  return rotateZ((angleDeg * Math.PI) / 180, toothSlotted)
 }
 
 const base2D = () => {
