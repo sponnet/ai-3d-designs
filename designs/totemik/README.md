@@ -309,9 +309,9 @@ this folder.
 ### Overview
 
 Ring with 7 evenly-spaced square teeth sticking out radially, extruded
-3mm, with a raised hollow-cylinder collar centered on top of it. A
-separate exploration, unrelated in dimensions to the other parts in this
-folder.
+2mm, with a hollow-cylinder collar centered on it that runs all the way
+down to the bottom (not just sitting on top). A separate exploration,
+unrelated in dimensions to the other parts in this folder.
 
 ### Geometry
 
@@ -324,17 +324,18 @@ folder.
   a strong printed bond, instead of a knife-edge tangent line
 - V-shaped slot down the center of each tooth: `0 mm` wide where it
   starts at the ring's outer edge, widening to `2 mm` wide at the tooth's
-  tip — cut clean through the tooth's `3 mm` height, splitting the
-  protruding part into 2 prongs joined only at their sunk-in root inside
-  the ring. Runs along the tooth's own radial line, centered
-  tangentially in the tooth's `7 mm` width.
-- Base extrusion height: `3 mm`
-- Collar: hollow cylinder centered on the ring's axis, sitting on top of
-  the base (`Z = 3` to `Z = 8`), outer diameter `48.5 mm`, wall thickness
-  `3 mm` (inner diameter `42.5 mm`) — its inner diameter is `2.5 mm`
-  smaller than the base ring's `45 mm` bore, so there's a small internal
-  step/lip where they meet
-- Collar height: `5 mm` (assumed — not specified in the brief)
+  tip — cut clean through the tooth's height, splitting the protruding
+  part into 2 prongs joined only at their sunk-in root inside the ring.
+  Runs along the tooth's own radial line, centered tangentially in the
+  tooth's `7 mm` width.
+- Base (ring + teeth) extrusion height / first-layer thickness: `2 mm`
+- Collar: hollow cylinder centered on the ring's axis, outer diameter
+  `48.5 mm`, wall thickness `3 mm` (inner diameter `42.5 mm`) — its inner
+  diameter is `2.5 mm` smaller than the base ring's `45 mm` bore, so
+  there's a small internal step/lip where they meet. Runs from `Z = 0`
+  (the very bottom, flush with the base) up to `Z = 7 mm` — `5 mm`
+  above the base's own top surface (that `5 mm` rise is assumed — not
+  specified in the brief).
 
 ### Source
 

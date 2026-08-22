@@ -1,7 +1,7 @@
 const { circle, rectangle, polygon } = require('@jscad/modeling').primitives
 const { subtract, union } = require('@jscad/modeling').booleans
 const { extrudeLinear } = require('@jscad/modeling').extrusions
-const { translate, rotateZ } = require('@jscad/modeling').transforms
+const { rotateZ } = require('@jscad/modeling').transforms
 
 // Ring with 7 evenly-spaced square teeth sticking out radially, extruded
 // 3mm, with a raised hollow-cylinder collar centered on top of it.
@@ -17,7 +17,7 @@ const RING_INNER_DIAMETER = 45
 const RING_OUTER_DIAMETER = 51
 const RING_INNER_RADIUS = RING_INNER_DIAMETER / 2
 const RING_OUTER_RADIUS = RING_OUTER_DIAMETER / 2
-const BASE_HEIGHT = 3
+const BASE_HEIGHT = 2 // first-layer extrusion thickness
 
 const TOOTH_COUNT = 7
 const TOOTH_WIDTH = 7 // tangential
@@ -33,7 +33,10 @@ const COLLAR_OUTER_DIAMETER = 48.5
 const COLLAR_WALL_THICKNESS = 3
 const COLLAR_OUTER_RADIUS = COLLAR_OUTER_DIAMETER / 2
 const COLLAR_INNER_RADIUS = COLLAR_OUTER_RADIUS - COLLAR_WALL_THICKNESS
-const COLLAR_HEIGHT = 5 // assumed -- not specified in the brief
+const COLLAR_RISE = 5 // assumed -- how far the collar rises above the base
+// layer's top surface. The collar itself runs all the way down to Z=0
+// (the very bottom), not just starting on top of the base layer.
+const COLLAR_HEIGHT = BASE_HEIGHT + COLLAR_RISE
 
 const SEGMENTS = 128
 
@@ -76,10 +79,9 @@ const collar2D = () => {
 
 const main = () => {
   const base = extrudeLinear({ height: BASE_HEIGHT }, base2D())
-  const collar = translate(
-    [0, 0, BASE_HEIGHT],
-    extrudeLinear({ height: COLLAR_HEIGHT }, collar2D())
-  )
+  // Starts at Z=0, same as the base -- runs all the way to the bottom
+  // instead of sitting only on top of the base layer.
+  const collar = extrudeLinear({ height: COLLAR_HEIGHT }, collar2D())
   return union(base, collar)
 }
 
