@@ -1,6 +1,6 @@
 # Totemik
 
-Five related explorations for the Totemik project:
+Six related explorations for the Totemik project:
 
 - **Ring** and **Partition**: a ring band with a push-fit partition strip
   (see below).
@@ -11,6 +11,8 @@ Five related explorations for the Totemik project:
   unrelated in dimensions to the other explorations.
 - **Keypad**: a minimalist 4-key Cherry MX switch bar with mounting tabs,
   also unrelated in dimensions to the other explorations.
+- **Gear Ring**: a toothed ring with a raised collar, also unrelated in
+  dimensions to the other explorations.
 
 ## Ring
 
@@ -301,3 +303,42 @@ this folder.
 
 ![Keypad isometric](./keypad-iso.png)
 ![Keypad top view](./keypad-top.png)
+
+## Gear Ring
+
+### Overview
+
+Ring with 7 evenly-spaced square teeth sticking out radially, extruded
+3mm, with a raised hollow-cylinder collar centered on top of it. A
+separate exploration, unrelated in dimensions to the other parts in this
+folder.
+
+### Geometry
+
+- Ring: inner diameter `45 mm`, outer diameter `51 mm`
+- Teeth: `7`, evenly spaced (every `360/7 ≈ 51.43°`), each `7 mm` wide
+  (tangential), sticking `10 mm` past the ring's outer edge (radial) —
+  constant-width rectangular tabs, not wedges that widen with radius
+- Base extrusion height: `3 mm`
+- Collar: hollow cylinder centered on the ring's axis, sitting on top of
+  the base (`Z = 3` to `Z = 8`), outer diameter `48.5 mm`, wall thickness
+  `3 mm` (inner diameter `42.5 mm`) — its inner diameter is `2.5 mm`
+  smaller than the base ring's `45 mm` bore, so there's a small internal
+  step/lip where they meet
+- Collar height: `5 mm` (assumed — not specified in the brief)
+
+### Source
+
+- JSCAD: [`gear-ring.jscad`](./gear-ring.jscad)
+- OpenJSCAD: [Open `gear-ring.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/gear-ring.jscad#)
+
+### Outputs
+
+- STL: [`gear-ring.stl`](./gear-ring.stl)
+- PNG preview (isometric): [`gear-ring-iso.png`](./gear-ring-iso.png)
+- PNG preview (top): [`gear-ring-top.png`](./gear-ring-top.png)
+
+### Preview
+
+![Gear ring isometric](./gear-ring-iso.png)
+![Gear ring top view](./gear-ring-top.png)

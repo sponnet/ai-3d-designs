@@ -114,3 +114,16 @@ for (const [file, cameraPosition] of Object.entries(keypadViews)) {
   fs.writeFileSync(path.join(__dirname, file), png)
   console.log('Wrote', file)
 }
+
+// --- gear-ring.stl ---
+// Toothed ring + raised collar, unrelated to the other parts.
+const gearRingStlData = fs.readFileSync(path.join(__dirname, 'gear-ring.stl'))
+const gearRingViews = {
+  'gear-ring-iso.png': [80, -80, 80],
+  'gear-ring-top.png': [0, 0, 200]
+}
+for (const [file, cameraPosition] of Object.entries(gearRingViews)) {
+  const png = stl2png(gearRingStlData, { ...baseOptions, width: 900, height: 900, cameraPosition })
+  fs.writeFileSync(path.join(__dirname, file), png)
+  console.log('Wrote', file)
+}
