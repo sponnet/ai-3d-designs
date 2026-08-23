@@ -4,7 +4,7 @@ const { extrudeLinear } = require('@jscad/modeling').extrusions
 const { translate, rotateX } = require('@jscad/modeling').transforms
 
 const OUTER_DIAMETER = 49
-const WALL_THICKNESS = 2
+const WALL_THICKNESS = 3 // 50% thicker than the original 2mm
 const NOTCH_WIDTH = 3
 const RING_HEIGHT = 5
 const CIRCLE_SEGMENTS = 128

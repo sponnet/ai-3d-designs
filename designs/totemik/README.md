@@ -158,7 +158,8 @@ above — different dimensions, not interchangeable.
 #### Ring
 
 - Outer diameter: `49 mm`
-- Wall thickness (radial): `2 mm` (inner diameter `45 mm`)
+- Wall thickness (radial): `3 mm` (inner diameter `43 mm`) — `50%`
+  thicker than the original `2 mm`
 - Notch/opening at 0°: `3 mm` wide, cut fully through the wall
 - Extrusion height: `5 mm`
 
@@ -167,9 +168,9 @@ above — different dimensions, not interchangeable.
 - Base footprint: `27 mm x 2.5 mm`, extrusion height (Z) `100 mm`, base at
   `z = 0` — same base plane as the ring, so the ring sits at the bottom of
   the beam
-- Positioned so its `27 mm` edge forms a chord at `~19.24 mm` from the ring
+- Positioned so its `27 mm` edge forms a chord at `~18.62 mm` from the ring
   center — the 2 endpoints of that edge land on the middle of the ring
-  wall (radius `23.5 mm`, halfway between inner `22.5 mm` and outer
+  wall (radius `23 mm`, halfway between inner `21.5 mm` and outer
   `24.5 mm`), so those 2 corners are embedded in solid ring material
   instead of just touching the inner surface. Placed opposite the 0°
   notch (along +Y) so the two features don't clash.
@@ -183,7 +184,7 @@ above — different dimensions, not interchangeable.
 - Stiffening rib on the beam's outer (wall-facing) side, centered on its
   `27 mm` width, `3 mm` wide (assumed — not specified): runs from `z = 0`
   (the base) up to `5 mm` before the first hole (`z = 63 mm`), reaching
-  out from the beam's outer face to the ring's inner radius (`22.5 mm`).
+  out from the beam's outer face to the ring's inner radius (`21.5 mm`).
   Reinforces the thin top half, whose center is otherwise unsupported
   between the beam's 2 wall-embedded corners. Sized for the default
   `beamNotchSide: 'inner'`, where the beam's outer face stays at the
