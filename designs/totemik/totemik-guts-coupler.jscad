@@ -23,7 +23,6 @@ const { translate, rotateX } = require('@jscad/modeling').transforms
 const BEAM_WIDTH = 27 // matches totemik-guts.jscad's BEAM_WIDTH
 const BEAM_DEPTH = 2.5 // matches totemik-guts.jscad's BEAM_DEPTH
 const BEAM_DEPTH_TOP = BEAM_DEPTH / 2 // matches totemik-guts.jscad's BEAM_DEPTH_TOP
-const COUPLER_LENGTH = 100 // 10cm
 
 const HOLE_DIAMETER = 3 // matches totemik-guts.jscad's HOLE_DIAMETER
 const HOLE_OFFSET_Z = 7 // matches totemik-guts.jscad's HOLE_OFFSET_Z
@@ -35,6 +34,17 @@ const HOLE_OVERSHOOT = 2
 // GUTS_TIP_TO_HOLE_CENTER (= 25) back from that tip, +- HOLE_OFFSET_Z.
 const GUTS_TIP_TO_HOLE_CENTER = 25 // = totemik-guts.jscad's BEAM_HEIGHT - TOP_CENTER_Z
 
+// totemik-guts.jscad's thinned top half runs the whole second half of
+// its beam, BEAM_HEIGHT / 2 = 50mm long. The recess here is sized to
+// match that exactly, so it fills the guts' own recess/cutout over its
+// full length rather than only the short stretch around the holes.
+const RECESS_LENGTH = 50 // = totemik-guts.jscad's BEAM_HEIGHT / 2
+
+// COUPLER_LENGTH grows with RECESS_LENGTH so a full-depth middle section
+// (COUPLER_MIDDLE_LENGTH) still remains between the 2 recessed ends.
+const COUPLER_MIDDLE_LENGTH = 30 // assumed -- not specified
+const COUPLER_LENGTH = 2 * RECESS_LENGTH + COUPLER_MIDDLE_LENGTH
+
 // For the lap joint, the recess's far edge is assembled flush against
 // the guts' tip (so the coupler's full-depth body starts exactly where
 // the guts' own thin material ends, with no collision between them) --
@@ -42,12 +52,8 @@ const GUTS_TIP_TO_HOLE_CENTER = 25 // = totemik-guts.jscad's BEAM_HEIGHT - TOP_C
 // (= 32mm) *inside* the recess from that far edge, i.e.
 // RECESS_LENGTH - GUTS_TIP_TO_HOLE_CENTER - HOLE_OFFSET_Z from the
 // recess's own (near) end -- not centered on RECESS_LENGTH / 2, which
-// only happens to coincide when RECESS_LENGTH = 2 * GUTS_TIP_TO_HOLE_CENTER.
-// Previously RECESS_LENGTH was 20mm (assumed, not derived from the guts
-// geometry) with holes centered on RECESS_LENGTH / 2 -- both wrong: 20mm
-// isn't even long enough to fit the far hole (32mm from the flush edge),
-// so that hole landed outside the recess, in unholed full-depth material.
-const RECESS_LENGTH = 35 // >= GUTS_TIP_TO_HOLE_CENTER + HOLE_OFFSET_Z (32), plus margin
+// only happens to coincide when RECESS_LENGTH = 2 * GUTS_TIP_TO_HOLE_CENTER
+// (as it now does, since RECESS_LENGTH = 50 = 2 * 25).
 const HOLE_CENTER_FROM_RECESS_START = RECESS_LENGTH - GUTS_TIP_TO_HOLE_CENTER
 
 // Full-depth beam profile, spanning the whole coupler length -- the 2

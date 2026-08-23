@@ -237,43 +237,43 @@ Straight coupler that joins 2 [`totemik-guts.jscad`](./totemik-guts.jscad)
 pieces end to end: `totemik-guts` → `totemik-guts-coupler` →
 `totemik-guts`. Same beam cross-section as totemik-guts' own beam
 (`27 x 2.5mm`), kept full depth along the middle. At each end, a
-`35 mm` section is thinned down and gets 2 holes — this nests with a
+`50 mm` section is thinned down and gets 2 holes — this nests with a
 totemik-guts beam's own thinned top end, using exactly the lap-joint
 mechanism totemik-guts already uses for its own `beamNotchSide` halves,
 then bolts through the 2 aligned holes.
 
 ### Geometry
 
-- Length: `100 mm` (`10 cm`)
+- Length: `130 mm`
 - Beam cross-section: `27 x 2.5 mm`, matching totemik-guts.jscad's
   `BEAM_WIDTH` / `BEAM_DEPTH`
-- Each end: `35 mm` long recess, thinned to `1.25 mm` (matching
+- Each end: `50 mm` long recess, thinned to `1.25 mm` (matching
   totemik-guts.jscad's `BEAM_DEPTH_TOP`), flush with one edge — the side
   complementary to totemik-guts' default `beamNotchSide: 'inner'`, so
   this coupler is designed to mate with totemik-guts pieces left at that
-  default setting. Sized so its far edge lands flush with the guts
-  beam's tip when assembled and both holes fall inside it with margin:
-  totemik-guts.jscad's 2 holes sit `18 mm` and `32 mm` from its beam
-  tip, so the recess (measured from the *joint*, i.e. its far edge) must
-  reach past `32 mm`; `35 mm` leaves `30 mm` of full-depth material in
-  the coupler's middle. (A previous `20 mm` recess, with holes centered
-  on it instead of positioned from the joint, was too short to reach the
-  far hole at all — that hole landed outside the recess, in unholed
-  full-depth material, so the coupler didn't actually fit the guts piece.)
+  default setting. `50 mm` matches totemik-guts.jscad's thinned top
+  half exactly (`BEAM_HEIGHT / 2`), so the recess fills the guts beam's
+  own recess over its *entire* length, not just the short stretch around
+  the holes — leaving `30 mm` of full-depth material in the coupler's
+  middle between the 2 recessed ends. (Earlier versions used a `20 mm`,
+  then a `35 mm` recess; both were shorter than the guts' full `50 mm`
+  recess, so part of it went unfilled by the coupler.)
 - 2 holes per end, `3 mm` diameter, `±7 mm` apart (matching
   totemik-guts.jscad's `HOLE_DIAMETER` / `HOLE_OFFSET_Z`), positioned so
-  they land exactly on totemik-guts' own hole positions once the recess
-  is butted flush against the guts beam tip
+  they land exactly on totemik-guts' own hole positions (`18 mm` and
+  `32 mm` from its beam tip) once the recess is butted flush against
+  that tip
 
 Assembly verified by unioning a totemik-guts piece with the coupler,
 translated to butt the coupler's recess flush against the guts beam tip
 (both in Z and in Y, to align the 2 parts' differently-offset beam
 cross-sections) — the result is one continuous, connected beam. Probing
 both hole positions with a `1.4 mm`-radius bolt-shaft cylinder confirms
-each passes through cleanly (no collision with either layer), while a
-probe at the midpoint between the holes correctly collides with solid
-material — i.e. both hole pairs coincide and the material between them
-overlaps as intended.
+each passes through cleanly (no collision with either layer); probing
+several points across the full `50 mm` recess (including the midpoint
+between the holes) confirms solid, overlapping material everywhere in
+that span — i.e. both hole pairs coincide and the coupler's recess fully
+fills the guts beam's own recess, with no gap or unfilled stretch.
 
 ### Source
 
