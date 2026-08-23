@@ -25,12 +25,30 @@ const BEAM_DEPTH = 2.5 // matches totemik-guts.jscad's BEAM_DEPTH
 const BEAM_DEPTH_TOP = BEAM_DEPTH / 2 // matches totemik-guts.jscad's BEAM_DEPTH_TOP
 const COUPLER_LENGTH = 100 // 10cm
 
-const RECESS_LENGTH = 20 // assumed -- not specified; long enough for a
-// solid overlap plus the 2 holes with margin
 const HOLE_DIAMETER = 3 // matches totemik-guts.jscad's HOLE_DIAMETER
 const HOLE_OFFSET_Z = 7 // matches totemik-guts.jscad's HOLE_OFFSET_Z
 const HOLE_SEGMENTS = 48
 const HOLE_OVERSHOOT = 2
+
+// totemik-guts.jscad's beam tip (its far, ring-less end) sits at its own
+// z = BEAM_HEIGHT = 100, and its 2 holes sit at TOP_CENTER_Z (= 75), i.e.
+// GUTS_TIP_TO_HOLE_CENTER (= 25) back from that tip, +- HOLE_OFFSET_Z.
+const GUTS_TIP_TO_HOLE_CENTER = 25 // = totemik-guts.jscad's BEAM_HEIGHT - TOP_CENTER_Z
+
+// For the lap joint, the recess's far edge is assembled flush against
+// the guts' tip (so the coupler's full-depth body starts exactly where
+// the guts' own thin material ends, with no collision between them) --
+// meaning the recessed end sits GUTS_TIP_TO_HOLE_CENTER + HOLE_OFFSET_Z
+// (= 32mm) *inside* the recess from that far edge, i.e.
+// RECESS_LENGTH - GUTS_TIP_TO_HOLE_CENTER - HOLE_OFFSET_Z from the
+// recess's own (near) end -- not centered on RECESS_LENGTH / 2, which
+// only happens to coincide when RECESS_LENGTH = 2 * GUTS_TIP_TO_HOLE_CENTER.
+// Previously RECESS_LENGTH was 20mm (assumed, not derived from the guts
+// geometry) with holes centered on RECESS_LENGTH / 2 -- both wrong: 20mm
+// isn't even long enough to fit the far hole (32mm from the flush edge),
+// so that hole landed outside the recess, in unholed full-depth material.
+const RECESS_LENGTH = 35 // >= GUTS_TIP_TO_HOLE_CENTER + HOLE_OFFSET_Z (32), plus margin
+const HOLE_CENTER_FROM_RECESS_START = RECESS_LENGTH - GUTS_TIP_TO_HOLE_CENTER
 
 // Full-depth beam profile, spanning the whole coupler length -- the 2
 // recessed ends get carved out of this afterward.
@@ -73,8 +91,8 @@ const main = () => {
   )
   const recessed = subtract(beam, cutBottom, cutTop)
 
-  const holesBottom = endHoles(RECESS_LENGTH / 2)
-  const holesTop = endHoles(COUPLER_LENGTH - RECESS_LENGTH / 2)
+  const holesBottom = endHoles(HOLE_CENTER_FROM_RECESS_START)
+  const holesTop = endHoles(COUPLER_LENGTH - HOLE_CENTER_FROM_RECESS_START)
 
   return subtract(recessed, ...holesBottom, ...holesTop)
 }
