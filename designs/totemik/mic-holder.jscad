@@ -63,11 +63,16 @@ const CORNER_ROUND_RADIUS = 1.5 // assumed -- < WALL_THICKNESS (2mm)
 const TOP_BEVEL_HEIGHT = 1.5 // assumed
 const TOP_BEVEL_INSET = 1.5 // assumed
 
-// Mounting ears: half-round lip at each end, flat edge flush with the
-// full exterior width, curved edge sticking outward, flush with the
-// bottom, with a 3mm screw hole -- same pattern as keypad.jscad's
-// endTab3D.
-const TAB_RADIUS = EXT_WIDTH / 2 // = 9.5
+// Mounting ears: half-round lip at each end, curved edge sticking
+// outward, flush with the bottom, with a 3mm screw hole -- same pattern
+// as keypad.jscad's endTab3D. Sized 20% narrower than the full exterior
+// width (rather than flush with it) so the ear's flat edge falls inside
+// the box's rounded-corner recess at that end (the box's actual width
+// right at X=0/EXT_LENGTH is only the flat part of the rounded rectangle,
+// EXT_WIDTH - 2*CORNER_ROUND_RADIUS = 16mm, narrower than the full 19mm)
+// -- flush-with-full-width previously left the ear overhanging past that
+// recess, an odd little ledge right where the rounded corner is.
+const TAB_RADIUS = (EXT_WIDTH / 2) * 0.8 // = 7.6
 const TAB_THICKNESS = 2 // assumed -- flush with the bottom edge
 const TAB_HOLE_DIAMETER = 3 // per spec
 const TAB_HOLE_INSET = 3 // assumed -- distance from the tab's curved

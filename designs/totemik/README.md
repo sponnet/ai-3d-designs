@@ -502,11 +502,14 @@ other parts in this folder.
 - Top edge: beveled over the last `1.5 mm` of height, inset `1.5 mm`
   (both assumed) — removes the sharp edge where the flat top meets the
   sides, on top of the rounded vertical corners
-- Mounting ears: one at each end, half-round, `9.5 mm` radius (flat edge
-  flush with the full `19 mm` exterior width, curved edge sticking
-  outward), flush with the bottom edge, `2 mm` thick, each with a `3 mm`
-  screw hole centered `3 mm` in from the curved outer edge (radius and
-  hole inset assumed)
+- Mounting ears: one at each end, half-round, `7.6 mm` radius — `20%`
+  narrower than the full `19 mm` exterior width (`9.5 mm`), so the ear's
+  flat edge falls inside the box's rounded-corner recess at that end
+  (the box's actual flat-edge width right at the very end is only
+  `EXT_WIDTH - 2×CORNER_ROUND_RADIUS` = `16 mm`, not the full `19 mm`) —
+  instead of overhanging past it. Curved edge sticking outward, flush
+  with the bottom edge, `2 mm` thick, each with a `3 mm` screw hole
+  centered `3 mm` in from the curved outer edge (hole inset assumed)
 
 ### Source
 
