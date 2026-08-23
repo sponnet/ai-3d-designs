@@ -473,8 +473,11 @@ for the microphone capsule near one end and a rectangular slot near the
 other end. `35 x 15 x 17 mm` is the *interior* (cavity) size; the outer
 box is that plus `2 mm` walls on every side (both sides of length/width,
 and the top — the open bottom gets none added). Hole positions are
-likewise measured within that same interior space. A separate
-exploration, unrelated in dimensions to the other parts in this folder.
+likewise measured within that same interior space. The vertical corners
+are rounded the full height and the top edge is beveled, so no edge is
+left sharp; a half-round mounting ear with a `3 mm` screw hole sticks out
+from each end. A separate exploration, unrelated in dimensions to the
+other parts in this folder.
 
 ### Geometry
 
@@ -493,6 +496,17 @@ exploration, unrelated in dimensions to the other parts in this folder.
 - The 2 holes are well clear of each other (a `13.5 mm` gap of solid top
   wall between them) and both stay clear of every wall
 - Both cutouts pass through the `2 mm` top wall only
+- Vertical corners: rounded with a `1.5 mm` radius (assumed — kept below
+  the `2 mm` wall thickness so the wall never thins out at a corner) for
+  the full height
+- Top edge: beveled over the last `1.5 mm` of height, inset `1.5 mm`
+  (both assumed) — removes the sharp edge where the flat top meets the
+  sides, on top of the rounded vertical corners
+- Mounting ears: one at each end, half-round, `9.5 mm` radius (flat edge
+  flush with the full `19 mm` exterior width, curved edge sticking
+  outward), flush with the bottom edge, `2 mm` thick, each with a `3 mm`
+  screw hole centered `3 mm` in from the curved outer edge (radius and
+  hole inset assumed)
 
 ### Source
 
