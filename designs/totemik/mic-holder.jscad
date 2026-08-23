@@ -12,12 +12,11 @@ const { translate } = require('@jscad/modeling').transforms
 // the bottom stays open so it gets none added there).
 //
 // Both hole positions are likewise measured within that same interior
-// space, not against the outer box: the round hole sits INT_LENGTH -
-// ROUND_HOLE_INSET from the interior edge nearest the rectangular hole,
-// putting it toward the opposite end; the rectangular hole is flush with
-// the interior's far edge (touching the wall's inner face) without
-// crossing into the wall itself, so it stays fully within the top
-// surface's open span.
+// space, not against the outer box: the round hole sits
+// ROUND_HOLE_DIST from the interior edge opposite the rectangular hole;
+// the rectangular hole is flush with the interior's far edge (touching
+// the wall's inner face) without crossing into the wall itself, so it
+// stays fully within the top surface's open span.
 //
 // Coordinates: X = along the 35mm interior length, Y = across the 15mm
 // interior width, Z = up (Z=0 is the open bottom, Z=EXT_HEIGHT is the
@@ -36,9 +35,9 @@ const EXT_HEIGHT = INT_HEIGHT + WALL_THICKNESS // 19 -- only the top adds
 
 const ROUND_HOLE_DIAMETER = 4 // per user spec
 const ROUND_HOLE_SEGMENTS = 32
-const ROUND_HOLE_INSET = 20 // per spec, measured from the interior edge
-// nearest the rectangular hole
-const ROUND_HOLE_X = WALL_THICKNESS + (INT_LENGTH - ROUND_HOLE_INSET) // = 17
+const ROUND_HOLE_DIST = 7.5 // per spec, measured from the interior edge
+// opposite the rectangular hole
+const ROUND_HOLE_X = WALL_THICKNESS + ROUND_HOLE_DIST // = 9.5
 const ROUND_HOLE_Y = WALL_THICKNESS + INT_WIDTH / 2 // = 9.5, centered
 
 const RECT_HOLE_X_SIZE = 12 // assumed -- the 2 dimensions (9 vs 12mm)
