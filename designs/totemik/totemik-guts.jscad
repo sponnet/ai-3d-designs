@@ -52,11 +52,15 @@ const BEAM_CONTACT_OFFSET = Math.sqrt(WALL_MID_RADIUS ** 2 - (BEAM_WIDTH / 2) **
 // otherwise only supported at its 2 far corners. Centered on the beam's
 // width, standing on the outer (wall-facing) side, from the base (z=0)
 // up to RIB_TOP_MARGIN before the first hole. Its depth reaches from the
-// beam's own outer face out to the ring's inner radius -- assumes the
-// default beamNotchSide = 'inner', where that outer face is the same Y
-// the whole way up (with 'outer', the top half's outer face moves and
-// this rib would no longer meet it there).
+// beam's own outer face out to RIB_OUTER_MARGIN before the ring's outer
+// edge -- sunk well into the ring's wall (not just the inner bore) for a
+// much stronger fused connection, leaving only RIB_OUTER_MARGIN of wall
+// material beyond the rib's tip. Assumes the default beamNotchSide =
+// 'inner', where that outer face is the same Y the whole way up (with
+// 'outer', the top half's outer face moves and this rib would no longer
+// meet it there).
 const RIB_WIDTH = 3 // assumed -- not specified
+const RIB_OUTER_MARGIN = 1
 const RIB_TOP_MARGIN = 5
 const TOP_CENTER_Z = (BEAM_HEIGHT / 2 + BEAM_HEIGHT) / 2
 const FIRST_HOLE_Z = TOP_CENTER_Z - HOLE_OFFSET_Z
@@ -117,7 +121,8 @@ const beamTop2D = (notchSide = BEAM_NOTCH_SIDE_DEFAULT) => {
 }
 
 const rib3D = () => {
-  const ribDepth = INNER_RADIUS - BEAM_CONTACT_OFFSET
+  const ribOuterRadius = OUTER_RADIUS - RIB_OUTER_MARGIN
+  const ribDepth = ribOuterRadius - BEAM_CONTACT_OFFSET
   return translate(
     [0, BEAM_CONTACT_OFFSET + ribDepth / 2, RIB_HEIGHT / 2],
     cuboid({ size: [RIB_WIDTH, ribDepth, RIB_HEIGHT] })

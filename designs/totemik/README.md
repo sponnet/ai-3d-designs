@@ -184,9 +184,13 @@ above — different dimensions, not interchangeable.
 - Stiffening rib on the beam's outer (wall-facing) side, centered on its
   `27 mm` width, `3 mm` wide (assumed — not specified): runs from `z = 0`
   (the base) up to `5 mm` before the first hole (`z = 63 mm`), reaching
-  out from the beam's outer face to the ring's inner radius (`21.5 mm`).
-  Reinforces the thin top half, whose center is otherwise unsupported
-  between the beam's 2 wall-embedded corners. Sized for the default
+  out from the beam's outer face to `1 mm` short of the ring's outer
+  radius (`23.5 mm`, vs. the outer radius of `24.5 mm`) — sunk well past
+  the inner bore and into the ring's wall itself, leaving only `1 mm` of
+  wall material beyond the rib's tip. Reinforces the thin top half, whose
+  center is otherwise unsupported between the beam's 2 wall-embedded
+  corners, and fuses it much more solidly to the ring than a rib merely
+  touching the inner bore would. Sized for the default
   `beamNotchSide: 'inner'`, where the beam's outer face stays at the
   same Y the whole way up.
 - Ring, beam and rib are unioned, then the 2 holes subtracted, into a
