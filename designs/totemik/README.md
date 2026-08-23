@@ -1,6 +1,6 @@
 # Totemik
 
-Seven related explorations for the Totemik project:
+Eight related explorations for the Totemik project:
 
 - **Ring** and **Partition**: a ring band with a push-fit partition strip
   (see below).
@@ -14,6 +14,8 @@ Seven related explorations for the Totemik project:
 - **Keypad**: a minimalist 4-key Cherry MX switch bar with mounting tabs,
   also unrelated in dimensions to the other explorations.
 - **Gear Ring**: a toothed ring with a raised collar, also unrelated in
+  dimensions to the other explorations.
+- **Mic Holder**: an open-bottom tray for a microphone, also unrelated in
   dimensions to the other explorations.
 
 ## Ring
@@ -460,3 +462,42 @@ unrelated in dimensions to the other parts in this folder.
 
 ![Gear ring isometric](./gear-ring-iso.png)
 ![Gear ring top view](./gear-ring-top.png)
+
+## Mic Holder
+
+### Overview
+
+Open-bottom tray for a microphone: a hollow box with 4 side walls and a
+top wall, no bottom face, with 2 cutouts through the top — a round hole
+for the microphone capsule and a rectangular slot at the opposite end. A
+separate exploration, unrelated in dimensions to the other parts in this
+folder.
+
+### Geometry
+
+- Footprint: `35 x 15 mm`, `17 mm` deep (open on the bottom)
+- Walls: `2 mm` thick throughout (assumed — not specified), 4 sides plus
+  the top
+- Round hole: `4 mm` diameter, centered on the `15 mm` side, `20 mm` from
+  one of the `35 mm` side's short edges
+- Rectangular hole: `12 x 9 mm`, centered on the `15 mm` side, flush with
+  the short edge opposite the round hole's reference edge (the `12 mm`
+  dimension runs inward from that edge, the `9 mm` dimension across the
+  width — assumed, not specified which dimension goes which way)
+- Both cutouts pass through the `2 mm` top wall only
+
+### Source
+
+- JSCAD: [`mic-holder.jscad`](./mic-holder.jscad)
+- OpenJSCAD: [Open `mic-holder.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/mic-holder.jscad#)
+
+### Outputs
+
+- STL: [`mic-holder.stl`](./mic-holder.stl)
+- PNG preview (isometric): [`mic-holder-iso.png`](./mic-holder-iso.png)
+- PNG preview (top): [`mic-holder-top.png`](./mic-holder-top.png)
+
+### Preview
+
+![Mic holder isometric](./mic-holder-iso.png)
+![Mic holder top view](./mic-holder-top.png)

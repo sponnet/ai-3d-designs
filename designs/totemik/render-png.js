@@ -139,3 +139,16 @@ for (const [file, cameraPosition] of Object.entries(couplerViews)) {
   fs.writeFileSync(path.join(__dirname, file), png)
   console.log('Wrote', file)
 }
+
+// --- mic-holder.stl ---
+// Open-bottom tray for a microphone, unrelated to the other parts.
+const micHolderStlData = fs.readFileSync(path.join(__dirname, 'mic-holder.stl'))
+const micHolderViews = {
+  'mic-holder-iso.png': [60, -60, 40],
+  'mic-holder-top.png': [17.5, 7, 100]
+}
+for (const [file, cameraPosition] of Object.entries(micHolderViews)) {
+  const png = stl2png(micHolderStlData, { ...baseOptions, width: 900, height: 700, cameraPosition })
+  fs.writeFileSync(path.join(__dirname, file), png)
+  console.log('Wrote', file)
+}
