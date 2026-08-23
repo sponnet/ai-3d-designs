@@ -336,34 +336,45 @@ Minimalist hollow beam, open only on the bottom, with 4 Cherry MX switch
 cutouts side by side in the top wall — raising the switches up on the
 beam's 4 closed sides (2 lengthwise side walls, 2 end walls), so there's
 clearance underneath for switch pins / hot-swap sockets / wiring instead
-of them sitting flush on whatever this is mounted to. Capped at `15 mm`
-wide, so the 2 side walls are as thin as reasonably printable to leave
-room for the 14mm switch cutout. 2 half-round mounting ears, each with a
-`3 mm` screw hole, stick out from the 2 lengthwise ends for screwing the
-whole keypad onto something. Hole size and top-wall thickness match the
-standard Cherry MX plate spec measured from the reference
-`3MechanicalButtons.3mf` (14x14mm square cutout, 1.8mm plate). A separate
-exploration, unrelated in dimensions to the other parts in this folder.
+of them sitting flush on whatever this is mounted to. The beam's width
+tapers with height — `15 mm` at the bottom, flaring out to `18 mm` at
+the top — so there's more wall material right around the switch cutouts
+at the top, where it matters most structurally, while staying compact at
+the bottom. 2 half-round mounting ears, each with a `3 mm` screw hole,
+stick out from the 2 lengthwise ends for screwing the whole keypad onto
+something. Hole size and top-wall thickness match the standard Cherry MX
+plate spec measured from the reference `3MechanicalButtons.3mf`
+(14x14mm square cutout, 1.8mm plate). A separate exploration, unrelated
+in dimensions to the other parts in this folder.
 
 ### Geometry
 
 - 4 square cutouts, `14 x 14 mm` each, spaced `19.05 mm` center-to-center
   (the standard MX/1u-keycap pitch, so keycaps don't collide), cut through
   the top wall
-- Beam footprint: `79.15 x 15 mm` — length keeps the original `4 mm`
-  margin beyond the outer hole edges left/right; width is capped at
-  `15 mm`, leaving only `0.5 mm` margin beyond the hole edges front/back
-- Top wall: `1.8 mm` thick (matches the measured Cherry MX plate spec)
-- Side walls (front/back, full beam length): `0.5 mm` thick — shrunk
-  from the original `2 mm` to fit the `15 mm` width cap, flush with the
-  `0.5 mm` margin so the wall doesn't intrude into the switch cutout
-- End walls (the 2 lengthwise ends): `2 mm` thick (assumed) — unaffected
-  by the width cap, kept at the sturdier original value
+- Beam footprint: `79.15 mm` long (keeps the original `4 mm` margin
+  beyond the outer hole edges left/right, unaffected by height); width
+  tapers from `15 mm` at the bottom (`z = 0`) to `18 mm` at the top
+  (`z = 12 mm`), flaring outward symmetrically
+- Inner hollow: a constant `14 mm` wide (matching the switch cutout) at
+  every height — the taper is carried entirely by wall thickness, not by
+  narrowing the switch/wiring clearance
+- Top wall: `1.8 mm` thick (matches the measured Cherry MX plate spec),
+  `18 mm` wide (the top-of-taper width), giving `2 mm` margin beyond the
+  hole edges front/back — up from the `0.5 mm` margin a constant-width
+  design would have, directly the "more material at the top" this taper
+  is for
+- Side walls (front/back, full beam length): taper from `0.5 mm` thick
+  at the bottom to `2 mm` thick at the top, inner face flush with the
+  `14 mm` hollow the whole way up, outer face sliding out with height
+- End walls (the 2 lengthwise ends): taper the same way in their Y
+  extent (matching the side walls' profile so everything stays flush),
+  `2 mm` thick in X throughout (assumed, unaffected by the Y taper)
 - Beam height: `12 mm` (assumed — how far "up" the holes sit, giving
   clearance underneath for switch pins/hot-swap sockets/wiring); only the
   bottom is open
 - Mounting ears: one at each lengthwise end, half-round, `7.5 mm` radius
-  (flat edge flush with the full `15 mm` beam width, curved edge sticking
+  (flat edge flush with the bottom's `15 mm` width, curved edge sticking
   outward), flush with the bottom edge, `2 mm` thick, each with a `3 mm`
   screw hole centered `3 mm` in from the curved outer edge (radius and
   hole inset assumed)
