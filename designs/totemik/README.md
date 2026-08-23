@@ -469,21 +469,30 @@ unrelated in dimensions to the other parts in this folder.
 
 Open-bottom tray for a microphone: a hollow box with 4 side walls and a
 top wall, no bottom face, with 2 cutouts through the top — a round hole
-for the microphone capsule and a rectangular slot at the opposite end. A
-separate exploration, unrelated in dimensions to the other parts in this
-folder.
+for the microphone capsule near one end and a rectangular slot near the
+other end. `35 x 15 x 17 mm` is the *interior* (cavity) size; the outer
+box is that plus `2 mm` walls on every side (both sides of length/width,
+and the top — the open bottom gets none added). Hole positions are
+likewise measured within that same interior space. A separate
+exploration, unrelated in dimensions to the other parts in this folder.
 
 ### Geometry
 
-- Footprint: `35 x 15 mm`, `17 mm` deep (open on the bottom)
-- Walls: `2 mm` thick throughout (assumed — not specified), 4 sides plus
-  the top
-- Round hole: `4 mm` diameter, centered on the `15 mm` side, `20 mm` from
-  one of the `35 mm` side's short edges
-- Rectangular hole: `12 x 9 mm`, centered on the `15 mm` side, flush with
-  the short edge opposite the round hole's reference edge (the `12 mm`
+- Interior (cavity): `35 x 15 mm` footprint, `17 mm` deep
+- Walls: `2 mm` thick, all 4 sides plus the top
+- Outer footprint: `39 x 19 mm` (`35 + 2×2` and `15 + 2×2`), `19 mm` tall
+  (`17 + 2`, only the top adds thickness since the bottom stays open)
+- Round hole: `4 mm` diameter, centered on the interior width, `20 mm`
+  from the interior edge nearest the rectangular hole — putting it
+  toward the opposite end of the design
+- Rectangular hole: `12 x 9 mm`, centered on the interior width, flush
+  with the interior edge opposite the round hole (touching the wall's
+  *inner* face, never crossing into the wall itself, so it stays fully
+  within the top surface with no overlap onto a side) — the `12 mm`
   dimension runs inward from that edge, the `9 mm` dimension across the
-  width — assumed, not specified which dimension goes which way)
+  width (assumed, not specified which dimension goes which way)
+- The 2 holes are well clear of each other (a `6 mm` gap of solid top
+  wall between them) and both stay clear of every wall
 - Both cutouts pass through the `2 mm` top wall only
 
 ### Source
