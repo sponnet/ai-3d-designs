@@ -11,10 +11,16 @@ const { translate } = require('@jscad/modeling').transforms
 // bottom is open). 2 half-round mounting ears, each with a 3mm screw
 // hole, stick out from the 2 lengthwise ends.
 //
-// Hole size (14x14mm, square) and top-wall thickness (1.8mm) match the
-// standard Cherry MX plate spec measured from the reference
+// Hole size (14x14mm nominal, square) and top-wall thickness (1.8mm)
+// match the standard Cherry MX plate spec measured from the reference
 // 3MechanicalButtons.3mf. Hole spacing uses the standard 19.05mm MX/
 // keycap pitch so 1u keycaps don't collide.
+//
+// The printed cutout itself (CUTOUT_SIZE) is shrunk slightly below that
+// 14mm nominal for a snugger push-fit -- switches were sitting loose at
+// the exact nominal size. Everything else (spacing, the inner hollow)
+// still uses the full nominal HOLE_SIZE, so only the opening the switch
+// clips through gets tighter, not the clearance around its body.
 //
 // The beam's width (front-to-back) tapers with height: 14mm at the
 // bottom (z=0) widening to 18mm at the top, flaring outward
@@ -37,10 +43,19 @@ const { translate } = require('@jscad/modeling').transforms
 // Coordinates: X = along the 4 keys, Y = depth (front-to-back), Z = up
 // (Z=0 is the open bottom, Z=BEAM_HEIGHT is the top wall's outer face).
 
-const HOLE_SIZE = 14
+const HOLE_SIZE = 14 // nominal Cherry MX plate spec -- still used for hole
+// spacing/positioning and the inner hollow (so the switch's actual 14mm
+// body has full clearance below the plate); only the printed cutout
+// itself is shrunk slightly, via CUTOUT_SIZE below
 const HOLE_PITCH = 19.05 // standard MX/keycap center spacing
 const NUM_KEYS = 4
 const TOP_THICKNESS = 1.8 // matches the measured Cherry MX plate spec
+
+const HOLE_FIT_REDUCTION = 0.2 // assumed -- shrinks the printed cutout
+// below the nominal 14mm for a snugger push-fit; switches were sitting
+// loose and popping back out at the exact nominal size
+const CUTOUT_SIZE = HOLE_SIZE - HOLE_FIT_REDUCTION // = 13.8mm, the
+// actual size cut through the top wall
 
 const MARGIN_X = 4 // minimal material beyond the outer hole edges, left/right
 const MARGIN_Y_BOTTOM = 0.5 // wall thickness at the bottom (z=0) -- thin,
@@ -84,7 +99,7 @@ const topWall3D = () => {
   const holes = keyHoleCenters().map((x) =>
     translate(
       [x, CENTER_Y, BEAM_HEIGHT - TOP_THICKNESS / 2],
-      cuboid({ size: [HOLE_SIZE, HOLE_SIZE, TOP_THICKNESS + HOLE_OVERSHOOT] })
+      cuboid({ size: [CUTOUT_SIZE, CUTOUT_SIZE, TOP_THICKNESS + HOLE_OVERSHOOT] })
     )
   )
   return subtract(wall, ...holes)

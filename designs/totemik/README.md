@@ -345,16 +345,20 @@ flush with the top wall's underside, so the top wall (already full
 width) sits flush on an already-full-width wall beneath it — no
 overhanging ledge at the top edge. 2 half-round mounting ears, each with
 a `3 mm` screw hole, stick out from the 2 lengthwise ends for screwing
-the whole keypad onto something. Hole size and top-wall thickness match
-the standard Cherry MX plate spec measured from the reference
-`3MechanicalButtons.3mf` (14x14mm square cutout, 1.8mm plate). A separate
-exploration, unrelated in dimensions to the other parts in this folder.
+the whole keypad onto something. Hole spacing and top-wall thickness
+match the standard Cherry MX plate spec measured from the reference
+`3MechanicalButtons.3mf` (14x14mm nominal square cutout, 1.8mm plate);
+the printed cutout itself is shrunk very slightly below that nominal
+size for a snugger push-fit, since switches sat loose and popped back
+out at the exact nominal 14mm. A separate exploration, unrelated in
+dimensions to the other parts in this folder.
 
 ### Geometry
 
-- 4 square cutouts, `14 x 14 mm` each, spaced `19.05 mm` center-to-center
-  (the standard MX/1u-keycap pitch, so keycaps don't collide), cut through
-  the top wall
+- 4 square cutouts, `13.8 x 13.8 mm` each (`14 mm` nominal minus a
+  `0.2 mm` push-fit reduction, assumed), spaced `19.05 mm`
+  center-to-center on the nominal `14 mm` grid (the standard MX/1u-keycap
+  pitch, so keycaps don't collide), cut through the top wall
 - Beam footprint: `79.15 mm` long (keeps the original `4 mm` margin
   beyond the outer hole edges left/right, unaffected by height); width
   tapers from `14 mm` at the bottom (`z = 0`) to `18 mm`, flaring outward
@@ -365,13 +369,16 @@ exploration, unrelated in dimensions to the other parts in this folder.
   would otherwise leave the top wall's edges overhanging past a
   still-narrower wall for that last `1.8 mm` of height
 - Inner hollow: tapers too, from `13 mm` wide at the bottom to exactly
-  `14 mm` (matching the switch cutout) at `z = 10.2 mm` — kept just wide
-  enough for wiring/pin clearance throughout, while letting wall
-  thickness stay a constant, compact `0.5 mm` at the bottom instead of
-  pinching to `0 mm` (which a 14mm-wide bottom with a fixed 14mm hollow
-  would otherwise force)
+  `14 mm` (the nominal switch size — deliberately wider than the `13.8 mm`
+  cutout above it, so the switch's actual body has full clearance even
+  though the opening it clips through is tighter) at `z = 10.2 mm` —
+  kept just wide enough for wiring/pin clearance throughout, while
+  letting wall thickness stay a constant, compact `0.5 mm` at the bottom
+  instead of pinching to `0 mm` (which a 14mm-wide bottom with a fixed
+  14mm hollow would otherwise force)
 - Top wall: `1.8 mm` thick (matches the measured Cherry MX plate spec),
-  `18 mm` wide, giving `2 mm` margin beyond the hole edges front/back
+  `18 mm` wide, giving `2 mm` margin beyond the (nominal) hole edges
+  front/back
 - Side walls (front/back, full beam length): taper from `0.5 mm` thick
   at the bottom to `2 mm` thick at `z = 10.2 mm` (then constant), both
   inner and outer faces sliding with height
