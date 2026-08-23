@@ -336,32 +336,37 @@ Minimalist hollow beam, open only on the bottom, with 4 Cherry MX switch
 cutouts side by side in the top wall — raising the switches up on the
 beam's 4 closed sides (2 lengthwise side walls, 2 end walls), so there's
 clearance underneath for switch pins / hot-swap sockets / wiring instead
-of them sitting flush on whatever this is mounted to. 2 mounting tabs
-(each with a screw hole) sit within that open bottom face, one at each
-end, for screwing the whole keypad onto something. Hole size and top-wall
-thickness match the standard Cherry MX plate spec measured from the
-reference `3MechanicalButtons.3mf` (14x14mm square cutout, 1.8mm plate).
-A separate exploration, unrelated in dimensions to the other parts in
-this folder.
+of them sitting flush on whatever this is mounted to. Capped at `15 mm`
+wide, so the 2 side walls are as thin as reasonably printable to leave
+room for the 14mm switch cutout. 2 half-round mounting ears, each with a
+`3 mm` screw hole, stick out from the 2 lengthwise ends for screwing the
+whole keypad onto something. Hole size and top-wall thickness match the
+standard Cherry MX plate spec measured from the reference
+`3MechanicalButtons.3mf` (14x14mm square cutout, 1.8mm plate). A separate
+exploration, unrelated in dimensions to the other parts in this folder.
 
 ### Geometry
 
 - 4 square cutouts, `14 x 14 mm` each, spaced `19.05 mm` center-to-center
   (the standard MX/1u-keycap pitch, so keycaps don't collide), cut through
   the top wall
-- Beam footprint: `4 mm` margin beyond the outer hole edges on every side
-  (kept as small as reasonably possible) → `79.15 x 22 mm`
+- Beam footprint: `79.15 x 15 mm` — length keeps the original `4 mm`
+  margin beyond the outer hole edges left/right; width is capped at
+  `15 mm`, leaving only `0.5 mm` margin beyond the hole edges front/back
 - Top wall: `1.8 mm` thick (matches the measured Cherry MX plate spec)
-- Side walls (front/back, full beam length) and end walls (the 2
-  lengthwise ends): `2 mm` thick (assumed)
+- Side walls (front/back, full beam length): `0.5 mm` thick — shrunk
+  from the original `2 mm` to fit the `15 mm` width cap, flush with the
+  `0.5 mm` margin so the wall doesn't intrude into the switch cutout
+- End walls (the 2 lengthwise ends): `2 mm` thick (assumed) — unaffected
+  by the width cap, kept at the sturdier original value
 - Beam height: `12 mm` (assumed — how far "up" the holes sit, giving
   clearance underneath for switch pins/hot-swap sockets/wiring); only the
   bottom is open
-- Mounting tabs: one at each end, sitting *within* the open bottom face
-  (not sticking out past the beam's ends) — `10 mm` long, spanning the
-  full depth between the 2 side walls, `2 mm` thick, flush with the
-  bottom edge, each with a `3 mm` screw hole centered in it (all
-  assumed)
+- Mounting ears: one at each lengthwise end, half-round, `7.5 mm` radius
+  (flat edge flush with the full `15 mm` beam width, curved edge sticking
+  outward), flush with the bottom edge, `2 mm` thick, each with a `3 mm`
+  screw hole centered `3 mm` in from the curved outer edge (radius and
+  hole inset assumed)
 
 ### Source
 
