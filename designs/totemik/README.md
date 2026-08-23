@@ -180,8 +180,16 @@ above — different dimensions, not interchangeable.
 - 2 through-holes in that thinned top half, `3 mm` diameter, axis along Y
   (perpendicular to the ring's Z axis), stacked one above the other along
   Z, `±7 mm` either side of the top half's mid-height (`z = 75 mm`).
-- Ring and beam are unioned, then the 2 holes subtracted, into a single
-  printable solid.
+- Stiffening rib on the beam's outer (wall-facing) side, centered on its
+  `27 mm` width, `3 mm` wide (assumed — not specified): runs from `z = 0`
+  (the base) up to `5 mm` before the first hole (`z = 63 mm`), reaching
+  out from the beam's outer face to the ring's inner radius (`22.5 mm`).
+  Reinforces the thin top half, whose center is otherwise unsupported
+  between the beam's 2 wall-embedded corners. Sized for the default
+  `beamNotchSide: 'inner'`, where the beam's outer face stays at the
+  same Y the whole way up.
+- Ring, beam and rib are unioned, then the 2 holes subtracted, into a
+  single printable solid.
 
 #### `beamNotchSide` parameter — printing 2 interlocking halves
 

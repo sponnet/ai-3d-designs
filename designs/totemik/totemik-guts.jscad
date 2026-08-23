@@ -1,4 +1,4 @@
-const { circle, rectangle, cylinder } = require('@jscad/modeling').primitives
+const { circle, rectangle, cylinder, cuboid } = require('@jscad/modeling').primitives
 const { subtract, union } = require('@jscad/modeling').booleans
 const { extrudeLinear } = require('@jscad/modeling').extrusions
 const { translate, rotateX } = require('@jscad/modeling').transforms
@@ -47,6 +47,20 @@ const WALL_MID_RADIUS = (OUTER_RADIUS + INNER_RADIUS) / 2
 // (BEAM_WIDTH-long) edge, chosen so that edge's 2 endpoints land on
 // WALL_MID_RADIUS -> those 2 corners sit inside the ring wall.
 const BEAM_CONTACT_OFFSET = Math.sqrt(WALL_MID_RADIUS ** 2 - (BEAM_WIDTH / 2) ** 2)
+
+// Stiffening rib for the thin (BEAM_DEPTH_TOP) top half, which is
+// otherwise only supported at its 2 far corners. Centered on the beam's
+// width, standing on the outer (wall-facing) side, from the base (z=0)
+// up to RIB_TOP_MARGIN before the first hole. Its depth reaches from the
+// beam's own outer face out to the ring's inner radius -- assumes the
+// default beamNotchSide = 'inner', where that outer face is the same Y
+// the whole way up (with 'outer', the top half's outer face moves and
+// this rib would no longer meet it there).
+const RIB_WIDTH = 3 // assumed -- not specified
+const RIB_TOP_MARGIN = 5
+const TOP_CENTER_Z = (BEAM_HEIGHT / 2 + BEAM_HEIGHT) / 2
+const FIRST_HOLE_Z = TOP_CENTER_Z - HOLE_OFFSET_Z
+const RIB_HEIGHT = FIRST_HOLE_Z - RIB_TOP_MARGIN
 
 const getParameterDefinitions = () => [
   {
@@ -102,6 +116,14 @@ const beamTop2D = (notchSide = BEAM_NOTCH_SIDE_DEFAULT) => {
   return rectangle({ size: [BEAM_WIDTH, BEAM_DEPTH_TOP], center: [0, centerY] })
 }
 
+const rib3D = () => {
+  const ribDepth = INNER_RADIUS - BEAM_CONTACT_OFFSET
+  return translate(
+    [0, BEAM_CONTACT_OFFSET + ribDepth / 2, RIB_HEIGHT / 2],
+    cuboid({ size: [RIB_WIDTH, ribDepth, RIB_HEIGHT] })
+  )
+}
+
 const beamTopHole = (z, notchSide) => {
   const centerY = beamTopCenterY(notchSide)
   const bore = cylinder({
@@ -125,13 +147,12 @@ const main = (params = {}) => {
     extrudeLinear({ height: BEAM_HEIGHT / 2 }, beamTop2D(notchSide))
   )
 
-  const topCenterZ = (BEAM_HEIGHT / 2 + BEAM_HEIGHT) / 2
-  const solid = union(ring, beamBottom, beamTop)
+  const solid = union(ring, beamBottom, beamTop, rib3D())
   return subtract(
     solid,
-    beamTopHole(topCenterZ - HOLE_OFFSET_Z, notchSide),
-    beamTopHole(topCenterZ + HOLE_OFFSET_Z, notchSide)
+    beamTopHole(TOP_CENTER_Z - HOLE_OFFSET_Z, notchSide),
+    beamTopHole(TOP_CENTER_Z + HOLE_OFFSET_Z, notchSide)
   )
 }
 
-module.exports = { main, getParameterDefinitions, ring2D, beamBottom2D, beamTop2D }
+module.exports = { main, getParameterDefinitions, ring2D, beamBottom2D, beamTop2D, rib3D }
