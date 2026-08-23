@@ -1,12 +1,14 @@
 # Totemik
 
-Six related explorations for the Totemik project:
+Seven related explorations for the Totemik project:
 
 - **Ring** and **Partition**: a ring band with a push-fit partition strip
   (see below).
 - **Totemik Guts**: a separate, independent exploration of a ring + beam
   design (different dimensions from the Ring above — not interchangeable
   with it).
+- **Totemik Guts Coupler**: a straight extension piece that joins 2
+  Totemik Guts beams end to end (same beam cross-section).
 - **Bottom Plug**: a push-fit foot for the bottom of a 49mm-ID tube,
   unrelated in dimensions to the other explorations.
 - **Keypad**: a minimalist 4-key Cherry MX switch bar with mounting tabs,
@@ -213,6 +215,52 @@ openjscad.xyz UI, and can be set from the CLI with
 
 ![Totemik guts preview, inner notch side](./totemik-guts.png)
 ![Totemik guts preview, outer notch side](./totemik-guts-outer.png)
+
+## Totemik Guts Coupler
+
+### Overview
+
+Straight coupler that joins 2 [`totemik-guts.jscad`](./totemik-guts.jscad)
+pieces end to end: `totemik-guts` → `totemik-guts-coupler` →
+`totemik-guts`. Same beam cross-section as totemik-guts' own beam
+(`27 x 2.5mm`), kept full depth along the middle. At each end, a short
+section is thinned down and gets 2 holes — this nests with a
+totemik-guts beam's own thinned top end, using exactly the lap-joint
+mechanism totemik-guts already uses for its own `beamNotchSide` halves,
+then bolts through the 2 aligned holes.
+
+### Geometry
+
+- Length: `100 mm` (`10 cm`)
+- Beam cross-section: `27 x 2.5 mm`, matching totemik-guts.jscad's
+  `BEAM_WIDTH` / `BEAM_DEPTH`
+- Each end: `20 mm` long recess (assumed — not specified; long enough for
+  a solid overlap plus the 2 holes with margin), thinned to `1.25 mm`
+  (matching totemik-guts.jscad's `BEAM_DEPTH_TOP`), flush with one edge
+  — the side complementary to totemik-guts' default `beamNotchSide:
+  'inner'`, so this coupler is designed to mate with totemik-guts pieces
+  left at that default setting
+- 2 holes per end, `3 mm` diameter, `±7 mm` apart (matching
+  totemik-guts.jscad's `HOLE_DIAMETER` / `HOLE_OFFSET_Z`), through the
+  recess depth
+
+Assembly checked by unioning a totemik-guts piece with the coupler
+positioned at its thinned top end — the recesses and holes line up into
+one continuous, solid beam with no gap or overlap.
+
+### Source
+
+- JSCAD: [`totemik-guts-coupler.jscad`](./totemik-guts-coupler.jscad)
+- OpenJSCAD: [Open `totemik-guts-coupler.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/totemik-guts-coupler.jscad#)
+
+### Outputs
+
+- STL: [`totemik-guts-coupler.stl`](./totemik-guts-coupler.stl)
+- PNG preview: [`totemik-guts-coupler.png`](./totemik-guts-coupler.png)
+
+### Preview
+
+![Totemik guts coupler preview](./totemik-guts-coupler.png)
 
 ## Bottom Plug
 

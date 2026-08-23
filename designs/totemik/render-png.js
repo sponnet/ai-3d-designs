@@ -127,3 +127,15 @@ for (const [file, cameraPosition] of Object.entries(gearRingViews)) {
   fs.writeFileSync(path.join(__dirname, file), png)
   console.log('Wrote', file)
 }
+
+// --- totemik-guts-coupler.stl ---
+// Straight coupler joining 2 totemik-guts.jscad pieces end to end.
+const couplerStlData = fs.readFileSync(path.join(__dirname, 'totemik-guts-coupler.stl'))
+const couplerViews = {
+  'totemik-guts-coupler.png': [80, -60, 20]
+}
+for (const [file, cameraPosition] of Object.entries(couplerViews)) {
+  const png = stl2png(couplerStlData, { ...baseOptions, width: 900, height: 700, cameraPosition })
+  fs.writeFileSync(path.join(__dirname, file), png)
+  console.log('Wrote', file)
+}
