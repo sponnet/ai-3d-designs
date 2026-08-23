@@ -337,15 +337,18 @@ cutouts side by side in the top wall — raising the switches up on the
 beam's 4 closed sides (2 lengthwise side walls, 2 end walls), so there's
 clearance underneath for switch pins / hot-swap sockets / wiring instead
 of them sitting flush on whatever this is mounted to. The beam's width
-tapers with height — `15 mm` at the bottom, flaring out to `18 mm` at
+tapers with height — `14 mm` at the bottom, flaring out to `18 mm` at
 the top — so there's more wall material right around the switch cutouts
 at the top, where it matters most structurally, while staying compact at
-the bottom. 2 half-round mounting ears, each with a `3 mm` screw hole,
-stick out from the 2 lengthwise ends for screwing the whole keypad onto
-something. Hole size and top-wall thickness match the standard Cherry MX
-plate spec measured from the reference `3MechanicalButtons.3mf`
-(14x14mm square cutout, 1.8mm plate). A separate exploration, unrelated
-in dimensions to the other parts in this folder.
+the bottom. The taper finishes 1 top-wall-thickness below the very top,
+flush with the top wall's underside, so the top wall (already full
+width) sits flush on an already-full-width wall beneath it — no
+overhanging ledge at the top edge. 2 half-round mounting ears, each with
+a `3 mm` screw hole, stick out from the 2 lengthwise ends for screwing
+the whole keypad onto something. Hole size and top-wall thickness match
+the standard Cherry MX plate spec measured from the reference
+`3MechanicalButtons.3mf` (14x14mm square cutout, 1.8mm plate). A separate
+exploration, unrelated in dimensions to the other parts in this folder.
 
 ### Geometry
 
@@ -354,27 +357,34 @@ in dimensions to the other parts in this folder.
   the top wall
 - Beam footprint: `79.15 mm` long (keeps the original `4 mm` margin
   beyond the outer hole edges left/right, unaffected by height); width
-  tapers from `15 mm` at the bottom (`z = 0`) to `18 mm` at the top
-  (`z = 12 mm`), flaring outward symmetrically
-- Inner hollow: a constant `14 mm` wide (matching the switch cutout) at
-  every height — the taper is carried entirely by wall thickness, not by
-  narrowing the switch/wiring clearance
+  tapers from `14 mm` at the bottom (`z = 0`) to `18 mm`, flaring outward
+  symmetrically. The taper reaches full width at `z = 10.2 mm`
+  (`BEAM_HEIGHT - TOP_THICKNESS`, the top wall's underside) and then
+  stays constant through the top wall's own `1.8 mm` thickness up to
+  `z = 12 mm` — not tapering all the way to the very top face, which
+  would otherwise leave the top wall's edges overhanging past a
+  still-narrower wall for that last `1.8 mm` of height
+- Inner hollow: tapers too, from `13 mm` wide at the bottom to exactly
+  `14 mm` (matching the switch cutout) at `z = 10.2 mm` — kept just wide
+  enough for wiring/pin clearance throughout, while letting wall
+  thickness stay a constant, compact `0.5 mm` at the bottom instead of
+  pinching to `0 mm` (which a 14mm-wide bottom with a fixed 14mm hollow
+  would otherwise force)
 - Top wall: `1.8 mm` thick (matches the measured Cherry MX plate spec),
-  `18 mm` wide (the top-of-taper width), giving `2 mm` margin beyond the
-  hole edges front/back — up from the `0.5 mm` margin a constant-width
-  design would have, directly the "more material at the top" this taper
-  is for
+  `18 mm` wide, giving `2 mm` margin beyond the hole edges front/back
 - Side walls (front/back, full beam length): taper from `0.5 mm` thick
-  at the bottom to `2 mm` thick at the top, inner face flush with the
-  `14 mm` hollow the whole way up, outer face sliding out with height
+  at the bottom to `2 mm` thick at `z = 10.2 mm` (then constant), both
+  inner and outer faces sliding with height
 - End walls (the 2 lengthwise ends): taper the same way in their Y
-  extent (matching the side walls' profile so everything stays flush),
-  `2 mm` thick in X throughout (assumed, unaffected by the Y taper)
+  extent up to `z = 10.2 mm` (matching the side walls' profile so
+  everything stays flush), then a constant-`18 mm`-wide cap fills the
+  remaining `1.8 mm` up to `z = 12 mm`, flush with the top wall; `2 mm`
+  thick in X throughout (assumed, unaffected by the Y taper)
 - Beam height: `12 mm` (assumed — how far "up" the holes sit, giving
   clearance underneath for switch pins/hot-swap sockets/wiring); only the
   bottom is open
-- Mounting ears: one at each lengthwise end, half-round, `7.5 mm` radius
-  (flat edge flush with the bottom's `15 mm` width, curved edge sticking
+- Mounting ears: one at each lengthwise end, half-round, `7 mm` radius
+  (flat edge flush with the bottom's `14 mm` width, curved edge sticking
   outward), flush with the bottom edge, `2 mm` thick, each with a `3 mm`
   screw hole centered `3 mm` in from the curved outer edge (radius and
   hole inset assumed)

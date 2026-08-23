@@ -16,15 +16,23 @@ const { translate } = require('@jscad/modeling').transforms
 // 3MechanicalButtons.3mf. Hole spacing uses the standard 19.05mm MX/
 // keycap pitch so 1u keycaps don't collide.
 //
-// The beam's width (front-to-back) tapers with height: 15mm at the
-// bottom (z=0) widening to 18mm at the top (z=BEAM_HEIGHT), flaring
-// outward symmetrically. The inner hollow stays a constant HOLE_SIZE
-// (14mm) throughout -- the switch/wiring clearance never pinches down --
-// so the taper shows up entirely as wall thickness, thin (0.5mm) at the
-// bottom for a compact footprint, thick (2mm) at the top for more
-// material right around the switch cutouts, where it matters most
-// structurally. The side walls, end walls and top wall (all Y-extent)
-// follow this same taper so they stay flush with each other at every z.
+// The beam's width (front-to-back) tapers with height: 14mm at the
+// bottom (z=0) widening to 18mm at the top, flaring outward
+// symmetrically. The taper finishes at TAPER_TOP_Z (where the top wall's
+// underside sits, BEAM_HEIGHT - TOP_THICKNESS below the very top) rather
+// than at BEAM_HEIGHT itself -- the top wall is already a full
+// BEAM_DEPTH_TOP-wide slab, so if the taper only reached full width at
+// its very top face, the top wall's edges would overhang past the
+// still-narrower wall directly beneath them for that last TOP_THICKNESS
+// of height. Finishing the taper 1 TOP_THICKNESS early means the top
+// wall sits flush on top of an already-full-width wall, with no ledge.
+//
+// The wall's inner (hollow-facing) face also tapers, from a HOLE_SIZE -
+// 2*MARGIN_Y_BOTTOM-derived width at the bottom (13mm) up to exactly
+// HOLE_SIZE (14mm, flush with the switch cutout) at TAPER_TOP_Z --
+// keeping wall thickness at a constant, compact MARGIN_Y_BOTTOM (0.5mm)
+// at the bottom rather than pinching to 0mm, which a 14mm-wide bottom
+// with a fixed 14mm hollow would otherwise force.
 //
 // Coordinates: X = along the 4 keys, Y = depth (front-to-back), Z = up
 // (Z=0 is the open bottom, Z=BEAM_HEIGHT is the top wall's outer face).
@@ -35,20 +43,22 @@ const NUM_KEYS = 4
 const TOP_THICKNESS = 1.8 // matches the measured Cherry MX plate spec
 
 const MARGIN_X = 4 // minimal material beyond the outer hole edges, left/right
-const MARGIN_Y_BOTTOM = 0.5 // bottom (z=0) margin/wall-thickness beyond the
-// hole edges, front/back -- thin, for a compact 15mm-wide footprint
-const MARGIN_Y_TOP = 2 // assumed -- top (z=BEAM_HEIGHT) margin/wall-thickness
-// beyond the hole edges, front/back -- thicker, for an 18mm-wide top with
-// more material around the switch cutouts
+const MARGIN_Y_BOTTOM = 0.5 // wall thickness at the bottom (z=0) -- thin,
+// for a compact footprint
+const MARGIN_Y_TOP = 2 // assumed -- wall thickness at TAPER_TOP_Z, beyond
+// the hole edges, front/back -- thicker, for more material around the
+// switch cutouts
 const END_WALL_THICKNESS = 2 // assumed -- the 2 lengthwise-end walls' X extent
 const BEAM_HEIGHT = 12 // assumed -- how far "up" the holes sit; gives
 // clearance underneath for switch pins/hot-swap sockets/wiring
 
 const BEAM_LENGTH = 2 * MARGIN_X + HOLE_SIZE + (NUM_KEYS - 1) * HOLE_PITCH
-const BEAM_DEPTH_BOTTOM = 2 * MARGIN_Y_BOTTOM + HOLE_SIZE // = 15mm
+const BEAM_DEPTH_BOTTOM = 14 // capped per spec (was 15mm)
 const BEAM_DEPTH_TOP = 2 * MARGIN_Y_TOP + HOLE_SIZE // = 18mm
-const CENTER_Y = MARGIN_Y_BOTTOM + HOLE_SIZE / 2 // constant across height,
-// since the taper is symmetric about the (fixed) hole center
+const CENTER_Y = BEAM_DEPTH_BOTTOM / 2 // constant across height -- the
+// taper is symmetric about this fixed centerline
+const TAPER_TOP_Z = BEAM_HEIGHT - TOP_THICKNESS // where the taper reaches
+// full BEAM_DEPTH_TOP width, flush with the top wall's underside
 
 const TAB_RADIUS = BEAM_DEPTH_BOTTOM / 2 // flat edge flush with the bottom width
 const TAB_THICKNESS = 2 // assumed -- flush with the walls' open bottom edge
@@ -81,38 +91,53 @@ const topWall3D = () => {
 }
 
 // A slice spanning [innerY, outerY] in Y, BEAM_LENGTH long in X, thin in Z
-// -- 2 of these (at z=0 and z=BEAM_HEIGHT) get hulled together into a
-// tapered wall whose inner (hollow-facing) edge stays flush at innerY for
-// the full height, while its outer edge slides from the bottom outerY to
-// the top outerY.
+// -- 2 of these (a bottom and a top one) get hulled together into a
+// tapered wall connecting them with a straight sloped surface on both
+// the inner and outer edges.
 const widthSlice = (innerY, outerY, z) =>
   translate(
     [BEAM_LENGTH / 2, (innerY + outerY) / 2, z],
     cuboid({ size: [BEAM_LENGTH, Math.abs(outerY - innerY), TAPER_SLICE_HEIGHT] })
   )
 
+// Inner (hollow-facing) half-width at the bottom vs. TAPER_TOP_Z --
+// unlike the outer edge (which follows BEAM_DEPTH_BOTTOM/TOP directly),
+// the inner edge also moves, from BEAM_DEPTH_BOTTOM/2 - MARGIN_Y_BOTTOM
+// up to exactly HOLE_SIZE/2 (flush with the switch cutout).
+const INNER_HALF_WIDTH_BOTTOM = BEAM_DEPTH_BOTTOM / 2 - MARGIN_Y_BOTTOM
+const INNER_HALF_WIDTH_TOP = HOLE_SIZE / 2
+
 const sideWalls3D = () => {
   const front = hull(
-    widthSlice(CENTER_Y - HOLE_SIZE / 2, CENTER_Y - BEAM_DEPTH_BOTTOM / 2, TAPER_SLICE_HEIGHT / 2),
-    widthSlice(CENTER_Y - HOLE_SIZE / 2, CENTER_Y - BEAM_DEPTH_TOP / 2, BEAM_HEIGHT - TAPER_SLICE_HEIGHT / 2)
+    widthSlice(CENTER_Y - INNER_HALF_WIDTH_BOTTOM, CENTER_Y - BEAM_DEPTH_BOTTOM / 2, TAPER_SLICE_HEIGHT / 2),
+    widthSlice(CENTER_Y - INNER_HALF_WIDTH_TOP, CENTER_Y - BEAM_DEPTH_TOP / 2, TAPER_TOP_Z - TAPER_SLICE_HEIGHT / 2)
   )
   const back = hull(
-    widthSlice(CENTER_Y + HOLE_SIZE / 2, CENTER_Y + BEAM_DEPTH_BOTTOM / 2, TAPER_SLICE_HEIGHT / 2),
-    widthSlice(CENTER_Y + HOLE_SIZE / 2, CENTER_Y + BEAM_DEPTH_TOP / 2, BEAM_HEIGHT - TAPER_SLICE_HEIGHT / 2)
+    widthSlice(CENTER_Y + INNER_HALF_WIDTH_BOTTOM, CENTER_Y + BEAM_DEPTH_BOTTOM / 2, TAPER_SLICE_HEIGHT / 2),
+    widthSlice(CENTER_Y + INNER_HALF_WIDTH_TOP, CENTER_Y + BEAM_DEPTH_TOP / 2, TAPER_TOP_Z - TAPER_SLICE_HEIGHT / 2)
   )
   return union(front, back)
 }
 
 // Closes off the beam's 2 lengthwise ends -- only the bottom stays open.
-// Tapers the same way as sideWalls3D so the two stay flush at every z.
+// Tapers the same way as sideWalls3D (reaching full width at TAPER_TOP_Z,
+// not BEAM_HEIGHT) so the 2 stay flush at every z with no ledge; a
+// constant-width cap fills the remaining TOP_THICKNESS up to BEAM_HEIGHT,
+// flush with the top wall.
 const endWalls3D = () => {
   const endSlice = (cx, z, depth) =>
     translate([cx, CENTER_Y, z], cuboid({ size: [END_WALL_THICKNESS, depth, TAPER_SLICE_HEIGHT] }))
-  const buildEnd = (cx) =>
-    hull(
+  const buildEnd = (cx) => {
+    const tapered = hull(
       endSlice(cx, TAPER_SLICE_HEIGHT / 2, BEAM_DEPTH_BOTTOM),
-      endSlice(cx, BEAM_HEIGHT - TAPER_SLICE_HEIGHT / 2, BEAM_DEPTH_TOP)
+      endSlice(cx, TAPER_TOP_Z - TAPER_SLICE_HEIGHT / 2, BEAM_DEPTH_TOP)
     )
+    const cap = translate(
+      [cx, CENTER_Y, TAPER_TOP_Z + TOP_THICKNESS / 2],
+      cuboid({ size: [END_WALL_THICKNESS, BEAM_DEPTH_TOP, TOP_THICKNESS] })
+    )
+    return union(tapered, cap)
+  }
   const left = buildEnd(END_WALL_THICKNESS / 2)
   const right = buildEnd(BEAM_LENGTH - END_WALL_THICKNESS / 2)
   return union(left, right)
