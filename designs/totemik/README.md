@@ -17,8 +17,8 @@ Nine related explorations for the Totemik project:
   dimensions to the other explorations.
 - **Mic Holder**: an open-bottom tray for a microphone, also unrelated in
   dimensions to the other explorations.
-- **Bottom Support**: a simple hollow cylinder (pipe), also unrelated in
-  dimensions to the other explorations.
+- **Bottom Support**: a closed hollow cylinder (canister) with a uniform
+  2mm wall, also unrelated in dimensions to the other explorations.
 
 ## Ring
 
@@ -533,18 +533,22 @@ other parts in this folder.
 
 ### Overview
 
-Hollow cylinder (pipe). An earlier version of this part was a
+Closed hollow cylinder (canister). An earlier version of this part was a
 half-hollow torus (donut), but that was too CPU-intensive to generate,
-so it was replaced with this much simpler tube: an outer cylinder with a
-same-height inner cylinder subtracted out of it. A separate exploration,
-unrelated in dimensions to the other parts in this folder.
+so it was replaced with an outer cylinder with a smaller, shorter
+cylinder subtracted from its middle — centered, so it stops short of the
+top and bottom too, giving a uniform wall thickness on every side
+(radial *and* top/bottom caps) instead of an open-ended pipe. A separate
+exploration, unrelated in dimensions to the other parts in this folder.
 
 ### Geometry
 
 - Outer diameter: `63 mm`
 - Height: `57 mm`
-- Inner diameter: `51 mm` (subtracted through the full height) — `6 mm`
-  wall thickness
+- Wall thickness: `2 mm`, uniform on every side
+- Cutout (centered): `59 mm` diameter (`63 - 2×2`), `53 mm` tall
+  (`57 - 2×2`) — leaves exactly `2 mm` of material radially and `2 mm`
+  caps at both the top and bottom
 
 ### Source
 
@@ -556,8 +560,14 @@ unrelated in dimensions to the other parts in this folder.
 - STL: [`bottom-support.stl`](./bottom-support.stl)
 - PNG preview (isometric): [`bottom-support-iso.png`](./bottom-support-iso.png)
 - PNG preview (top): [`bottom-support-top.png`](./bottom-support-top.png)
+- PNG preview (cross-section): [`bottom-support-cross-section.png`](./bottom-support-cross-section.png) —
+  a thin slab through the axis; since slicing a cylinder through its own
+  axis gives a rectangle (not a circle), this shows as a "picture frame":
+  the outer `63x57mm` rectangle with the inner `59x53mm` cavity inset
+  exactly `2mm` on every side
 
 ### Preview
 
 ![Bottom support isometric](./bottom-support-iso.png)
 ![Bottom support top view](./bottom-support-top.png)
+![Bottom support cross-section](./bottom-support-cross-section.png)
