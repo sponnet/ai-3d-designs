@@ -9,7 +9,6 @@ const { stl2png, makeStandardMaterial, makeEdgeMaterial, makeAmbientLight, makeD
 const { main } = require('./partition.jscad')
 const { intersect } = require('@jscad/modeling').booleans
 const { cuboid } = require('@jscad/modeling').primitives
-const { translate } = require('@jscad/modeling').transforms
 const { serialize } = require('@jscad/stl-serializer')
 
 const baseOptions = {
@@ -155,7 +154,7 @@ for (const [file, cameraPosition] of Object.entries(micHolderViews)) {
 }
 
 // --- bottom-support.stl ---
-// Half hollow donut (C-channel ring), unrelated to the other parts.
+// Hollow cylinder (pipe), unrelated to the other parts.
 const bottomSupportStlData = fs.readFileSync(path.join(__dirname, 'bottom-support.stl'))
 const bottomSupportViews = {
   'bottom-support-iso.png': [70, -70, 50],
@@ -166,19 +165,3 @@ for (const [file, cameraPosition] of Object.entries(bottomSupportViews)) {
   fs.writeFileSync(path.join(__dirname, file), png)
   console.log('Wrote', file)
 }
-
-// Thin wedge slice through the ring so the C-channel cross-section (the
-// hollow 2mm shell, inner half cut away) faces the camera directly.
-const { main: bottomSupportMain } = require('./bottom-support.jscad')
-const bottomSupportSliced = intersect(bottomSupportMain(), translate([25.5, 0, 0], cuboid({ size: [16, 3, 25] })))
-const bottomSupportSlicedPng = stl2png(toBuffer(bottomSupportSliced), {
-  width: 900,
-  height: 700,
-  backgroundColor: 0xffffff,
-  cameraPosition: [40, -200, 5],
-  materials: [makeStandardMaterial(1, 0x3a7bd5)],
-  edgeMaterials: [makeEdgeMaterial(1.5, 0x000000)],
-  lights: [makeAmbientLight(0xffffff, 0.7), makeDirectionalLight(0, -1, 0, 0xffffff, 0.7)]
-})
-fs.writeFileSync(path.join(__dirname, 'bottom-support-cross-section.png'), bottomSupportSlicedPng)
-console.log('Wrote bottom-support-cross-section.png')
