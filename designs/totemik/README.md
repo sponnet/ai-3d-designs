@@ -534,41 +534,44 @@ other parts in this folder.
 
 ### Overview
 
-Outer cylinder with 2 cutouts. An earlier version of this part was a
-half-hollow torus (donut), but that was too CPU-intensive to generate,
-so it was replaced with this cylinder-based design. The first cutout is
-a centered recess that stops `2 mm` short of the top, bottom and sides,
-giving a uniform `2 mm` wall on every side over most of the height. The
-second is a narrower through-hole running the *full* height — since it's
-narrower than the recess, it only actually removes material at the 2 end
-caps the recess leaves solid, so the result is a thin-walled tube with a
-thicker ring at each end, open all the way through. 7 evenly-spaced
-notches are cut into that top ring at its inner edge, like a scalloped
-or castellated opening. A separate exploration, unrelated in dimensions
-to the other parts in this folder.
+Outer cylinder with 2 cutouts, split into 2 half-arcs for printing. An
+earlier version of this part was a half-hollow torus (donut), but that
+was too CPU-intensive to generate, so it was replaced with this
+cylinder-based design. The first cutout is a centered recess that stops
+`2 mm` short of the top, bottom and sides, giving a uniform `2 mm` wall
+on every side over most of the height. The second is a narrower
+through-hole running the *full* height — since it's narrower than the
+recess, it only actually removes material at the 2 end caps the recess
+leaves solid, so the result is a thin-walled tube with a thicker ring at
+each end, open all the way through. 7 evenly-spaced notches are cut into
+that top ring at its inner edge, like a scalloped or castellated
+opening. Finally the whole piece is cut in half through its central
+(X=0) plane, since printing it as 2 separate half-arcs was easier than
+the full ring. A separate exploration, unrelated in dimensions to the
+other parts in this folder.
 
 ### Geometry
 
-- Outer diameter: `63 mm`
-- Height: `57 mm`
+- Outer diameter: `70 mm`
+- Height: `50 mm`
 - Wall thickness: `2 mm`, uniform on every side
-- Recess (centered): `59 mm` diameter (`63 - 2×2`), `53 mm` tall
-  (`57 - 2×2`) — leaves exactly `2 mm` of material radially and `2 mm`
+- Recess (centered): `66 mm` diameter (`70 - 2×2`), `46 mm` tall
+  (`50 - 2×2`) — leaves exactly `2 mm` of material radially and `2 mm`
   caps at both the top and bottom
-- Through-hole: `51 mm` diameter, running the full `57 mm` height —
+- Through-hole: `51 mm` diameter, running the full `50 mm` height —
   narrower than the recess, so its only visible effect is punching
   through the `2 mm` end caps; combined with the recess this leaves a
-  `6 mm`-thick ring (`63` to `51 mm` diameter) at each end and a `2 mm`
-  wall (`63` to `59 mm` diameter) in between
+  `9.5 mm`-thick ring (`70` to `51 mm` diameter) at each end and a `2 mm`
+  wall (`70` to `66 mm` diameter) in between
 - Notches: `7`, evenly spaced (every `360/7 ≈ 51.43°`) around the top
   ring's inner (through-hole) edge, cut through the ring's full `2 mm`
   height. `12 mm` wide tangentially (measured at the inner edge) and
-  `5 mm` deep radially, reaching from the `51 mm` through-hole out to
-  `61 mm` diameter — leaving `1 mm` of the `6 mm`-wide ring remaining at
-  each notch. (The spec gave "12mm wide, 5mm deep"; since the ring is
-  only `2 mm` tall but `6 mm` wide, "deep" is read here as the radial
-  dimension, not vertical — a vertical 5mm cut isn't possible with only
-  2mm of material to cut through.)
+  `3 mm` deep radially, reaching from the `51 mm` through-hole out to
+  `57 mm` diameter — leaving `6.5 mm` of the `9.5 mm`-wide ring remaining
+  past each notch
+- Split in half through the X=0 plane (`CUT_RIGHT_HALF` in the source
+  toggles which half is kept) so it prints as 2 identical-but-mirrored
+  half-arcs instead of one full ring
 
 ### Source
 
@@ -582,9 +585,9 @@ to the other parts in this folder.
 - PNG preview (top): [`bottom-support-top.png`](./bottom-support-top.png)
 - PNG preview (cross-section): [`bottom-support-cross-section.png`](./bottom-support-cross-section.png) —
   a thin slab through the axis; since slicing a cylinder through its own
-  axis gives a rectangle (not a circle), this shows as 2 bracket-shaped
-  profiles, one along each side — the thicker `6mm` end rings, the
-  thinner `2mm` middle wall, and the `51mm` through-hole gap between them
+  axis gives a rectangle (not a circle), this shows as a bracket-shaped
+  profile — the thicker `9.5mm` end ring, the thinner `2mm` middle wall,
+  and the `51mm` through-hole gap
 
 ### Preview
 

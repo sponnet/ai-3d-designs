@@ -154,13 +154,11 @@ for (const [file, cameraPosition] of Object.entries(micHolderViews)) {
 }
 
 // --- bottom-support.stl ---
-// Closed hollow cylinder (canister), unrelated to the other parts. Fully
-// enclosed (2mm wall on every side, including the top/bottom caps) so
-// the outer iso/top views alone don't show the hollow interior -- a thin
-// slab through the axis is also rendered for that; a cylinder sliced
-// through its own axis shows a rectangle (not a circle), so this comes
-// out as a "picture frame" -- the outer 63x57mm rectangle with the inner
-// 59x53mm cavity inset exactly 2mm on every side.
+// Half-arc of a hollow cylinder (only x<=0, per CUT_RIGHT_HALF in the
+// source), unrelated to the other parts. A thin slab through the axis
+// is also rendered to show the internal wall profile -- a cylinder
+// sliced through its own axis shows a rectangle (not a circle), so this
+// comes out as a bracket-shaped profile.
 const bottomSupportStlData = fs.readFileSync(path.join(__dirname, 'bottom-support.stl'))
 const bottomSupportViews = {
   'bottom-support-iso.png': [70, -70, 50],
@@ -173,7 +171,7 @@ for (const [file, cameraPosition] of Object.entries(bottomSupportViews)) {
 }
 
 const { main: bottomSupportMain } = require('./bottom-support.jscad')
-const bottomSupportSliced = intersect(bottomSupportMain(), cuboid({ size: [70, 4, 70] }))
+const bottomSupportSliced = intersect(bottomSupportMain(), cuboid({ size: [70, 4, 70], center: [-35, 0, 0] }))
 const bottomSupportSlicedPng = stl2png(toBuffer(bottomSupportSliced), {
   width: 900,
   height: 700,
