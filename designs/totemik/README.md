@@ -1,6 +1,6 @@
 # Totemik
 
-Eight related explorations for the Totemik project:
+Nine related explorations for the Totemik project:
 
 - **Ring** and **Partition**: a ring band with a push-fit partition strip
   (see below).
@@ -16,6 +16,8 @@ Eight related explorations for the Totemik project:
 - **Gear Ring**: a toothed ring with a raised collar, also unrelated in
   dimensions to the other explorations.
 - **Mic Holder**: an open-bottom tray for a microphone, also unrelated in
+  dimensions to the other explorations.
+- **Bottom Support**: a half hollow donut (torus), also unrelated in
   dimensions to the other explorations.
 
 ## Ring
@@ -526,3 +528,46 @@ other parts in this folder.
 
 ![Mic holder isometric](./mic-holder-iso.png)
 ![Mic holder top view](./mic-holder-top.png)
+
+## Bottom Support
+
+### Overview
+
+Half hollow donut (torus): a full ring-shaped tube, hollowed out to a
+`2 mm` wall, with the inner half of the tube's circular cross-section cut
+away — leaving a "C"-channel ring, open toward the ring's own center,
+curved on the outward-facing side, all the way around. A separate
+exploration, unrelated in dimensions to the other parts in this folder.
+
+### Geometry
+
+- Major radius (the donut's own radius, center of the ring to the center
+  of the tube): `25.5 mm`
+- Minor radius (the donut body / tube itself): `10 mm`
+- Wall thickness: `2 mm`
+- The tube spans radially from `15.5 mm` to `35.5 mm` at its widest
+  (`major ± minor`); everything within `25.5 mm` of the central axis is
+  cut away — exactly the inner half of every cross-section around the
+  ring, since each cross-section circle is centered exactly on the major
+  radius
+- Overall footprint: `71 mm` diameter (`2 × 35.5 mm`), `20 mm` tall
+  (`2 × minor radius` — the vertical extent is untouched by the cut,
+  only the radial inner half is removed)
+
+### Source
+
+- JSCAD: [`bottom-support.jscad`](./bottom-support.jscad)
+- OpenJSCAD: [Open `bottom-support.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/bottom-support.jscad#)
+
+### Outputs
+
+- STL: [`bottom-support.stl`](./bottom-support.stl)
+- PNG preview (isometric): [`bottom-support-iso.png`](./bottom-support-iso.png)
+- PNG preview (top): [`bottom-support-top.png`](./bottom-support-top.png)
+- PNG preview (cross-section): [`bottom-support-cross-section.png`](./bottom-support-cross-section.png)
+
+### Preview
+
+![Bottom support isometric](./bottom-support-iso.png)
+![Bottom support top view](./bottom-support-top.png)
+![Bottom support cross-section](./bottom-support-cross-section.png)
