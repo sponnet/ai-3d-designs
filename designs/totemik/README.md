@@ -542,8 +542,10 @@ giving a uniform `2 mm` wall on every side over most of the height. The
 second is a narrower through-hole running the *full* height — since it's
 narrower than the recess, it only actually removes material at the 2 end
 caps the recess leaves solid, so the result is a thin-walled tube with a
-thicker ring at each end, open all the way through. A separate
-exploration, unrelated in dimensions to the other parts in this folder.
+thicker ring at each end, open all the way through. 7 evenly-spaced
+notches are cut into that top ring at its inner edge, like a scalloped
+or castellated opening. A separate exploration, unrelated in dimensions
+to the other parts in this folder.
 
 ### Geometry
 
@@ -558,6 +560,15 @@ exploration, unrelated in dimensions to the other parts in this folder.
   through the `2 mm` end caps; combined with the recess this leaves a
   `6 mm`-thick ring (`63` to `51 mm` diameter) at each end and a `2 mm`
   wall (`63` to `59 mm` diameter) in between
+- Notches: `7`, evenly spaced (every `360/7 ≈ 51.43°`) around the top
+  ring's inner (through-hole) edge, cut through the ring's full `2 mm`
+  height. `12 mm` wide tangentially (measured at the inner edge) and
+  `5 mm` deep radially, reaching from the `51 mm` through-hole out to
+  `61 mm` diameter — leaving `1 mm` of the `6 mm`-wide ring remaining at
+  each notch. (The spec gave "12mm wide, 5mm deep"; since the ring is
+  only `2 mm` tall but `6 mm` wide, "deep" is read here as the radial
+  dimension, not vertical — a vertical 5mm cut isn't possible with only
+  2mm of material to cut through.)
 
 ### Source
 
