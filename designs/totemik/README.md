@@ -549,8 +549,11 @@ opening. The whole piece is cut in half through its central (X=0) plane,
 since printing it as 2 separate half-arcs was easier than the full ring.
 A `3 mm` hole goes radially through the wall at the angular middle of
 one half, and each half carries a glue lip at both of its seam ends —
-one half gets it as a protruding tab, the other as a matching slot, so
-the 2 halves key together and glue with more contact area. A separate
+a rib that stays flush with (parallel to) the cutting plane, fully
+recessed within its own half rather than crossing the seam, reaching
+inward toward the cylinder's center. Both halves get the identical rib,
+so the extra material meets and adds glue contact area beyond the bare
+wall edge when the 2 flat seam faces are pressed together. A separate
 exploration, unrelated in dimensions to the other parts in this folder.
 
 ### Geometry
@@ -580,13 +583,15 @@ exploration, unrelated in dimensions to the other parts in this folder.
   vertically centered). Fixed at that absolute position rather than
   computed per half, so it lands in only the `x<=0` piece — generating
   the other half simply doesn't reach that location
-- Glue lips: at both of the wall's seam crossings (`y = ±34mm`, where
-  the X=0 cutting plane meets the `2 mm`-thick wall band), from the
-  bottom up to `10 mm` short of the top (`40 mm` tall), `6 mm` out from
-  the seam in X, `2 mm` thick radially (matching the wall). The `x<=0`
-  half gets these as protruding tabs (reaching into `x=[0,6]`); the
-  `x>=0` half gets the same volume subtracted as a matching slot, so the
-  tab seats into it when the 2 halves are glued together
+- Glue lips: at both of the wall's seam crossings (`y = ±35mm`, the
+  outer edge where the X=0 cutting plane meets the wall), from the
+  bottom up to `10 mm` short of the top (`40 mm` tall), reaching `6 mm`
+  radially inward from the outer edge (toward the cylinder's center,
+  down to `y = ±29mm`), `2 mm` deep in X — but recessed *into* its own
+  half (`x` from `-2` to `0` for the `x<=0` half, `0` to `2` for the
+  `x>=0` half) rather than crossing the seam. Identical on both halves
+  (mirrored), so the 2 ribs meet flush when the flat seam faces are
+  pressed together
 
 ### Source
 

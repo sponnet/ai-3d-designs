@@ -34,15 +34,17 @@ const { rotateZ, rotateY, translate } = require('@jscad/modeling').transforms
 // halves without any extra conditional.
 //
 // A glue lip runs along each of the wall's 2 seam crossings (where the
-// X=0 cutting plane meets the wall band, y=+-(OUTER_RADIUS -
-// WALL_THICKNESS/2)) -- LIP_HEIGHT out from the seam in X, LIP_THICKNESS
-// wide (matching the wall's own radial thickness), from the bottom up to
-// LIP_TOP_MARGIN short of the top. This is a tab-and-slot pair at the
-// *same* fixed location (x=0 to LIP_HEIGHT): the left half (x<=0) gets
-// it added as a protruding tab, sticking into where the right half's
-// wall would otherwise be solid; the right half (x>=0) gets that same
-// volume subtracted as a matching slot, so the left half's tab has
-// somewhere to seat into once the 2 halves are pushed together.
+// X=0 cutting plane meets the wall band, y=+-OUTER_RADIUS). It stays
+// parallel to (flush with) the X=0 cutting plane and fully recessed
+// within its own half -- LIP_THICKNESS deep in X, entirely on the kept
+// side (x in [-LIP_THICKNESS,0] for the left half, [0,LIP_THICKNESS] for
+// the right) rather than protruding across the seam. It points toward
+// the cylinder's center: anchored at the wall's outer edge and reaching
+// LIP_REACH radially inward, from the bottom up to LIP_TOP_MARGIN short
+// of the top. Both halves get the identical rib (just mirrored in X), so
+// when the 2 flat seam faces are pressed together, the 2 ribs meet and
+// add glue contact area beyond the bare 2mm wall edge -- no tab/slot
+// interlock, since neither one crosses x=0.
 
 const OUTER_DIAMETER = 70
 const HEIGHT = 50
@@ -61,8 +63,10 @@ const NOTCH_OVERSHOOT = 2
 const RADIAL_HOLE_DIAMETER = 3
 const RADIAL_HOLE_SEGMENTS = 32
 
-const LIP_HEIGHT = 6 // how far the lip sticks out from the seam, in X
-const LIP_THICKNESS = 2 // matches WALL_THICKNESS; the lip's radial extent
+const LIP_REACH = 6 // how far the lip extends radially inward from the
+// wall's outer edge, toward the cylinder's center
+const LIP_THICKNESS = 2 // the lip's depth in X, recessed into its own
+// half from the seam (not crossing it)
 const LIP_TOP_MARGIN = 10 // the lip stops this far short of the top
 
 const CUT_RIGHT_HALF = true
@@ -107,22 +111,24 @@ const radialHole3D = () => {
   return rotateY(Math.PI / 2, translate([0, 0, -radius], bore))
 }
 
-// One glue lip at 1 of the wall's 2 seam crossings (y = +-(OUTER_RADIUS
-// - WALL_THICKNESS/2)), spanning x=[0, LIP_HEIGHT] -- either a
-// protruding tab (union) or a matching slot cutter (subtract), depending
-// on which half is being generated.
-const lip3D = (ySign, forSlot) => {
-  const yCenter = ySign * (OUTER_DIAMETER / 2 - WALL_THICKNESS / 2)
+// One glue lip at 1 of the wall's 2 seam crossings (y = +-OUTER_RADIUS),
+// reaching from the wall's outer edge LIP_REACH inward (toward y=0), and
+// LIP_THICKNESS deep in X on the kept side of the seam (never crossing
+// x=0).
+const lip3D = (ySign, keepLeft) => {
+  const outerRadius = OUTER_DIAMETER / 2
+  const yStart = ySign * (outerRadius - LIP_REACH)
+  const yEnd = ySign * outerRadius
   const zBottom = -HEIGHT / 2
   const zTop = HEIGHT / 2 - LIP_TOP_MARGIN
-  const xStart = forSlot ? -OVERSHOOT : 0
+  const xEnd = keepLeft ? -LIP_THICKNESS : LIP_THICKNESS
   return cuboid({
-    size: [LIP_HEIGHT - xStart, LIP_THICKNESS, zTop - zBottom],
-    center: [(xStart + LIP_HEIGHT) / 2, yCenter, (zBottom + zTop) / 2]
+    size: [Math.abs(xEnd), Math.abs(yEnd - yStart), zTop - zBottom],
+    center: [xEnd / 2, (yStart + yEnd) / 2, (zBottom + zTop) / 2]
   })
 }
 
-const lips3D = (forSlot) => union(lip3D(1, forSlot), lip3D(-1, forSlot))
+const lips3D = (keepLeft) => union(lip3D(1, keepLeft), lip3D(-1, keepLeft))
 
 const main = () => {
   const outer = cylinder({ radius: OUTER_DIAMETER / 2, height: HEIGHT, segments: SEGMENTS })
@@ -131,10 +137,10 @@ const main = () => {
   const full = subtract(outer, cutout, throughHole, notches3D())
   const withHole = subtract(full, radialHole3D())
   const half = intersect(withHole, halfCutter(CUT_RIGHT_HALF))
-  // The lip tab must be added (or its slot subtracted) *after* the
-  // half-cut, since it protrudes past x=0 -- clipping it to the half
-  // first would cut the tab off right where it needs to stick out.
-  return CUT_RIGHT_HALF ? union(half, lips3D(false)) : subtract(half, lips3D(true))
+  // The lip stays fully within the kept half (never crosses x=0), so
+  // adding it before or after the half-cut makes no difference here --
+  // added after for clarity, matching the hole/half sequence above.
+  return union(half, lips3D(CUT_RIGHT_HALF))
 }
 
 module.exports = { main }
