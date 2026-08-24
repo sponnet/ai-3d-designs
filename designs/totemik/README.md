@@ -545,10 +545,13 @@ recess, it only actually removes material at the 2 end caps the recess
 leaves solid, so the result is a thin-walled tube with a thicker ring at
 each end, open all the way through. 7 evenly-spaced notches are cut into
 that top ring at its inner edge, like a scalloped or castellated
-opening. Finally the whole piece is cut in half through its central
-(X=0) plane, since printing it as 2 separate half-arcs was easier than
-the full ring. A separate exploration, unrelated in dimensions to the
-other parts in this folder.
+opening. The whole piece is cut in half through its central (X=0) plane,
+since printing it as 2 separate half-arcs was easier than the full ring.
+A `3 mm` hole goes radially through the wall at the angular middle of
+one half, and each half carries a glue lip at both of its seam ends —
+one half gets it as a protruding tab, the other as a matching slot, so
+the 2 halves key together and glue with more contact area. A separate
+exploration, unrelated in dimensions to the other parts in this folder.
 
 ### Geometry
 
@@ -569,9 +572,21 @@ other parts in this folder.
   `3 mm` deep radially, reaching from the `51 mm` through-hole out to
   `57 mm` diameter — leaving `6.5 mm` of the `9.5 mm`-wide ring remaining
   past each notch
-- Split in half through the X=0 plane (`CUT_RIGHT_HALF` in the source
-  toggles which half is kept) so it prints as 2 identical-but-mirrored
-  half-arcs instead of one full ring
+- Split in half through the X=0 plane (`CUT_RIGHT_HALF` in the source,
+  a plain boolean — `true` keeps the `x<=0` half, `false` keeps `x>=0`)
+  so it prints as 2 half-arcs instead of one full ring
+- Radial hole: `3 mm` diameter, straight through the `2 mm` wall at the
+  angular middle of the `x<=0` half (`x=-34mm, y=0`, pointing along -X,
+  vertically centered). Fixed at that absolute position rather than
+  computed per half, so it lands in only the `x<=0` piece — generating
+  the other half simply doesn't reach that location
+- Glue lips: at both of the wall's seam crossings (`y = ±34mm`, where
+  the X=0 cutting plane meets the `2 mm`-thick wall band), from the
+  bottom up to `10 mm` short of the top (`40 mm` tall), `6 mm` out from
+  the seam in X, `2 mm` thick radially (matching the wall). The `x<=0`
+  half gets these as protruding tabs (reaching into `x=[0,6]`); the
+  `x>=0` half gets the same volume subtracted as a matching slot, so the
+  tab seats into it when the 2 halves are glued together
 
 ### Source
 
