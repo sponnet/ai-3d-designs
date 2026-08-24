@@ -299,13 +299,16 @@ fills the guts beam's own recess, with no gap or unfilled stretch.
 ### Overview
 
 Push-fit foot for the bottom of a tube: a short plug that fits up inside
-the tube's bottom opening, with a large rounded foot (a hemisphere) below
-it that ends up touching the ground once installed. Modeled with the foot
-at `Z < 0` (dome pointing down, flat equator face at `Z = 0`) and the plug
-at `Z > 0`, matching the piece's physical orientation once installed —
-for printing, reorienting plug-side-down in the slicer gives a flat base
-and a self-supporting dome with no overhangs. A separate exploration,
-unrelated in dimensions to the Ring/Partition/Totemik Guts above.
+the tube's bottom opening, with a shallow rounded foot below it that ends
+up touching the ground once installed. The whole piece is a hollow
+shell, not solid. The foot is a shallow spherical cap rather than a full
+hemisphere — flat across its whole diameter, bulging only a little at
+its center. Modeled with the foot at `Z < 0` (dome pointing down, flat
+equator face at `Z = 0`) and the plug at `Z > 0`, matching the piece's
+physical orientation once installed — for printing, reorienting
+plug-side-down in the slicer gives a flat base and a self-supporting
+dome with no overhangs. A separate exploration, unrelated in dimensions
+to the Ring/Partition/Totemik Guts above.
 
 ### Geometry
 
@@ -315,7 +318,13 @@ unrelated in dimensions to the Ring/Partition/Totemik Guts above.
 - Plug height: `20 mm` (assumed — "kort stukje", not specified)
 - Plug tip: `2 mm` tall lead-in chamfer, shrinking `2 mm` off the
   diameter, to ease insertion (assumed)
-- Foot: hemisphere, radius `25 mm`, flat face flush with the plug's base
+- Foot: a shallow spherical cap, `52 mm` across (a bit larger than the
+  `49 mm` tube, for margin) and only `10 mm` deep at its center —
+  computed from a much larger sphere (radius ≈ `38.8 mm`) so the curve
+  is gentle, not a hemisphere's full curvature
+- Wall thickness: `3 mm`, uniform through both the plug and the foot cap
+  (concentric inner surface, offset inward by `3 mm` along the same
+  sphere center for the foot, and by `3 mm` radius for the plug)
 
 ### Source
 
