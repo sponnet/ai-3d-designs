@@ -303,19 +303,20 @@ the tube's bottom opening, with a shallow rounded foot below it that ends
 up touching the ground once installed. The whole piece is a hollow
 shell, not solid. The foot is a shallow spherical cap rather than a full
 hemisphere — flat across its whole diameter, bulging only a little at
-its center. Modeled with the foot at `Z < 0` (dome pointing down, flat
-equator face at `Z = 0`) and the plug at `Z > 0`, matching the piece's
-physical orientation once installed — for printing, reorienting
-plug-side-down in the slicer gives a flat base and a self-supporting
-dome with no overhangs. A separate exploration, unrelated in dimensions
-to the Ring/Partition/Totemik Guts above.
+its center. A relief slot cut through the plug's wall lets it flex a
+little if the push-fit ends up too tight. Modeled with the foot at
+`Z < 0` (dome pointing down, flat equator face at `Z = 0`) and the plug
+at `Z > 0`, matching the piece's physical orientation once installed —
+for printing, reorienting plug-side-down in the slicer gives a flat base
+and a self-supporting dome with no overhangs. A separate exploration,
+unrelated in dimensions to the Ring/Partition/Totemik Guts above.
 
 ### Geometry
 
 - Tube inner diameter: `49 mm`
 - Plug diameter: `48.6 mm` (`0.4 mm` push-fit clearance — assumed, not
   specified; adjust `PLUG_CLEARANCE` for a tighter/looser fit)
-- Plug height: `20 mm` (assumed — "kort stukje", not specified)
+- Plug height: `6.67 mm` (`20 / 3` — 1/3 of the original assumed `20 mm`)
 - Plug tip: `2 mm` tall lead-in chamfer, shrinking `2 mm` off the
   diameter, to ease insertion (assumed)
 - Foot: a shallow spherical cap, `52 mm` across (a bit larger than the
@@ -325,6 +326,10 @@ to the Ring/Partition/Totemik Guts above.
 - Wall thickness: `3 mm`, uniform through both the plug and the foot cap
   (concentric inner surface, offset inward by `3 mm` along the same
   sphere center for the foot, and by `3 mm` radius for the plug)
+- Relief slot: `2 mm` wide (assumed), cut radially through the plug's
+  wall along its full height, from the hollow cavity out past the outer
+  surface — gives the plug wall a little compliance if the tube's actual
+  bore ends up tighter than the assumed `0.4 mm` clearance
 
 ### Source
 

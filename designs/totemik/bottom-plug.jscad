@@ -21,7 +21,7 @@ const { translate } = require('@jscad/modeling').transforms
 const TUBE_ID = 49
 const PLUG_CLEARANCE = 0.4 // assumed FDM push-fit clearance, not specified
 const PLUG_DIAMETER = TUBE_ID - PLUG_CLEARANCE
-const PLUG_HEIGHT = 20 // assumed -- "kort stukje", not specified
+const PLUG_HEIGHT = 20 / 3 // 1/3 of the original 20mm assumed height
 const PLUG_CHAMFER_HEIGHT = 2 // assumed lead-in chamfer, eases insertion
 const PLUG_CHAMFER_SHRINK = 2 // diameter reduction at the plug's tip
 
@@ -38,6 +38,12 @@ const WALL_THICKNESS = 3
 const SEGMENTS = 96
 const CAVITY_OVERLAP = 1 // extra depth so the plug's and foot's inner
 // cavities overlap cleanly at Z=0 instead of just touching
+
+const SLOT_WIDTH = 2 // assumed -- not specified
+const SLOT_OVERSHOOT = 1 // clears past the outer surface and into the
+// already-hollow cavity, for a clean full-thickness cut regardless of
+// the plug's local radius (constant along the body, tapering in the
+// chamfer)
 
 const plugOuter3D = () => {
   const bodyHeight = PLUG_HEIGHT - PLUG_CHAMFER_HEIGHT
@@ -93,10 +99,26 @@ const footCap3D = (sphereRadius, topExtension) => {
   return intersect(ball, lowerHalf)
 }
 
+// A relief slot cut radially through the plug's wall, from the (already
+// hollow) cavity out past the outer surface, along the plug's full
+// height -- lets the wall flex/compress a little if the push-fit into
+// the tube ends up too tight, instead of being a fully rigid ring.
+// Runs from near the center out along +X so it fully clears the wall at
+// any radius, including the chamfer's taper, without needing to track
+// the local radius.
+const slot3D = () => {
+  const outerReach = PLUG_DIAMETER / 2 + SLOT_OVERSHOOT
+  const xStart = -SLOT_OVERSHOOT
+  return translate(
+    [(xStart + outerReach) / 2, 0, PLUG_HEIGHT / 2],
+    cuboid({ size: [outerReach - xStart, SLOT_WIDTH, PLUG_HEIGHT + 2 * SLOT_OVERSHOOT] })
+  )
+}
+
 const main = () => {
   const outer = union(plugOuter3D(), footCap3D(FOOT_SPHERE_RADIUS, 0))
   const inner = union(plugInner3D(), footCap3D(FOOT_SPHERE_RADIUS - WALL_THICKNESS, CAVITY_OVERLAP))
-  return subtract(outer, inner)
+  return subtract(outer, inner, slot3D())
 }
 
 module.exports = { main, plugOuter3D, footCap3D }
