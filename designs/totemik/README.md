@@ -17,8 +17,9 @@ Nine related explorations for the Totemik project:
   dimensions to the other explorations.
 - **Mic Holder**: an open-bottom tray for a microphone, also unrelated in
   dimensions to the other explorations.
-- **Bottom Support**: a closed hollow cylinder (canister) with a uniform
-  2mm wall, also unrelated in dimensions to the other explorations.
+- **Bottom Support**: a hollow cylinder with a through-hole, thicker end
+  rings and a thin 2mm-wall middle section, also unrelated in dimensions
+  to the other explorations.
 
 ## Ring
 
@@ -533,12 +534,15 @@ other parts in this folder.
 
 ### Overview
 
-Closed hollow cylinder (canister). An earlier version of this part was a
+Outer cylinder with 2 cutouts. An earlier version of this part was a
 half-hollow torus (donut), but that was too CPU-intensive to generate,
-so it was replaced with an outer cylinder with a smaller, shorter
-cylinder subtracted from its middle — centered, so it stops short of the
-top and bottom too, giving a uniform wall thickness on every side
-(radial *and* top/bottom caps) instead of an open-ended pipe. A separate
+so it was replaced with this cylinder-based design. The first cutout is
+a centered recess that stops `2 mm` short of the top, bottom and sides,
+giving a uniform `2 mm` wall on every side over most of the height. The
+second is a narrower through-hole running the *full* height — since it's
+narrower than the recess, it only actually removes material at the 2 end
+caps the recess leaves solid, so the result is a thin-walled tube with a
+thicker ring at each end, open all the way through. A separate
 exploration, unrelated in dimensions to the other parts in this folder.
 
 ### Geometry
@@ -546,9 +550,14 @@ exploration, unrelated in dimensions to the other parts in this folder.
 - Outer diameter: `63 mm`
 - Height: `57 mm`
 - Wall thickness: `2 mm`, uniform on every side
-- Cutout (centered): `59 mm` diameter (`63 - 2×2`), `53 mm` tall
+- Recess (centered): `59 mm` diameter (`63 - 2×2`), `53 mm` tall
   (`57 - 2×2`) — leaves exactly `2 mm` of material radially and `2 mm`
   caps at both the top and bottom
+- Through-hole: `51 mm` diameter, running the full `57 mm` height —
+  narrower than the recess, so its only visible effect is punching
+  through the `2 mm` end caps; combined with the recess this leaves a
+  `6 mm`-thick ring (`63` to `51 mm` diameter) at each end and a `2 mm`
+  wall (`63` to `59 mm` diameter) in between
 
 ### Source
 
@@ -562,9 +571,9 @@ exploration, unrelated in dimensions to the other parts in this folder.
 - PNG preview (top): [`bottom-support-top.png`](./bottom-support-top.png)
 - PNG preview (cross-section): [`bottom-support-cross-section.png`](./bottom-support-cross-section.png) —
   a thin slab through the axis; since slicing a cylinder through its own
-  axis gives a rectangle (not a circle), this shows as a "picture frame":
-  the outer `63x57mm` rectangle with the inner `59x53mm` cavity inset
-  exactly `2mm` on every side
+  axis gives a rectangle (not a circle), this shows as 2 bracket-shaped
+  profiles, one along each side — the thicker `6mm` end rings, the
+  thinner `2mm` middle wall, and the `51mm` through-hole gap between them
 
 ### Preview
 
