@@ -260,6 +260,61 @@ These were learned while building `designs/sketched-plate/` from a hand sketch.
 - When deriving a length from the difference of two parameters (e.g. `riser - 2 * treadThickness`), wrap in `Math.max(minSensibleValue, ...)` to prevent zero-length or negative solids that silently fail:
   - `const lLength = Math.max(thickness, riser - 2 * thickness)`
 
+## Case study learnings: totemik series (ring, coupler, keypad, mic-holder, bottom-support, bottom-plug)
+
+These were learned iterating a family of small parametric parts under `designs/totemik/`, each refined over many small user-directed edits.
+
+### `cylinder()` silently ignores `radiusStart`/`radiusEnd` — use `cylinderElliptic`
+
+- `primitives.cylinder({ radiusStart, radiusEnd, ... })` does **not** error — those keys aren't in its options, so they're silently dropped and `radius` falls back to its **default of 1**. A "chamfer" cone written this way becomes a ~1mm spike, not a taper.
+- This bug sat undetected in `bottom-plug.jscad`'s lead-in chamfer for an entire earlier session (looked fine at a glance in low-res previews) until a bounding-box check on the isolated chamfer piece exposed the ~1mm radius.
+- Correct API for a tapered cylinder/frustum: `cylinderElliptic({ startRadius: [r1, r1], endRadius: [r2, r2], height, segments })` (elliptic because X/Y radii are given separately; use equal pairs for a circular taper).
+- **Takeaway:** when a primitive call uses parameter names you're not 100% sure exist, dump the function's own source (`primitives.cylinder.toString()` in a quick `node -e`) or check its `measureBoundingBox()` in isolation before trusting the render.
+
+### Winding order flips what `subtract()` does with a hole shape
+
+- A `polygon({ points })` used as the subtracted "hole" must be wound **counter-clockwise**, or `subtract(shape, hole)` can return something like the hole itself rather than `shape` minus the hole.
+- Found via a V-slot cut into a gear tooth (`gear-ring.jscad`) that came out as just the slot triangle; fixed by swapping the last two points in the polygon's point list. Verify with a minimal repro (`rectangle` minus a hand-wound triangle) if a subtract result looks inverted.
+
+### Torus booleans can be too slow to iterate on — prefer simpler primitives when a shape allows it
+
+- A half-hollow torus (`torus()` twice for the shell, plus a large cylinder to shave off the inner half) was reported as too CPU-intensive to regenerate quickly during iteration.
+- Replaced with an outer cylinder minus a smaller, shorter, centered cylinder (a plain "closed canister" shape) — visually and functionally close enough for the part's purpose, and boolean time dropped from multi-second/slow to ~2s.
+- **Takeaway:** if a `torus`-based design becomes painful to iterate on, check whether the curved feature can be approximated with cylinder/sphere booleans before optimizing segment counts.
+
+### `hull()` between thin slices = a clean tapered wall
+
+- To taper a wall's width with height (e.g. a beam that's narrower at the bottom, wider at the top), build two very thin (`height ≈ 0.01`) cross-section slices at the bottom and top Z, each sized/positioned for that level's target width, then `hull(bottomSlice, topSlice)`.
+- This produces a straight-sided taper (a loft) on **both** the inner and outer edges if both slices' inner/outer coordinates differ — useful for e.g. a wall that must widen from a 14mm bottom rim to an 18mm top rim while keeping wall thickness sane at each end.
+- Order-of-operations pitfall: if a taper is meant to finish **before** a feature sitting on top of it (e.g. a flat lid/cap that's already full-width), stop the taper at that feature's underside, not at the model's very top — otherwise the flat feature's edge overhangs the still-narrower taper for the last stretch, an unsupported ledge. (Caught by slicing the model at several Z heights and checking the width profile was monotonic with no jump.)
+
+### Half-space `intersect()`/`subtract()` to split a part into 2 printable pieces
+
+- A big cuboid spanning the whole model in Y/Z but only `x<=0` (or `x>=0`) in X, `intersect()`ed with the full solid, keeps just that half — a simple, reusable way to split a ring/tube into 2 halves for printing.
+- **Order matters for anything added on top that must cross the cut plane.** A feature that's supposed to protrude *past* the half-boundary (e.g. a glue tab reaching into where the other half would be) must be unioned in **after** the half-cut `intersect`, not before — intersecting first clips the very protrusion the feature exists for. (First implementation got this backwards; the tab silently vanished from the output.)
+- Conversely, a feature that must stay **fully inside its own half** (recessed, not crossing the seam) doesn't care about the ordering, since the half-cut never touches it anyway.
+- For a tab-and-slot pair across such a seam, generate both halves from the *same* fixed-position geometry: add it (`union`) on the half that should get the protruding tab, subtract it (`subtract`) on the half that should get the matching recess — same coordinates both times, just a different boolean.
+- A feature can be made to land in "only one of the split halves" for free by giving it a fixed absolute position within one half's territory (not computed relative to "whichever half is kept") — the other half's `intersect` simply never reaches that location, no extra conditional needed.
+
+### Spherical cap formula for a shallow dome (not a full hemisphere)
+
+- For a bulge that's much flatter than a hemisphere — flat across a given base diameter `2a`, bulging only `h` at its center — compute the *much larger* enclosing sphere's radius `R = (a² + h²) / (2h)`, then take only the cap between the sphere's pole and the cutting plane. The sphere's center sits `R − h` above (or below) that cutting plane.
+- Build the cap as `intersect(sphere(R) translated to that center, a half-space box)`. For a hollow shell version, use the same construction with a smaller concentric sphere (`R − wallThickness`, same center) for the inner surface — the wall thickness this gives is only exactly `wallThickness` at the very apex, tapering slightly elsewhere, which is normally an acceptable approximation for a shallow cap.
+- **Overshoot pitfall:** if the same half-space cutter (with a Z overshoot added for clean union with an adjoining part's cavity) is reused for **both** the outer surface and the inner cavity, the overshoot also lets the *outer* surface bulge past its intended flat cutting plane (since the sphere's radius grows again as Z moves back toward the sphere's own equator). Give the outer cap's cutter box a hard boundary at the true cutting plane, and only add the extra overlap margin to the inner cavity's cutter.
+
+### Orient probe shapes to match what you're testing, not the default axis
+
+- A cheap way to numerically verify a hole/cavity's position is `intersect(solid, smallProbeShape)` and check the resulting polygon count is 0 (open) or non-zero (solid) — much faster than eyeballing renders.
+- `cylinder()` defaults to a circular cross-section in **XY**, extruded along **Z**. Probing a hole whose own axis has been rotated (e.g. a radial hole through a tube wall, axis along X) with a default-oriented probe cylinder tests the wrong cross-section — it can report "blocked" even when the hole is genuinely clear, because the probe pokes outside the hole's true (rotated) circular bound in the axis it wasn't checking. Prefer a small **cuboid** probe (isotropic in all 3 axes) unless you've explicitly rotated the probe to match the feature's real orientation.
+
+### Slicing a cylinder through its own axis renders as a rectangle, not a circle
+
+- For a cross-section preview render, a thin box slab cut straight through a cylinder/tube's central axis shows its **side profile** (a rectangle, or a stepped/bracketed outline for a shaped wall) — the circular cross-section only appears when slicing **perpendicular** to the axis. Don't be surprised when an axis-aligned slice "looks wrong" for not being round; that's the correct result for that cut direction.
+
+### Reusing the same helper for outer surface and inner cavity, parameterized by radius/overlap
+
+- Several of these parts hollow out a solid shape by building the *outer* surface and a *shrunk* copy of the same construction for the *inner* cavity, then `subtract(outer, inner)`. Writing the shared shape as a function taking the radius (or radii) as a parameter — rather than duplicating the geometry code once per outer/inner — keeps the two versions from drifting out of sync when a dimension changes, and made the later "also cut a through-hole" and "also add a relief slot" follow-up requests quick, additive changes instead of rewrites.
+
 ## References
 
 - [JSCAD User Guide](https://openjscad.xyz/guide.html)
@@ -271,6 +326,7 @@ These were learned while building `designs/sketched-plate/` from a hand sketch.
 - **Staircase:** `designs/staircase/` — `npm run staircase:stl` / `npm run staircase:png` from repo root.
 - **Foam cutter:** `designs/foamcutter/` — `npm run foamcutter:stl` / `npm run foamcutter:png` from repo root.
 - **Pill cutter:** `designs/pill-cutter/` — `node designs/pill-cutter/render-png.js` (see also learnings summarized in **Alignment, rotation & booleans** above).
+- **Totemik series:** `designs/totemik/` — several small related parts (ring, coupler, keypad, mic-holder, bottom-support, bottom-plug), each with its own `.jscad` + STL/PNG outputs and a shared `render-png.js`; see also **Case study learnings: totemik series** above.
 
 ---
 

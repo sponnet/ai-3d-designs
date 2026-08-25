@@ -13,6 +13,7 @@ Each subdirectory is a self-contained JSCAD design (source + optional `render-pn
 | Staircase with landing | [`starcase-with-landing/`](starcase-with-landing/) |
 | Mounting hook | [`mounting-hook/`](mounting-hook/) |
 | Focus rotaty knob | [`focus-rotaty-knob/`](focus-rotaty-knob/) |
-| Totemik (ring + partition) | [`totemik/`](totemik/) |
+| Totemik (ring + partition + totemik-guts) | [`totemik/`](totemik/) |
+| Adapter — BnD mount to tube clamp | [`adapter-BnD-mount/`](adapter-BnD-mount/) |
 
 Shared tooling and conventions: [`../OPENJSCAD_SKILL.md`](../OPENJSCAD_SKILL.md).
