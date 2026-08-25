@@ -262,7 +262,7 @@ These were learned while building `designs/sketched-plate/` from a hand sketch.
 
 ## Case study learnings: totemik series (ring, coupler, keypad, mic-holder, bottom-support, bottom-plug)
 
-These were learned iterating a family of small parametric parts under `designs/totemik/`, each refined over many small user-directed edits.
+These were learned iterating a family of small parametric parts under `designs/totemikk/`, each refined over many small user-directed edits.
 
 ### `cylinder()` silently ignores `radiusStart`/`radiusEnd` — use `cylinderElliptic`
 
@@ -326,7 +326,7 @@ These were learned iterating a family of small parametric parts under `designs/t
 - **Staircase:** `designs/staircase/` — `npm run staircase:stl` / `npm run staircase:png` from repo root.
 - **Foam cutter:** `designs/foamcutter/` — `npm run foamcutter:stl` / `npm run foamcutter:png` from repo root.
 - **Pill cutter:** `designs/pill-cutter/` — `node designs/pill-cutter/render-png.js` (see also learnings summarized in **Alignment, rotation & booleans** above).
-- **Totemik series:** `designs/totemik/` — several small related parts (ring, coupler, keypad, mic-holder, bottom-support, bottom-plug), each with its own `.jscad` + STL/PNG outputs and a shared `render-png.js`; see also **Case study learnings: totemik series** above.
+- **Totemik series:** `designs/totemikk/` — several small related parts (ring, coupler, keypad, mic-holder, bottom-support, bottom-plug), each with its own `.jscad` + STL/PNG outputs and a shared `render-png.js`; see also **Case study learnings: totemik series** above.
 
 ---
 

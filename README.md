@@ -12,7 +12,7 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
 - [**Foamcutter v2**](./designs/foamcutter-v2/): updated foam cutter support assembly plus X-Acto No. 11 outline tooling model.
 - [**Staircase with landing**](./designs/starcase-with-landing/): parametric U-turn staircase model with landing and glue tabs.
 - [**Mounting hook**](./designs/mounting-hook/): 48 mm hook-profile part from sketch, extruded 20 mm.
-- [**Totemik**](./designs/totemik/): 51 mm inner-diameter ring band with a top notch and outer ridges, plus a 150 mm partition strip that push-fits onto the ring's ridges, plus a separate 49 mm ring + beam exploration ("totemik-guts").
+- [**Totemikk**](./designs/totemikk/): parts for an LED totem — ring/partition shell segments, an internal ring+beam skeleton with a coupler, a push-fit bottom plug/foot, a 4-key keypad, a gear ring, a mic holder, and a bottom support.
 - [**Adapter — BnD mount to tube**](./designs/adapter-BnD-mount/): matches a BnD 20Vmax tool mount's 60x65mm/3-hole back plate on one side, half-shell tube clamp (Ø51mm) with bolted end flanges on the other; 2 pieces sandwich the tube.
 
 ## Outputs At A Glance
@@ -59,17 +59,17 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
   - [`designs/mounting-hook/mounting-hook.png`](./designs/mounting-hook/mounting-hook.png)
   - ![Mounting hook preview](./designs/mounting-hook/mounting-hook.png)
 - Totemik ring STL/PNG:
-  - [`designs/totemik/ring.stl`](./designs/totemik/ring.stl)
-  - [`designs/totemik/ring.png`](./designs/totemik/ring.png)
-  - ![Totemik ring preview](./designs/totemik/ring.png)
+  - [`designs/totemikk/ring.stl`](./designs/totemikk/ring.stl)
+  - [`designs/totemikk/ring.png`](./designs/totemikk/ring.png)
+  - ![Totemik ring preview](./designs/totemikk/ring.png)
 - Totemik partition STL/PNG:
-  - [`designs/totemik/partition.stl`](./designs/totemik/partition.stl)
-  - [`designs/totemik/partition-detail.png`](./designs/totemik/partition-detail.png)
-  - ![Partition slot detail preview](./designs/totemik/partition-detail.png)
+  - [`designs/totemikk/partition.stl`](./designs/totemikk/partition.stl)
+  - [`designs/totemikk/partition-detail.png`](./designs/totemikk/partition-detail.png)
+  - ![Partition slot detail preview](./designs/totemikk/partition-detail.png)
 - Totemik guts (ring + beam) STL/PNG:
-  - [`designs/totemik/totemik-guts.stl`](./designs/totemik/totemik-guts.stl)
-  - [`designs/totemik/totemik-guts.png`](./designs/totemik/totemik-guts.png)
-  - ![Totemik guts preview](./designs/totemik/totemik-guts.png)
+  - [`designs/totemikk/totemik-guts.stl`](./designs/totemikk/totemik-guts.stl)
+  - [`designs/totemikk/totemik-guts.png`](./designs/totemikk/totemik-guts.png)
+  - ![Totemik guts preview](./designs/totemikk/totemik-guts.png)
 - Adapter — BnD mount to tube STL/PNG:
   - [`designs/adapter-BnD-mount/adapter.stl`](./designs/adapter-BnD-mount/adapter.stl)
   - [`designs/adapter-BnD-mount/adapter-iso.png`](./designs/adapter-BnD-mount/adapter-iso.png)

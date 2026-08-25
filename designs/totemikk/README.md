@@ -1,25 +1,31 @@
-# Totemik
+# Totemikk
 
-Nine related explorations for the Totemik project:
+<img src="./totemikk-logo-horizontal.svg" alt="Totemikk logo" width="480">
 
-- **Ring** and **Partition**: a ring band with a push-fit partition strip
-  (see below).
-- **Totemik Guts**: a separate, independent exploration of a ring + beam
-  design (different dimensions from the Ring above — not interchangeable
-  with it).
-- **Totemik Guts Coupler**: a straight extension piece that joins 2
-  Totemik Guts beams end to end (same beam cross-section).
-- **Bottom Plug**: a push-fit foot for the bottom of a 49.1mm-ID tube,
-  unrelated in dimensions to the other explorations.
-- **Keypad**: a minimalist 4-key Cherry MX switch bar with mounting tabs,
-  also unrelated in dimensions to the other explorations.
-- **Gear Ring**: a toothed ring with a raised collar, also unrelated in
-  dimensions to the other explorations.
-- **Mic Holder**: an open-bottom tray for a microphone, also unrelated in
-  dimensions to the other explorations.
-- **Bottom Support**: a hollow cylinder with a through-hole, thicker end
-  rings and a thin 2mm-wall middle section, also unrelated in dimensions
-  to the other explorations.
+Totemikk is an LED totem: a modular, 3D-printed tube-shaped tower that
+carries LED strips/electronics inside it, stands on its own base, and
+gets user input through a small physical keypad and a microphone (for
+sound-reactive lighting effects). This folder holds nine related design
+explorations that make up that tower and its accessories — some are
+alternate/independent takes on the same idea (different dimensions, not
+interchangeable), rather than nine parts of one single finished
+assembly:
+
+| Part | Function in the totem |
+| --- | --- |
+| **Ring** + **Partition** | Outer ring band (with a push-fit partition strip across a notch in it) forming a segment of the totem's outer shell/structure. |
+| **Totemik Guts** | Internal ring + beam skeleton that runs up the inside of the totem tube, giving it a rigid spine to mount LEDs/electronics against. |
+| **Totemik Guts Coupler** | Straight joiner that extends 2 Totemik Guts spine sections end to end, letting the internal skeleton run taller than one printed piece. |
+| **Bottom Plug** | Push-fit foot that plugs into the bottom opening of the totem's tube and touches the ground, giving the standing totem a stable, closed base. |
+| **Keypad** | 4-key physical control panel (Cherry MX switches) mounted on the totem for user input — e.g. switching modes/colors/brightness. |
+| **Gear Ring** | Toothed ring with a raised hollow collar, sized to the same tube family — a mounting/adapter ring for a rotating or attachable feature at the top or along the tube. |
+| **Mic Holder** | Open-bottom tray that holds a microphone in/on the totem, feeding audio in for sound-reactive LED behavior. |
+| **Bottom Support** | Split-printable hollow cylinder (through-hole + notched top ring) that fits inside the tube near the bottom, giving the internal skeleton/wiring extra support close to the base. |
+
+### Logo
+
+- [`totemikk-logo-horizontal.svg`](./totemikk-logo-horizontal.svg) — wide/horizontal lockup (shown above)
+- [`totemikk-logo-vertical.svg`](./totemikk-logo-vertical.svg) — tall/vertical lockup, for narrow layouts
 
 ## Ring
 
@@ -72,7 +78,7 @@ and the 51 mm bore stays true (not obstructed) under any of them.
 ### Source
 
 - JSCAD: [`ring.jscad`](./ring.jscad)
-- OpenJSCAD: [Open `ring.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/ring.jscad#)
+- OpenJSCAD: [Open `ring.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/ring.jscad#)
 
 ### Outputs
 
@@ -121,7 +127,7 @@ end is slotted.
 ### Source
 
 - JSCAD: [`partition.jscad`](./partition.jscad)
-- OpenJSCAD: [Open `partition.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/partition.jscad#)
+- OpenJSCAD: [Open `partition.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/partition.jscad#)
 
 ### Outputs
 
@@ -220,7 +226,7 @@ openjscad.xyz UI, and can be set from the CLI with
 ### Source
 
 - JSCAD: [`totemik-guts.jscad`](./totemik-guts.jscad)
-- OpenJSCAD: [Open `totemik-guts.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/totemik-guts.jscad#)
+- OpenJSCAD: [Open `totemik-guts.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/totemik-guts.jscad#)
 
 ### Outputs
 
@@ -283,7 +289,7 @@ fills the guts beam's own recess, with no gap or unfilled stretch.
 ### Source
 
 - JSCAD: [`totemik-guts-coupler.jscad`](./totemik-guts-coupler.jscad)
-- OpenJSCAD: [Open `totemik-guts-coupler.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/totemik-guts-coupler.jscad#)
+- OpenJSCAD: [Open `totemik-guts-coupler.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/totemik-guts-coupler.jscad#)
 
 ### Outputs
 
@@ -335,7 +341,7 @@ unrelated in dimensions to the Ring/Partition/Totemik Guts above.
 ### Source
 
 - JSCAD: [`bottom-plug.jscad`](./bottom-plug.jscad)
-- OpenJSCAD: [Open `bottom-plug.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/bottom-plug.jscad#)
+- OpenJSCAD: [Open `bottom-plug.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/bottom-plug.jscad#)
 
 ### Outputs
 
@@ -419,7 +425,7 @@ dimensions to the other parts in this folder.
 ### Source
 
 - JSCAD: [`keypad.jscad`](./keypad.jscad)
-- OpenJSCAD: [Open `keypad.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/keypad.jscad#)
+- OpenJSCAD: [Open `keypad.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/keypad.jscad#)
 
 ### Outputs
 
@@ -468,7 +474,7 @@ unrelated in dimensions to the other parts in this folder.
 ### Source
 
 - JSCAD: [`gear-ring.jscad`](./gear-ring.jscad)
-- OpenJSCAD: [Open `gear-ring.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/gear-ring.jscad#)
+- OpenJSCAD: [Open `gear-ring.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/gear-ring.jscad#)
 
 ### Outputs
 
@@ -532,7 +538,7 @@ other parts in this folder.
 ### Source
 
 - JSCAD: [`mic-holder.jscad`](./mic-holder.jscad)
-- OpenJSCAD: [Open `mic-holder.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/mic-holder.jscad#)
+- OpenJSCAD: [Open `mic-holder.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/mic-holder.jscad#)
 
 ### Outputs
 
@@ -611,7 +617,7 @@ exploration, unrelated in dimensions to the other parts in this folder.
 ### Source
 
 - JSCAD: [`bottom-support.jscad`](./bottom-support.jscad)
-- OpenJSCAD: [Open `bottom-support.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/bottom-support.jscad#)
+- OpenJSCAD: [Open `bottom-support.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/bottom-support.jscad#)
 
 ### Outputs
 

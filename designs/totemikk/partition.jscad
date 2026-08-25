@@ -6,7 +6,7 @@ const { rotateX, rotateY } = require('@jscad/modeling').transforms
 // mm, Z up. A standing trapezoidal partition (isoceles, wide base at the
 // bottom, flat truncated top), long and thin, with a short slot cut into
 // its base at each end — sized to push-fit over a ridge from
-// designs/totemik/ring.jscad (RIDGE_WIDTH x RIDGE_PROTRUSION) — while the
+// designs/totemikk/ring.jscad (RIDGE_WIDTH x RIDGE_PROTRUSION) — while the
 // middle of the length stays solid (no repeating slot). The flat top is
 // scalloped along its full length with small rectangular notches,
 // cross-wise (perpendicular to the length), evenly spaced.
