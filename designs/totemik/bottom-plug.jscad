@@ -18,8 +18,8 @@ const { translate } = require('@jscad/modeling').transforms
 // plug-side-down in the slicer gives a flat base and a self-supporting
 // dome with no overhangs.
 
-const TUBE_ID = 49
-const PLUG_CLEARANCE = 0.4 // assumed FDM push-fit clearance, not specified
+const TUBE_ID = 49.1
+const PLUG_CLEARANCE = 0 // no push-fit clearance -- plug diameter matches the tube ID exactly
 const PLUG_DIAMETER = TUBE_ID - PLUG_CLEARANCE
 const PLUG_HEIGHT = 20 / 3 // 1/3 of the original 20mm assumed height
 const PLUG_CHAMFER_HEIGHT = 2 // assumed lead-in chamfer, eases insertion

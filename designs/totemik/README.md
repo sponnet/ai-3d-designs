@@ -9,7 +9,7 @@ Nine related explorations for the Totemik project:
   with it).
 - **Totemik Guts Coupler**: a straight extension piece that joins 2
   Totemik Guts beams end to end (same beam cross-section).
-- **Bottom Plug**: a push-fit foot for the bottom of a 49mm-ID tube,
+- **Bottom Plug**: a push-fit foot for the bottom of a 49.1mm-ID tube,
   unrelated in dimensions to the other explorations.
 - **Keypad**: a minimalist 4-key Cherry MX switch bar with mounting tabs,
   also unrelated in dimensions to the other explorations.
@@ -313,14 +313,15 @@ unrelated in dimensions to the Ring/Partition/Totemik Guts above.
 
 ### Geometry
 
-- Tube inner diameter: `49 mm`
-- Plug diameter: `48.6 mm` (`0.4 mm` push-fit clearance — assumed, not
-  specified; adjust `PLUG_CLEARANCE` for a tighter/looser fit)
+- Tube inner diameter: `49.1 mm`
+- Plug diameter: `49.1 mm` (`0 mm` clearance — matches the tube ID
+  exactly; the relief slot below is what gives it room to seat despite
+  the zero clearance, adjust `PLUG_CLEARANCE` for a looser fit instead)
 - Plug height: `6.67 mm` (`20 / 3` — 1/3 of the original assumed `20 mm`)
 - Plug tip: `2 mm` tall lead-in chamfer, shrinking `2 mm` off the
   diameter, to ease insertion (assumed)
 - Foot: a shallow spherical cap, `52 mm` across (a bit larger than the
-  `49 mm` tube, for margin) and only `10 mm` deep at its center —
+  `49.1 mm` tube, for margin) and only `10 mm` deep at its center —
   computed from a much larger sphere (radius ≈ `38.8 mm`) so the curve
   is gentle, not a hemisphere's full curvature
 - Wall thickness: `3 mm`, uniform through both the plug and the foot cap
@@ -328,8 +329,8 @@ unrelated in dimensions to the Ring/Partition/Totemik Guts above.
   sphere center for the foot, and by `3 mm` radius for the plug)
 - Relief slot: `2 mm` wide (assumed), cut radially through the plug's
   wall along its full height, from the hollow cavity out past the outer
-  surface — gives the plug wall a little compliance if the tube's actual
-  bore ends up tighter than the assumed `0.4 mm` clearance
+  surface — gives the plug wall a little compliance now that there's no
+  push-fit clearance at all
 
 ### Source
 
