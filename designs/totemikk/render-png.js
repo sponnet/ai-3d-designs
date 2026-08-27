@@ -213,3 +213,12 @@ const wallHookDetailPng = stl2png(toBuffer(wallHookDetail), {
 })
 fs.writeFileSync(path.join(__dirname, 'wall-hook-detail.png'), wallHookDetailPng)
 console.log('Wrote wall-hook-detail.png (top bend detail)')
+
+// --- hinge-bracket.stl ---
+// Flat mounting base necking into a narrower, rounded-corner boss with
+// a pivot hole. Standalone part, unrelated in dimensions to the other
+// parts in this folder (not yet coupled to wall-hook.jscad).
+const hingeBracketStlData = fs.readFileSync(path.join(__dirname, 'hinge-bracket.stl'))
+const hingeBracketPng = stl2png(hingeBracketStlData, { ...baseOptions, width: 500, height: 700, cameraPosition: [18, 28, 300] })
+fs.writeFileSync(path.join(__dirname, 'hinge-bracket-front.png'), hingeBracketPng)
+console.log('Wrote hinge-bracket-front.png')

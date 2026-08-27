@@ -5,10 +5,10 @@
 Totemikk is an LED totem: a modular, 3D-printed tube-shaped tower that
 carries LED strips/electronics inside it, stands on its own base, and
 gets user input through a small physical keypad and a microphone (for
-sound-reactive lighting effects). This folder holds ten related design
-explorations that make up that tower and its accessories — some are
-alternate/independent takes on the same idea (different dimensions, not
-interchangeable), rather than ten parts of one single finished
+sound-reactive lighting effects). This folder holds eleven related
+design explorations that make up that tower and its accessories — some
+are alternate/independent takes on the same idea (different dimensions,
+not interchangeable), rather than eleven parts of one single finished
 assembly:
 
 | Part | Function in the totem |
@@ -21,7 +21,8 @@ assembly:
 | **Gear Ring** | Toothed ring with a raised hollow collar, sized to the same tube family — a mounting/adapter ring for a rotating or attachable feature at the top or along the tube. |
 | **Mic Holder** | Open-bottom tray that holds a microphone in/on the totem, feeding audio in for sound-reactive LED behavior. |
 | **Bottom Support** | Split-printable hollow cylinder (through-hole + notched top ring) that fits inside the tube near the bottom, giving the internal skeleton/wiring extra support close to the base. |
-| **Wall Hook** | Round bent-rod hook, from a hand sketch, for hanging the totem on a wall/rail instead of standing it on the Bottom Plug. |
+| **Wall Hook** | Flat bent-bar hook, from a hand sketch, for hanging the totem on a wall/rail instead of standing it on the Bottom Plug. |
+| **Hinge Bracket** | Flat mounting bracket with a pivot hole, from a hand sketch — a standalone hinge knuckle, not yet coupled to the Wall Hook. |
 
 ### Logo
 
@@ -682,3 +683,48 @@ dimensions to the other parts in this folder.
 
 ![Wall hook full length](./wall-hook-front.png)
 ![Wall hook detail](./wall-hook-detail.png)
+
+## Hinge Bracket
+
+### Overview
+
+A flat hinge bracket, from a hand sketch: a wide mounting base that
+necks up into a narrower boss (flush with the base's right edge,
+rounded at its top-left corner) carrying a pivot hole. A standalone
+part for now — not yet coupled to the [Wall Hook](#wall-hook) (no
+matching hole/pin there yet); the idea is a pin through this bracket's
+hole would let something (like the Wall Hook) pivot against it. A
+separate exploration, unrelated in dimensions to the other parts in
+this folder.
+
+### Geometry
+
+- Overall width: `36 mm` (at the base)
+- Overall height: `56 mm` (extreme/max)
+- Extrusion thickness: `5 mm` (flat profile, matching the Wall Hook)
+- Pivot hole: `8 mm` diameter
+- Base height: `20 mm` (assumed — not dimensioned in the sketch), full
+  `36 mm` width
+- Boss: `24 mm` wide (assumed), flush with the base's right edge (a
+  `12 mm` step on the left where the base is wider than the boss),
+  running from the top of the base up to the full `56 mm` height
+- Boss corner: `10 mm` radius (assumed), rounding just the boss's
+  top-left corner — built by cutting that corner square out, then
+  filling back in with only the matching quarter-circle, leaving it
+  rounded rather than sharp
+- Pivot hole position: centered in the boss, both horizontally and
+  vertically (assumed — not dimensioned)
+
+### Source
+
+- JSCAD: [`hinge-bracket.jscad`](./hinge-bracket.jscad)
+- OpenJSCAD: [Open `hinge-bracket.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/hinge-bracket.jscad)
+
+### Outputs
+
+- STL: [`hinge-bracket.stl`](./hinge-bracket.stl)
+- PNG preview: [`hinge-bracket-front.png`](./hinge-bracket-front.png)
+
+### Preview
+
+![Hinge bracket](./hinge-bracket-front.png)
