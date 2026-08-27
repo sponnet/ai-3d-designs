@@ -22,8 +22,6 @@ const THICKNESS = 5 // flat extrusion thickness, matching wall-hook.jscad
 
 const SEGMENTS = 64 // full-circle resolution
 
-// The 2D profile alone, exported so hinge-yoke.jscad can reuse it for
-// both of its 2 rings without duplicating this geometry.
 const profile2D = () => {
   // Angles must be given positive; going from 270deg to 90deg wraps
   // through 0deg, i.e. sweeps the right half (a plain circle() can't
@@ -41,4 +39,4 @@ const profile2D = () => {
 
 const main = () => extrudeLinear({ height: THICKNESS }, profile2D())
 
-module.exports = { main, profile2D, OUTER_DIAMETER, OUTER_RADIUS, HOLE_DIAMETER, THICKNESS }
+module.exports = { main }

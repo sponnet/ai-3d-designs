@@ -653,9 +653,8 @@ squared off into a sharp corner instead of continuing the curve. It's a
 2D profile (foot rectangle + round outer quarter + squared outer
 quarter, with the round throat subtracted) linear-extruded to a flat
 EXTRUDE_HEIGHT, not a round rod. Meant for hanging the totem on a wall
-or rail, as an alternative to standing it on the
-[Bottom Plug](#bottom-plug). A separate exploration, unrelated in
-dimensions to the other parts in this folder.
+or rail. A separate exploration, unrelated in dimensions to the other
+parts in this folder.
 
 ### Geometry
 
@@ -694,16 +693,15 @@ outer edge, round center hole) with its left side squared off — both
 the bottom-left and top-left corners of the outer edge are flattened
 into a square corner, while the right side stays a plain round curve.
 The center hole stays a full round circle throughout. A standalone
-part for now — not yet coupled to the [Wall Hook](#wall-hook); the
-idea is a pin through the center hole would let something (like the
-Wall Hook) pivot against it. A separate exploration, unrelated in
-dimensions to the other parts in this folder.
+part -- the idea is a pin through the center hole would let something
+pivot against it. A separate exploration, unrelated in dimensions to
+the other parts in this folder.
 
 ### Geometry
 
 - Outer diameter: `36 mm`
 - Center hole: `8 mm` diameter, round, centered
-- Extrusion thickness: `5 mm` (flat profile, matching the Wall Hook)
+- Extrusion thickness: `5 mm`
 - Left side: squared off — both the top-left and bottom-left corners
   of the `36 mm` outer circle are flattened, giving a flat left edge
   (`36 mm` tall, at `x = -18 mm`) instead of a curve there
@@ -734,21 +732,23 @@ silently produces no hole at all (see the case-study note in
 
 ### Overview
 
-Two [Hinge Bracket](#hinge-bracket) rings, side by side along the
-extrusion axis with a gap between them (wide enough for an 8mm axle to
-pass straight through both center holes, and for something to pivot in
-the gap), joined into one rigid piece by a connecting plate along their
-flat (squared) back edge. The plate sits flush against that flat edge
-and extends straight backward from it, away from the rings — it
-doesn't cut into or overlap the rings' own footprint at all, just adds
-onto their back face, and spans the full run from the front of the
-first ring to the back of the second, closing off the back of the gap
-too.
+Two identical rings (36mm outer diameter, 8mm center hole, left side
+squared off, right side round), side by side along the extrusion axis
+with a gap between them (wide enough for an 8mm axle to pass straight
+through both center holes, and for something to pivot in the gap),
+joined into one rigid piece by a connecting plate along their flat
+(squared) back edge. The plate sits flush against that flat edge and
+extends straight backward from it, away from the rings — it doesn't
+cut into or overlap the rings' own footprint at all, just adds onto
+their back face, and spans the full run from the front of the first
+ring to the back of the second, closing off the back of the gap too. A
+separate, self-contained exploration, unrelated in dimensions to the
+other parts in this folder.
 
 ### Geometry
 
-- 2 rings, each identical to [`hinge-bracket.jscad`](./hinge-bracket.jscad)
-  (36mm outer diameter, 8mm center hole, 5mm thick, left side squared)
+- 2 rings, each `36mm` outer diameter, `8mm` center hole, `5mm` thick,
+  left side squared
 - Gap between the rings: `5.1 mm`
 - Connecting plate: `5 mm` thick (how far it sticks out backward from
   the rings' flat edge), spanning the rings' full `36 mm` height and
