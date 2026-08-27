@@ -5,10 +5,10 @@
 Totemikk is an LED totem: a modular, 3D-printed tube-shaped tower that
 carries LED strips/electronics inside it, stands on its own base, and
 gets user input through a small physical keypad and a microphone (for
-sound-reactive lighting effects). This folder holds nine related design
+sound-reactive lighting effects). This folder holds ten related design
 explorations that make up that tower and its accessories — some are
 alternate/independent takes on the same idea (different dimensions, not
-interchangeable), rather than nine parts of one single finished
+interchangeable), rather than ten parts of one single finished
 assembly:
 
 | Part | Function in the totem |
@@ -21,6 +21,7 @@ assembly:
 | **Gear Ring** | Toothed ring with a raised hollow collar, sized to the same tube family — a mounting/adapter ring for a rotating or attachable feature at the top or along the tube. |
 | **Mic Holder** | Open-bottom tray that holds a microphone in/on the totem, feeding audio in for sound-reactive LED behavior. |
 | **Bottom Support** | Split-printable hollow cylinder (through-hole + notched top ring) that fits inside the tube near the bottom, giving the internal skeleton/wiring extra support close to the base. |
+| **Wall Hook** | Round bent-rod hook, from a hand sketch, for hanging the totem on a wall/rail instead of standing it on the Bottom Plug. |
 
 ### Logo
 
@@ -635,3 +636,60 @@ exploration, unrelated in dimensions to the other parts in this folder.
 ![Bottom support isometric](./bottom-support-iso.png)
 ![Bottom support top view](./bottom-support-top.png)
 ![Bottom support cross-section](./bottom-support-cross-section.png)
+
+## Wall Hook
+
+### Overview
+
+A round rod, bent flat in one plane, from a hand sketch: a long straight
+shaft with a rounded, blunt bottom tip, sweeping through a wide bend at
+the top into a short run that turns 2 more corners — the sketch's "1
+side made rectangular" — before curling back on itself into a small
+round hook that does the actual catching. Reads overall as a round hook
+whose far end has been squared off into a small rectangular profile,
+with only the very tip staying a tight round curl. Built as a bent
+centerline (straight runs + partial-torus bends) with a round rod
+cross-section swept along it, so it comes out as a true round rod, not
+a flat plate — both ends get a rounded (sphere) cap. Meant for hanging
+the totem on a wall or rail, as an alternative to standing it on the
+[Bottom Plug](#bottom-plug). A separate exploration, unrelated in
+dimensions to the other parts in this folder.
+
+### Geometry
+
+- Rod diameter: `10 mm` (assumed — not dimensioned in the sketch)
+- Overall height: `180 mm`, tip to tip, including both rounded end caps
+  (matches the sketch's outer dimension line)
+- Top run: `24 mm` long (centerline), horizontal
+- Side run: `16 mm` long (centerline), down the right side of the top
+  section
+- Hook curl: `8 mm` radius (centerline) — the one round feature the
+  sketch dimensions explicitly, sweeping `270°` (assumed) so the tip
+  curls back and the opening faces upward, actually catching whatever
+  the hook is hung on
+- Top bend: `12 mm` radius (assumed — not dimensioned), the wide,
+  generous curve that turns the main shaft into the top run
+- Corner radius: rod radius `+ 1 mm` (assumed), the small corner that
+  gives the top section its "rectangular" look — kept just barely
+  larger than the rod radius (a torus needs its outer radius bigger
+  than its inner radius) so it reads as a snug, printable, near-square
+  corner rather than a knife edge
+- The straight shaft's own length is solved (not fixed) so the finished
+  piece's overall height comes out to exactly `180 mm` once the top
+  bend and both end caps are added
+
+### Source
+
+- JSCAD: [`wall-hook.jscad`](./wall-hook.jscad)
+- OpenJSCAD: [Open `wall-hook.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/wall-hook.jscad#)
+
+### Outputs
+
+- STL: [`wall-hook.stl`](./wall-hook.stl)
+- PNG preview (top-down, full length): [`wall-hook-front.png`](./wall-hook-front.png)
+- PNG preview (hook detail): [`wall-hook-detail.png`](./wall-hook-detail.png)
+
+### Preview
+
+![Wall hook full length](./wall-hook-front.png)
+![Wall hook detail](./wall-hook-detail.png)

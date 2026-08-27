@@ -12,7 +12,7 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
 - [**Foamcutter v2**](./designs/foamcutter-v2/): updated foam cutter support assembly plus X-Acto No. 11 outline tooling model.
 - [**Staircase with landing**](./designs/starcase-with-landing/): parametric U-turn staircase model with landing and glue tabs.
 - [**Mounting hook**](./designs/mounting-hook/): 48 mm hook-profile part from sketch, extruded 20 mm.
-- [**Totemikk**](./designs/totemikk/): parts for an LED totem — ring/partition shell segments, an internal ring+beam skeleton with a coupler, a push-fit bottom plug/foot, a 4-key keypad, a gear ring, a mic holder, and a bottom support.
+- [**Totemikk**](./designs/totemikk/): parts for an LED totem — ring/partition shell segments, an internal ring+beam skeleton with a coupler, a push-fit bottom plug/foot, a 4-key keypad, a gear ring, a mic holder, a bottom support, and a wall-mount hook.
 - [**Adapter — BnD mount to tube**](./designs/adapter-BnD-mount/): matches a BnD 20Vmax tool mount's 60x65mm/3-hole back plate on one side, half-shell tube clamp (Ø51mm) with bolted end flanges on the other; 2 pieces sandwich the tube.
 - [**Insta360 tripod leg (sliding slot)**](./designs/insta360-tripod-leg/): variation on the Insta360 tripod mount's leg — flat tapered blade with a rounded hub-end knuckle, but the pivot hole is replaced by a lengthwise slot so the leg can pivot and slide up along the pole once folded. Proposal for a single leg; the central hub is not modeled yet.
 

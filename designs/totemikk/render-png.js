@@ -183,3 +183,33 @@ const bottomSupportSlicedPng = stl2png(toBuffer(bottomSupportSliced), {
 })
 fs.writeFileSync(path.join(__dirname, 'bottom-support-cross-section.png'), bottomSupportSlicedPng)
 console.log('Wrote bottom-support-cross-section.png')
+
+// --- wall-hook.stl ---
+// Round rod bent flat in one plane: long shaft (180mm tall), rounded
+// tip at the bottom, a wide bend into a short "rectangular" top section
+// (24 x 16mm) that curls back into a small round hook (8mm radius) at
+// the tip. Unrelated in dimensions to the other parts in this folder.
+const wallHookStlData = fs.readFileSync(path.join(__dirname, 'wall-hook.stl'))
+// The hook lies flat in the XY plane (only 10mm thick in Z), so a
+// top-down camera (looking down the Z axis) is the view that actually
+// shows its bent-wire silhouette, not an edge-on sliver.
+const wallHookPng = stl2png(wallHookStlData, { ...baseOptions, width: 500, height: 1000, cameraPosition: [20, 85, 400] })
+fs.writeFileSync(path.join(__dirname, 'wall-hook-front.png'), wallHookPng)
+console.log('Wrote wall-hook-front.png')
+
+const { main: wallHookMain } = require('./wall-hook.jscad')
+// Crop to just the top hook detail (roughly y = 120..180), where the
+// rectangular top section and the curl actually live -- at the part's
+// full 180mm length that detail renders too small to read.
+const wallHookDetail = intersect(wallHookMain(), cuboid({ size: [70, 70, 30], center: [15, 150, 0] }))
+const wallHookDetailPng = stl2png(toBuffer(wallHookDetail), {
+  width: 900,
+  height: 700,
+  backgroundColor: 0xffffff,
+  cameraPosition: [40, 60, 120],
+  materials: [makeStandardMaterial(1, 0x3a7bd5)],
+  edgeMaterials: [makeEdgeMaterial(1.5, 0x000000)],
+  lights: [makeAmbientLight(0xffffff, 0.7), makeDirectionalLight(0, -1, 1, 0xffffff, 0.7)]
+})
+fs.writeFileSync(path.join(__dirname, 'wall-hook-detail.png'), wallHookDetailPng)
+console.log('Wrote wall-hook-detail.png (top hook detail)')
