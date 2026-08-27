@@ -20,8 +20,11 @@ const { translate, rotateX, rotateZ } = require('@jscad/modeling').transforms
 //      the axle direction becomes tangential (around the tube).
 //   2. translate so the yoke's flat plate face sits MOUNT_EMBED into
 //      the tube's 2mm wall (not just touching it) -- guarantees a
-//      real solid overlap for the union, and the ring height (36mm)
-//      lands exactly flush with the tube's own 36mm height.
+//      real solid overlap for the union. The Z offset is fixed at
+//      OUTER_RADIUS (the yoke's own half-height), not TUBE_HEIGHT/2,
+//      so the yoke's bottom always sits flush on the ground plane
+//      (Z=0) no matter what TUBE_HEIGHT is set to, instead of staying
+//      vertically centered on the tube.
 //   3. rotateZ by each of 3 evenly-spaced angles around the tube's own
 //      axis places the 3 copies around its circumference.
 
@@ -82,8 +85,13 @@ const main = () => {
   // After rotateX(90deg): local X unchanged (still the plate/radial
   // axis), local Y is now the old Z (axle/tangential axis), local Z is
   // now the old Y (ring height/vertical axis).
+  // Z offset is OUTER_RADIUS (the yoke's own half-height), not
+  // TUBE_HEIGHT/2 -- that keeps the yoke's bottom flush with the
+  // ground plane (Z=0) regardless of TUBE_HEIGHT, instead of staying
+  // vertically centered on the tube (which would lift it off the
+  // ground, or sink it below Z=0, whenever TUBE_HEIGHT changes).
   const placedAtAngleZero = translate(
-    [TUBE_OUTER_RADIUS - MOUNT_EMBED - PLATE_FACE_X, YOKE_DEPTH / 2, TUBE_HEIGHT / 2],
+    [TUBE_OUTER_RADIUS - MOUNT_EMBED - PLATE_FACE_X, YOKE_DEPTH / 2, OUTER_RADIUS],
     reoriented
   )
 

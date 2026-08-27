@@ -920,12 +920,17 @@ in this folder.
 - 3 clevises, evenly spaced (`120°` apart) around the tube
 - Each clevis: identical 2-ring-plus-plate geometry to the standalone
   hinge yoke (`36 mm` ring diameter, `8 mm` axle hole, `5.1 mm` gap
-  between rings) — reoriented so the ring height (`36 mm`, matching the
-  tube's own height exactly) runs along the tube's axis, and the axle
-  hole runs tangentially around the tube
+  between rings) — reoriented so the ring height (`36 mm`) runs along
+  the tube's axis, and the axle hole runs tangentially around the tube
 - Mounting: each clevis's flat plate face sits `1 mm` (assumed) inside
   the tube's outer surface, within its `2 mm` wall — a real solid
   overlap for the union, not just a touching surface
+- Each clevis's bottom always sits flush on the ground plane (`Z = 0`),
+  independent of `TUBE_HEIGHT` — the vertical offset is fixed at the
+  clevis's own half-height rather than half of `TUBE_HEIGHT`, so
+  changing the tube's height doesn't lift the clevises off the ground
+  or sink them below it; at the default `36 mm` tube height this
+  happens to also land their top flush with the tube's own top
 
 ### Source
 
