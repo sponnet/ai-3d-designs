@@ -264,6 +264,12 @@ These were learned while building `designs/sketched-plate/` from a hand sketch.
 
 These were learned iterating a family of small parametric parts under `designs/totemikk/`, each refined over many small user-directed edits.
 
+### 3D `union()` argument order matters when one shape is hollow
+
+- `union(hollowShape, ...otherShapes)` — a hollow/enclosing shape listed **first** — can silently seal that shape's own cavity shut, even when the hollow shape alone and the other shapes unioned by themselves are each independently correct. Listing the hollow shape **last** instead (`union(...otherShapes, hollowShape)`) fixed it.
+- Found in `hinge-yoke-tube-mount.jscad`: a hollow tube unioned with 3 solid clevis mounts came out fully solid at the tube's own center when the tube was the first argument; reordering so the tube came last gave the correct, still-hollow result.
+- **Takeaway:** when unioning a hollow/enclosing shape with other solids, list the hollow shape last, and verify with a point probe at its cavity (not just a bounding-box or polygon-count check — both stayed unchanged either way here).
+
 ### `cylinder()` silently ignores `radiusStart`/`radiusEnd` — use `cylinderElliptic`
 
 - `primitives.cylinder({ radiusStart, radiusEnd, ... })` does **not** error — those keys aren't in its options, so they're silently dropped and `radius` falls back to its **default of 1**. A "chamfer" cone written this way becomes a ~1mm spike, not a taper.

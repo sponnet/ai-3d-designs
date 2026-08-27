@@ -244,3 +244,18 @@ const hingeCouplerStlData = fs.readFileSync(path.join(__dirname, 'hinge-coupler.
 const hingeCouplerPng = stl2png(hingeCouplerStlData, { ...baseOptions, width: 500, height: 500, cameraPosition: [40, -40, 30] })
 fs.writeFileSync(path.join(__dirname, 'hinge-coupler.png'), hingeCouplerPng)
 console.log('Wrote hinge-coupler.png')
+
+// --- hinge-yoke-tube-mount.stl ---
+// 51mm-ID tube with 3 hinge-yoke clevises spaced 120 degrees apart
+// around its outside, each mounted per the reference-photo orientation
+// (plate flush against the tube, axle hole running tangentially).
+const hingeYokeTubeMountStlData = fs.readFileSync(path.join(__dirname, 'hinge-yoke-tube-mount.stl'))
+const hingeYokeTubeMountViews = {
+  'hinge-yoke-tube-mount-iso.png': [150, -150, 120],
+  'hinge-yoke-tube-mount-top.png': [0, 0, 300]
+}
+for (const [file, cameraPosition] of Object.entries(hingeYokeTubeMountViews)) {
+  const png = stl2png(hingeYokeTubeMountStlData, { ...baseOptions, width: 900, height: 900, cameraPosition })
+  fs.writeFileSync(path.join(__dirname, file), png)
+  console.log('Wrote', file)
+}

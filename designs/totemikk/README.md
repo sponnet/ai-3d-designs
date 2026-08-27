@@ -5,10 +5,10 @@
 Totemikk is an LED totem: a modular, 3D-printed tube-shaped tower that
 carries LED strips/electronics inside it, stands on its own base, and
 gets user input through a small physical keypad and a microphone (for
-sound-reactive lighting effects). This folder holds thirteen related
+sound-reactive lighting effects). This folder holds fourteen related
 design explorations that make up that tower and its accessories — some
 are alternate/independent takes on the same idea (different dimensions,
-not interchangeable), rather than thirteen parts of one single finished
+not interchangeable), rather than fourteen parts of one single finished
 assembly:
 
 | Part | Function in the totem |
@@ -25,6 +25,7 @@ assembly:
 | **Hinge Bracket** | Flat ring with a pivot hole and 3 squared-off corners, from a hand sketch — a standalone hinge knuckle. |
 | **Hinge Yoke** | Two hinge-knuckle rings spaced apart on a connecting plate, forming a clevis/fork for an 8mm axle. |
 | **Hinge Coupler** | Plain spacer ring that rides on the axle in the gap between the Hinge Yoke's 2 rings. |
+| **Hinge Yoke Tube Mount** | A 51mm-ID tube with 3 hinge-yoke clevises evenly spaced around its outside, for mounting the totem hinge directly onto a tube. |
 
 ### Logo
 
@@ -894,3 +895,60 @@ run on anything it considers multi-user data and fails with
 `Modifiers cannot be applied to multi-user data`. Fixed by forcing the
 mesh single-user right after import (`obj.data = obj.data.copy()`
 whenever `obj.data.users > 1`) before adding or applying any modifiers.
+
+## Hinge Yoke Tube Mount
+
+### Overview
+
+A hollow tube with 3 hinge-yoke clevises evenly spaced around its
+outer surface, from a reference photo of a printed hinge mounted flush
+against a flat surface: each clevis's connecting plate sits flush
+(embedded slightly into the wall) against the tube, its 2 rings
+project straight outward from it, and the axle-hole axis runs
+tangentially around the tube — parallel to the surface, like the bolt
+in the reference photo — not radially into it. Each clevis is the same
+2-rings-plus-plate geometry as the standalone hinge-yoke shape,
+reoriented so the ring height lines up with the tube's own height and
+placed 120° apart around the tube's circumference. A separate,
+self-contained exploration, unrelated in dimensions to the other parts
+in this folder.
+
+### Geometry
+
+- Tube: `51 mm` inner diameter, `2 mm` wall (`55 mm` outer diameter),
+  `36 mm` tall, open through both ends
+- 3 clevises, evenly spaced (`120°` apart) around the tube
+- Each clevis: identical 2-ring-plus-plate geometry to the standalone
+  hinge yoke (`36 mm` ring diameter, `8 mm` axle hole, `5.1 mm` gap
+  between rings) — reoriented so the ring height (`36 mm`, matching the
+  tube's own height exactly) runs along the tube's axis, and the axle
+  hole runs tangentially around the tube
+- Mounting: each clevis's flat plate face sits `1 mm` (assumed) inside
+  the tube's outer surface, within its `2 mm` wall — a real solid
+  overlap for the union, not just a touching surface
+
+### Source
+
+- JSCAD: [`hinge-yoke-tube-mount.jscad`](./hinge-yoke-tube-mount.jscad)
+- OpenJSCAD: [Open `hinge-yoke-tube-mount.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/hinge-yoke-tube-mount.jscad)
+
+### Outputs
+
+- STL: [`hinge-yoke-tube-mount.stl`](./hinge-yoke-tube-mount.stl)
+- PNG preview (isometric): [`hinge-yoke-tube-mount-iso.png`](./hinge-yoke-tube-mount-iso.png)
+- PNG preview (top): [`hinge-yoke-tube-mount-top.png`](./hinge-yoke-tube-mount-top.png)
+
+### Preview
+
+![Hinge yoke tube mount isometric](./hinge-yoke-tube-mount-iso.png)
+![Hinge yoke tube mount top view](./hinge-yoke-tube-mount-top.png)
+
+### Real bug found building this
+
+`union(tube, ...mounts)` — the hollow tube listed *first* — silently
+sealed the tube's own hollow interior shut: a point probe at the
+tube's center came back solid even though the tube alone, and the 3
+mounts unioned by themselves, were each independently correct. Simply
+reordering to list the hollow tube *last* (`union(...mounts, tube)`)
+fixed it, confirmed by re-running the same probes (interior, wall
+between mounts, each clevis's gap and axle hole).
