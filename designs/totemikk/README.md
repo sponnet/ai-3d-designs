@@ -916,7 +916,7 @@ in this folder.
 ### Geometry
 
 - Tube: `51 mm` inner diameter, `2 mm` wall (`55 mm` outer diameter),
-  `36 mm` tall, open through both ends
+  `50 mm` tall, open through both ends
 - 3 clevises, evenly spaced (`120°` apart) around the tube
 - Each clevis: identical 2-ring-plus-plate geometry to the standalone
   hinge yoke (`36 mm` ring diameter, `8 mm` axle hole, `5.1 mm` gap
@@ -929,8 +929,8 @@ in this folder.
   independent of `TUBE_HEIGHT` — the vertical offset is fixed at the
   clevis's own half-height rather than half of `TUBE_HEIGHT`, so
   changing the tube's height doesn't lift the clevises off the ground
-  or sink them below it; at the default `36 mm` tube height this
-  happens to also land their top flush with the tube's own top
+  or sink them below it. At the current `50 mm` tube height the
+  clevises (`36 mm` tall) stop `14 mm` short of the tube's own top
 
 ### Source
 

@@ -32,7 +32,7 @@ const TUBE_INNER_DIAMETER = 51
 const TUBE_INNER_RADIUS = TUBE_INNER_DIAMETER / 2
 const TUBE_WALL_THICKNESS = 2
 const TUBE_OUTER_RADIUS = TUBE_INNER_RADIUS + TUBE_WALL_THICKNESS
-const TUBE_HEIGHT = 36
+const TUBE_HEIGHT = 50
 
 const MOUNT_COUNT = 3
 const MOUNT_EMBED = 1 // assumed -- how far the yoke's plate face sits
