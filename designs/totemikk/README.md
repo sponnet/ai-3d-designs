@@ -688,32 +688,32 @@ dimensions to the other parts in this folder.
 
 ### Overview
 
-A flat hinge bracket, from a hand sketch: a wide mounting base that
-necks up into a narrower boss (flush with the base's right edge,
-rounded at its top-left corner) carrying a pivot hole. A standalone
-part for now — not yet coupled to the [Wall Hook](#wall-hook) (no
-matching hole/pin there yet); the idea is a pin through this bracket's
-hole would let something (like the Wall Hook) pivot against it. A
-separate exploration, unrelated in dimensions to the other parts in
-this folder.
+Restarted from scratch, simpler than the first version: a ring (round
+outer edge, round center hole) with its left side squared off — both
+the bottom-left and top-left corners of the outer edge are flattened
+into a square corner, while the right side stays a plain round curve.
+The center hole stays a full round circle throughout. A standalone
+part for now — not yet coupled to the [Wall Hook](#wall-hook); the
+idea is a pin through the center hole would let something (like the
+Wall Hook) pivot against it. A separate exploration, unrelated in
+dimensions to the other parts in this folder.
 
 ### Geometry
 
-- Overall width: `36 mm` (at the base)
-- Overall height: `56 mm` (extreme/max)
+- Outer diameter: `36 mm`
+- Center hole: `8 mm` diameter, round, centered
 - Extrusion thickness: `5 mm` (flat profile, matching the Wall Hook)
-- Pivot hole: `8 mm` diameter
-- Base height: `20 mm` (assumed — not dimensioned in the sketch), full
-  `36 mm` width
-- Boss: `24 mm` wide (assumed), flush with the base's right edge (a
-  `12 mm` step on the left where the base is wider than the boss),
-  running from the top of the base up to the full `56 mm` height
-- Boss corner: `10 mm` radius (assumed), rounding just the boss's
-  top-left corner — built by cutting that corner square out, then
-  filling back in with only the matching quarter-circle, leaving it
-  rounded rather than sharp
-- Pivot hole position: centered in the boss, both horizontally and
-  vertically (assumed — not dimensioned)
+- Left side: squared off — both the top-left and bottom-left corners
+  of the `36 mm` outer circle are flattened, giving a flat left edge
+  (`36 mm` tall, at `x = -18 mm`) instead of a curve there
+- Right side: unchanged, a plain `180°` round arc
+
+Built as a right half-disc (the round side) unioned with a square block
+covering the left half (giving it the 2 square corners), with the
+round center hole subtracted from each piece individually before that
+union — subtracting it from the already-unioned outline instead
+silently produces no hole at all (see the case-study note in
+`OPENJSCAD_SKILL.md`).
 
 ### Source
 
