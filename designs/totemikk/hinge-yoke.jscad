@@ -31,17 +31,17 @@ const PLATE_THICKNESS = 5 // how far the connecting plate sticks out
 const SEGMENTS = 64 // full-circle resolution
 
 const ringProfile2D = () => {
-  // Angles must be given positive; going from 270deg to 90deg wraps
-  // through 0deg, i.e. sweeps the right half (a plain circle() can't
-  // express a negative startAngle).
-  const rightHalf = circle({ radius: OUTER_RADIUS, segments: SEGMENTS, startAngle: (3 * Math.PI) / 2, endAngle: Math.PI / 2 })
-  const leftSquare = rectangle({ size: [OUTER_RADIUS, OUTER_DIAMETER], center: [-OUTER_RADIUS / 2, 0] })
+  // 3 of the ring's 4 outer corners are squared off (bottom-left,
+  // top-left, bottom-right); only the top-right corner stays round.
+  const bottomHalf = rectangle({ size: [OUTER_DIAMETER, OUTER_RADIUS], center: [0, -OUTER_RADIUS / 2] })
+  const topLeftQuarter = rectangle({ size: [OUTER_RADIUS, OUTER_RADIUS], center: [-OUTER_RADIUS / 2, OUTER_RADIUS / 2] })
+  const topRightQuarterRound = circle({ radius: OUTER_RADIUS, segments: SEGMENTS, startAngle: 0, endAngle: Math.PI / 2 })
 
   const hole = circle({ radius: HOLE_DIAMETER / 2, segments: SEGMENTS })
   // Cut the hole from each piece before the final union -- subtracting
   // it from the already-unioned outline instead can silently produce
   // no hole at all (see OPENJSCAD_SKILL.md).
-  return union(subtract(rightHalf, hole), subtract(leftSquare, hole))
+  return union(subtract(bottomHalf, hole), subtract(topLeftQuarter, hole), subtract(topRightQuarterRound, hole))
 }
 
 const main = () => {

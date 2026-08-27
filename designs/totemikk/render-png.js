@@ -236,3 +236,11 @@ for (const [file, cameraPosition] of Object.entries(hingeYokeViews)) {
   fs.writeFileSync(path.join(__dirname, file), png)
   console.log('Wrote', file)
 }
+
+// --- hinge-coupler.stl ---
+// Plain spacer ring (8mm ID, 16mm OD, 5.1mm tall) that rides on the
+// axle in the gap between hinge-yoke.jscad's 2 rings.
+const hingeCouplerStlData = fs.readFileSync(path.join(__dirname, 'hinge-coupler.stl'))
+const hingeCouplerPng = stl2png(hingeCouplerStlData, { ...baseOptions, width: 500, height: 500, cameraPosition: [40, -40, 30] })
+fs.writeFileSync(path.join(__dirname, 'hinge-coupler.png'), hingeCouplerPng)
+console.log('Wrote hinge-coupler.png')

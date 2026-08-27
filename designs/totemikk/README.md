@@ -5,10 +5,10 @@
 Totemikk is an LED totem: a modular, 3D-printed tube-shaped tower that
 carries LED strips/electronics inside it, stands on its own base, and
 gets user input through a small physical keypad and a microphone (for
-sound-reactive lighting effects). This folder holds twelve related
+sound-reactive lighting effects). This folder holds thirteen related
 design explorations that make up that tower and its accessories — some
 are alternate/independent takes on the same idea (different dimensions,
-not interchangeable), rather than twelve parts of one single finished
+not interchangeable), rather than thirteen parts of one single finished
 assembly:
 
 | Part | Function in the totem |
@@ -21,9 +21,10 @@ assembly:
 | **Gear Ring** | Toothed ring with a raised hollow collar, sized to the same tube family — a mounting/adapter ring for a rotating or attachable feature at the top or along the tube. |
 | **Mic Holder** | Open-bottom tray that holds a microphone in/on the totem, feeding audio in for sound-reactive LED behavior. |
 | **Bottom Support** | Split-printable hollow cylinder (through-hole + notched top ring) that fits inside the tube near the bottom, giving the internal skeleton/wiring extra support close to the base. |
-| **Wall Hook** | Flat bent-bar hook, from a hand sketch, for hanging the totem on a wall/rail instead of standing it on the Bottom Plug. |
-| **Hinge Bracket** | Flat ring with a pivot hole, from a hand sketch — a standalone hinge knuckle, not yet coupled to the Wall Hook. |
-| **Hinge Yoke** | 2 Hinge Brackets spaced apart on a connecting plate, forming a clevis/fork for an 8mm axle. |
+| **Wall Hook** | Flat bent-bar hook, from a hand sketch, for hanging the totem on a wall or rail. |
+| **Hinge Bracket** | Flat ring with a pivot hole and 3 squared-off corners, from a hand sketch — a standalone hinge knuckle. |
+| **Hinge Yoke** | Two hinge-knuckle rings spaced apart on a connecting plate, forming a clevis/fork for an 8mm axle. |
+| **Hinge Coupler** | Plain spacer ring that rides on the axle in the gap between the Hinge Yoke's 2 rings. |
 
 ### Logo
 
@@ -688,31 +689,29 @@ parts in this folder.
 
 ### Overview
 
-Restarted from scratch, simpler than the first version: a ring (round
-outer edge, round center hole) with its left side squared off — both
-the bottom-left and top-left corners of the outer edge are flattened
-into a square corner, while the right side stays a plain round curve.
-The center hole stays a full round circle throughout. A standalone
-part -- the idea is a pin through the center hole would let something
-pivot against it. A separate exploration, unrelated in dimensions to
-the other parts in this folder.
+A ring (round outer edge, round center hole) with 3 of its 4 outer
+corners squared off — bottom-left, top-left and bottom-right are all
+flattened into a square corner, while only the top-right corner stays
+a plain round curve. The center hole stays a full round circle
+throughout. A standalone part — the idea is a pin through the center
+hole would let something pivot against it. A separate exploration,
+unrelated in dimensions to the other parts in this folder.
 
 ### Geometry
 
 - Outer diameter: `36 mm`
 - Center hole: `8 mm` diameter, round, centered
 - Extrusion thickness: `5 mm`
-- Left side: squared off — both the top-left and bottom-left corners
-  of the `36 mm` outer circle are flattened, giving a flat left edge
-  (`36 mm` tall, at `x = -18 mm`) instead of a curve there
-- Right side: unchanged, a plain `180°` round arc
+- 3 corners squared off (bottom-left, top-left, bottom-right); only
+  the top-right corner is left as a plain round curve
 
-Built as a right half-disc (the round side) unioned with a square block
-covering the left half (giving it the 2 square corners), with the
-round center hole subtracted from each piece individually before that
-union — subtracting it from the already-unioned outline instead
-silently produces no hole at all (see the case-study note in
-`OPENJSCAD_SKILL.md`).
+Built as the bottom half (a rectangle, squares both bottom corners)
+unioned with the top-left quarter (a square block, squares that
+corner) and the top-right quarter (a round pie slice, the one corner
+left round), with the round center hole subtracted from each piece
+individually before that union — subtracting it from the already-
+unioned outline instead silently produces no hole at all (see the
+case-study note in `OPENJSCAD_SKILL.md`).
 
 ### Source
 
@@ -732,23 +731,24 @@ silently produces no hole at all (see the case-study note in
 
 ### Overview
 
-Two identical rings (36mm outer diameter, 8mm center hole, left side
-squared off, right side round), side by side along the extrusion axis
-with a gap between them (wide enough for an 8mm axle to pass straight
-through both center holes, and for something to pivot in the gap),
-joined into one rigid piece by a connecting plate along their flat
-(squared) back edge. The plate sits flush against that flat edge and
-extends straight backward from it, away from the rings — it doesn't
-cut into or overlap the rings' own footprint at all, just adds onto
-their back face, and spans the full run from the front of the first
-ring to the back of the second, closing off the back of the gap too. A
-separate, self-contained exploration, unrelated in dimensions to the
-other parts in this folder.
+Two identical rings (36mm outer diameter, 8mm center hole, 3 of the 4
+outer corners squared off, only the top-right corner round), side by
+side along the extrusion axis with a gap between them (wide enough for
+an 8mm axle to pass straight through both center holes, and for
+something to pivot in the gap), joined into one rigid piece by a
+connecting plate along their flat (squared) back edge. The plate sits
+flush against that flat edge and extends straight backward from it,
+away from the rings — it doesn't cut into or overlap the rings' own
+footprint at all, just adds onto their back face, and spans the full
+run from the front of the first ring to the back of the second,
+closing off the back of the gap too. A separate, self-contained
+exploration, unrelated in dimensions to the other parts in this
+folder.
 
 ### Geometry
 
 - 2 rings, each `36mm` outer diameter, `8mm` center hole, `5mm` thick,
-  left side squared
+  3 of the 4 outer corners squared off (only the top-right stays round)
 - Gap between the rings: `5.1 mm`
 - Connecting plate: `5 mm` thick (how far it sticks out backward from
   the rings' flat edge), spanning the rings' full `36 mm` height and
@@ -770,3 +770,32 @@ other parts in this folder.
 
 ![Hinge yoke isometric](./hinge-yoke-iso.png)
 ![Hinge yoke front](./hinge-yoke-front.png)
+
+## Hinge Coupler
+
+### Overview
+
+A plain round spacer ring, meant to ride on an 8mm axle in the gap
+between 2 hinge-knuckle rings, filling that gap so the axle stays
+centered. A separate, self-contained exploration, unrelated in
+dimensions to the other parts in this folder.
+
+### Geometry
+
+- Outer diameter: `16 mm`
+- Inner diameter: `8 mm`
+- Extrusion height: `5.1 mm`
+
+### Source
+
+- JSCAD: [`hinge-coupler.jscad`](./hinge-coupler.jscad)
+- OpenJSCAD: [Open `hinge-coupler.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/hinge-coupler.jscad)
+
+### Outputs
+
+- STL: [`hinge-coupler.stl`](./hinge-coupler.stl)
+- PNG preview: [`hinge-coupler.png`](./hinge-coupler.png)
+
+### Preview
+
+![Hinge coupler](./hinge-coupler.png)
