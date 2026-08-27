@@ -871,6 +871,19 @@ Before (plain JSCAD export) vs. after (Blender pipeline), same camera angle:
 
 ![Bottom plug beautified isometric](./bottom-plug-beautified-iso.png)
 
+Also run against [`hinge-yoke.stl`](./hinge-yoke.stl) with `--erosion 0`
+(rounding only, no noise texture — `634` verts / `1198` tris in,
+`26154` tris out after remesh + bevel + smooth + decimate; the 2 axle
+holes, the gap between the rings and the connecting plate all verified
+still open/solid via point probes on the output):
+
+- Output: [`hinge-yoke-beautified.stl`](./hinge-yoke-beautified.stl)
+- Editable: [`hinge-yoke-beautified.blend`](./hinge-yoke-beautified.blend)
+
+![Hinge yoke before](./hinge-yoke-iso.png)
+![Hinge yoke after Blender beautify, no erosion](./hinge-yoke-beautified-iso.png)
+![Hinge yoke after Blender beautify, front](./hinge-yoke-beautified-front.png)
+
 ### Real bug found building this
 
 Freshly STL-imported mesh data reports `.data.users == 2` in this
