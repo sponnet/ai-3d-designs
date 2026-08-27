@@ -641,10 +641,15 @@ exploration, unrelated in dimensions to the other parts in this folder.
 
 ### Overview
 
-A flat hook, simpler than the sketch it's based on: a straight foot
-standing on end, that bends 180 degrees at its top into a hook -- a
-plain cane/coat-hook silhouette. It's a 2D profile (a rectangle for the
-foot, plus a half-annulus for the bend) linear-extruded to a flat
+A flat hook, from a hand sketch: a straight foot standing on end, that
+bends 180 degrees at its top into a hook. The bend's inner edge (the
+throat, where whatever it's hung on actually sits) stays a plain round
+curve the whole way round. Its outer edge is round only for the first
+quarter-turn coming off the foot — the sketch's "left side," which had
+to stay round — while the second quarter-turn, toward the open end, is
+squared off into a sharp corner instead of continuing the curve. It's a
+2D profile (foot rectangle + round outer quarter + squared outer
+quarter, with the round throat subtracted) linear-extruded to a flat
 EXTRUDE_HEIGHT, not a round rod. Meant for hanging the totem on a wall
 or rail, as an alternative to standing it on the
 [Bottom Plug](#bottom-plug). A separate exploration, unrelated in
@@ -655,9 +660,11 @@ dimensions to the other parts in this folder.
 - Bar width: `10 mm` (assumed — not specified)
 - Extrusion thickness: `5 mm` (flat profile, extruded straight up)
 - Foot: `180 mm` long, straight, standing on end
-- Bend: `180°` turn at the top, `8 mm` inner radius (given) / `18 mm`
-  outer radius (`= inner radius + bar width`)
-- Overall height: `198 mm` (`180 mm` foot `+ 18 mm` outer bend radius);
+- Bend: `180°` turn at the top, `8 mm` inner (throat) radius (given) /
+  `18 mm` outer reach (`= inner radius + bar width`) — outer edge round
+  for the quarter-turn off the foot, squared to a right angle for the
+  quarter-turn into the open end
+- Overall height: `198 mm` (`180 mm` foot `+ 18 mm` outer bend reach);
   overall width `36 mm` (`-5` to `31 mm`, foot centered on `x = 0`)
 
 ### Source

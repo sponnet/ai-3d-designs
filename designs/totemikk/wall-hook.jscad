@@ -7,33 +7,52 @@ const { translate } = require('@jscad/modeling').transforms
 // its top into a hook -- a simple cane/coat-hook silhouette, flat
 // (2D profile extruded straight up), not a round rod.
 //
-// Built as a 2D profile in the XY plane -- a rectangle for the straight
-// foot, plus a half-annulus (an outer half-disc minus an inner
-// half-disc, both centered on the same point) for the 180-degree bend
-// -- unioned together and linear-extruded by EXTRUDE_HEIGHT. The bend's
-// half-annulus is centered BEND_CENTER_OFFSET to the side of the foot's
-// centerline, exactly far enough that its flat inner-to-outer edge at
-// the bottom lines up with the foot's own top edge, so the 2 pieces
-// meet flush with no gap or overlap.
+// The bend's inner edge (the throat you actually hang something on)
+// stays a plain round curve the whole way round. Its outer edge is
+// round only for the first quarter-turn coming off the foot (the "left
+// side" in the sketch, which must stay round) -- the second
+// quarter-turn, toward the open end, is squared off into a sharp
+// corner instead of continuing the curve.
+//
+// Built as a 2D profile in the XY plane: a rectangle for the straight
+// foot, a quarter-disc pie slice for the round outer quarter, and a
+// square block for the squared-off outer quarter, unioned together --
+// then the full round inner half-disc is subtracted from that union to
+// cut the throat, and the result is linear-extruded by EXTRUDE_HEIGHT.
+// The quarter-disc's straight edge (from its center out to the apex)
+// exactly coincides with the square block's inner edge, so the 2 pieces
+// meet flush with no seam.
 
 const BAR_WIDTH = 10 // assumed -- the flat bar's own width, not specified
-const INNER_RADIUS = 8 // the bend's inner radius
-const OUTER_RADIUS = INNER_RADIUS + BAR_WIDTH
+const INNER_RADIUS = 8 // the bend's inner (throat) radius -- stays round
+const OUTER_RADIUS = INNER_RADIUS + BAR_WIDTH // the round quarter's radius;
+// also the squared quarter's reach, so both quarters end up the same size
 const BEND_CENTER_OFFSET = INNER_RADIUS + BAR_WIDTH / 2 // = the bend's
 // center point's distance from the foot's centerline
 
 const FOOT_LENGTH = 180 // the straight foot, standing on end
 const EXTRUDE_HEIGHT = 5 // flat extrusion thickness
 
-const SEGMENTS = 64 // full-circle resolution; the half-circle bend gets half of this
+const SEGMENTS = 64 // full-circle resolution; each quarter/half gets its share of this
 
 const main = () => {
   const foot = rectangle({ size: [BAR_WIDTH, FOOT_LENGTH], center: [0, FOOT_LENGTH / 2] })
 
   const bendCenter = [BEND_CENTER_OFFSET, FOOT_LENGTH]
-  const outerHalf = translate(bendCenter, circle({ radius: OUTER_RADIUS, segments: SEGMENTS, startAngle: 0, endAngle: Math.PI }))
+  // Round quarter, coming straight off the foot: angle 90-180 (standard
+  // math convention, 0 = +X from center) -- stays a smooth curve.
+  const outerRoundQuarter = translate(bendCenter, circle({ radius: OUTER_RADIUS, segments: SEGMENTS, startAngle: Math.PI / 2, endAngle: Math.PI }))
+  // Squared quarter, toward the open end: a plain square block covering
+  // the same angle-0-90 corner the round quarter's other half would
+  // have occupied, replacing its curve with a sharp corner.
+  const outerSquareQuarter = translate(
+    [bendCenter[0] + OUTER_RADIUS / 2, bendCenter[1] + OUTER_RADIUS / 2],
+    rectangle({ size: [OUTER_RADIUS, OUTER_RADIUS] })
+  )
+  const outerShape = union(outerRoundQuarter, outerSquareQuarter)
+
   const innerHalf = translate(bendCenter, circle({ radius: INNER_RADIUS, segments: SEGMENTS, startAngle: 0, endAngle: Math.PI }))
-  const bend = subtract(outerHalf, innerHalf)
+  const bend = subtract(outerShape, innerHalf)
 
   const profile2D = union(foot, bend)
   return extrudeLinear({ height: EXTRUDE_HEIGHT }, profile2D)
