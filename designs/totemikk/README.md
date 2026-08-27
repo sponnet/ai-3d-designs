@@ -799,3 +799,85 @@ dimensions to the other parts in this folder.
 ### Preview
 
 ![Hinge coupler](./hinge-coupler.png)
+
+## Blender post-processing: `blender-beautify.py`
+
+A separate Blender pipeline (not JSCAD) that takes any of the STLs
+above and "organically" post-processes them: rounds every real corner
+a little, then erodes a small, noisy, random amount of material (never
+adds any) concentrated on edges and curved/organic regions while
+leaving large flat technical faces alone. Meant to run headless with
+Blender's own Python interpreter, not this repo's Node/JSCAD toolchain:
+
+```sh
+blender --background --python blender-beautify.py -- \
+  bottom-plug.stl bottom-plug-beautified.stl \
+  --rounding 1.4 --organic-scale 22 --erosion 0.8 --seed 437
+```
+
+### Pipeline
+
+```
+import STL
+  -> Voxel Remesh (OpenVDB)     -- cleans/unifies the raw CAD mesh
+  -> Bevel (angle-limited)      -- lightly rounds every real corner
+  -> Geometry Nodes erosion     -- 4D noise x curvature mask, along
+                                    the inward normal only (0 .. -erosion mm)
+  -> Smooth                     -- relaxes the eroded surface a touch
+  -> Decimate                   -- brings the triangle count back down
+  -> export STL
+```
+
+The curvature mask is built from a Geometry Nodes "Blur Attribute" on
+vertex position: how far a point sits from a locally-averaged version
+of itself is ~0 on a flat face and bigger on edges/corners/bumps, so
+that value gates how much the noise is allowed to erode at that point.
+The noise itself uses 4D Noise Texture with `seed` wired to the W axis
+(picking a different seed reshuffles the pattern without changing its
+scale), and `organic-scale` (mm) is converted to the noise's Scale
+input as `1 / organic-scale`, so a bigger number means bigger, coarser
+bumps rather than a higher frequency.
+
+Every run also saves an un-applied `<output>.blend` next to the output
+STL, with the whole modifier stack (Remesh / Bevel / the Geometry Nodes
+group / Smooth / Decimate) still live and editable in Blender's UI —
+rerunning the script isn't the only way to retune it.
+
+### Parameters
+
+| Flag | Default | Meaning |
+| --- | --- | --- |
+| `--rounding` | `1.4` mm | Bevel width on real edges/corners |
+| `--organic-scale` | `22` mm | Noise feature size (bigger = coarser bumps) |
+| `--erosion` | `0.8` mm | Max depth removed at a noise peak |
+| `--seed` | `437` | Noise seed — same scale, different pattern |
+| `--voxel-size` | `0.6` mm | Voxel Remesh detail |
+| `--decimate-ratio` | `0.5` | Fraction of triangles kept at the end |
+| `--save-blend` | *(next to output)* | Where to save the editable `.blend` |
+
+### Worked example
+
+Run against [`bottom-plug.stl`](./bottom-plug.stl) with the defaults
+shown above (`3718` verts / `7064` tris in, `35846` tris out after
+remesh + bevel + erosion + smooth + decimate):
+
+- Output: [`bottom-plug-beautified.stl`](./bottom-plug-beautified.stl)
+- Editable: [`bottom-plug-beautified.blend`](./bottom-plug-beautified.blend)
+
+Before (plain JSCAD export) vs. after (Blender pipeline), same camera angle:
+
+![Bottom plug before](./bottom-plug-front.png)
+![Bottom plug after Blender beautify](./bottom-plug-beautified-front.png)
+
+![Bottom plug beautified isometric](./bottom-plug-beautified-iso.png)
+
+### Real bug found building this
+
+Freshly STL-imported mesh data reports `.data.users == 2` in this
+Blender build even though `bpy.data.user_map()` shows only the one
+object actually referencing it — looks like an internal reference-count
+quirk rather than a real second user, but `modifier_apply` refuses to
+run on anything it considers multi-user data and fails with
+`Modifiers cannot be applied to multi-user data`. Fixed by forcing the
+mesh single-user right after import (`obj.data = obj.data.copy()`
+whenever `obj.data.users > 1`) before adding or applying any modifiers.
