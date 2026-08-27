@@ -271,6 +271,12 @@ These were learned iterating a family of small parametric parts under `designs/t
 - Correct API for a tapered cylinder/frustum: `cylinderElliptic({ startRadius: [r1, r1], endRadius: [r2, r2], height, segments })` (elliptic because X/Y radii are given separately; use equal pairs for a circular taper).
 - **Takeaway:** when a primitive call uses parameter names you're not 100% sure exist, dump the function's own source (`primitives.cylinder.toString()` in a quick `node -e`) or check its `measureBoundingBox()` in isolation before trusting the render.
 
+### 2D `subtract()` after a `union()` can silently no-op
+
+- `subtract(union(shapeA, shapeB), hole)` can return a result with **no hole at all** — even when `hole` is a perfectly valid, correctly-positioned 2D circle, and even when `subtract(shapeB, hole)` alone (without the prior union) works correctly. The bug is silent: no error, and the returned area is only off by rounding noise, not by the hole's area — easy to miss without an explicit area/probe check.
+- Found in `hinge-bracket.jscad`: cutting an 8mm pivot hole from a boss-shape-unioned-with-a-base plate did nothing, but cutting the same hole from the boss alone, *then* unioning with the base, worked.
+- **Takeaway:** when a hole only touches one of several unioned pieces, subtract it from that piece first, then union in the rest — don't build the full unioned outline before cutting. Verify with `measureArea()` before/after (should drop by the hole's own area) or a point probe at the hole's center, not just a bounding-box check (the bbox doesn't change either way).
+
 ### Winding order flips what `subtract()` does with a hole shape
 
 - A `polygon({ points })` used as the subtracted "hole" must be wound **counter-clockwise**, or `subtract(shape, hole)` can return something like the hole itself rather than `shape` minus the hole.
