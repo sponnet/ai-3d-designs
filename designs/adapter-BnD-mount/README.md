@@ -86,7 +86,7 @@ size) don't match what you need, they're single constants at the top of
 
 - Reference STL (as uploaded): [`BnD_20Vmax_mount_v6_2017.stl`](./BnD_20Vmax_mount_v6_2017.stl)
 - JSCAD: [`adapter.jscad`](./adapter.jscad)
-- OpenJSCAD: [Open `adapter.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/adapter-BnD-mount/adapter.jscad#)
+- OpenJSCAD: [Open `adapter.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/adapter-BnD-mount/adapter.jscad)
 
 ## Outputs
 

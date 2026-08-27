@@ -13,7 +13,7 @@ Circular-segment bracket — a flat cylinder with one chord face, extruded 15 mm
 
 ## Open in OpenJSCAD
 
-[Open beugel.jscad in OpenJSCAD online editor](https://openjscad.xyz/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/main/designs/beugel/beugel.jscad)
+[Open beugel.jscad in OpenJSCAD online editor](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/main/designs/beugel/beugel.jscad)
 
 ## Preview
 

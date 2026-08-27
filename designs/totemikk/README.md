@@ -79,7 +79,7 @@ and the 51 mm bore stays true (not obstructed) under any of them.
 ### Source
 
 - JSCAD: [`ring.jscad`](./ring.jscad)
-- OpenJSCAD: [Open `ring.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/ring.jscad#)
+- OpenJSCAD: [Open `ring.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/ring.jscad)
 
 ### Outputs
 
@@ -128,7 +128,7 @@ end is slotted.
 ### Source
 
 - JSCAD: [`partition.jscad`](./partition.jscad)
-- OpenJSCAD: [Open `partition.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/partition.jscad#)
+- OpenJSCAD: [Open `partition.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/partition.jscad)
 
 ### Outputs
 
@@ -227,7 +227,7 @@ openjscad.xyz UI, and can be set from the CLI with
 ### Source
 
 - JSCAD: [`totemik-guts.jscad`](./totemik-guts.jscad)
-- OpenJSCAD: [Open `totemik-guts.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/totemik-guts.jscad#)
+- OpenJSCAD: [Open `totemik-guts.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/totemik-guts.jscad)
 
 ### Outputs
 
@@ -290,7 +290,7 @@ fills the guts beam's own recess, with no gap or unfilled stretch.
 ### Source
 
 - JSCAD: [`totemik-guts-coupler.jscad`](./totemik-guts-coupler.jscad)
-- OpenJSCAD: [Open `totemik-guts-coupler.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/totemik-guts-coupler.jscad#)
+- OpenJSCAD: [Open `totemik-guts-coupler.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/totemik-guts-coupler.jscad)
 
 ### Outputs
 
@@ -342,7 +342,7 @@ unrelated in dimensions to the Ring/Partition/Totemik Guts above.
 ### Source
 
 - JSCAD: [`bottom-plug.jscad`](./bottom-plug.jscad)
-- OpenJSCAD: [Open `bottom-plug.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/bottom-plug.jscad#)
+- OpenJSCAD: [Open `bottom-plug.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/bottom-plug.jscad)
 
 ### Outputs
 
@@ -426,7 +426,7 @@ dimensions to the other parts in this folder.
 ### Source
 
 - JSCAD: [`keypad.jscad`](./keypad.jscad)
-- OpenJSCAD: [Open `keypad.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/keypad.jscad#)
+- OpenJSCAD: [Open `keypad.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/keypad.jscad)
 
 ### Outputs
 
@@ -475,7 +475,7 @@ unrelated in dimensions to the other parts in this folder.
 ### Source
 
 - JSCAD: [`gear-ring.jscad`](./gear-ring.jscad)
-- OpenJSCAD: [Open `gear-ring.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/gear-ring.jscad#)
+- OpenJSCAD: [Open `gear-ring.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/gear-ring.jscad)
 
 ### Outputs
 
@@ -539,7 +539,7 @@ other parts in this folder.
 ### Source
 
 - JSCAD: [`mic-holder.jscad`](./mic-holder.jscad)
-- OpenJSCAD: [Open `mic-holder.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/mic-holder.jscad#)
+- OpenJSCAD: [Open `mic-holder.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/mic-holder.jscad)
 
 ### Outputs
 
@@ -618,7 +618,7 @@ exploration, unrelated in dimensions to the other parts in this folder.
 ### Source
 
 - JSCAD: [`bottom-support.jscad`](./bottom-support.jscad)
-- OpenJSCAD: [Open `bottom-support.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/bottom-support.jscad#)
+- OpenJSCAD: [Open `bottom-support.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/bottom-support.jscad)
 
 ### Outputs
 
@@ -670,7 +670,7 @@ dimensions to the other parts in this folder.
 ### Source
 
 - JSCAD: [`wall-hook.jscad`](./wall-hook.jscad)
-- OpenJSCAD: [Open `wall-hook.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/wall-hook.jscad#)
+- OpenJSCAD: [Open `wall-hook.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/wall-hook.jscad)
 
 ### Outputs
 
