@@ -641,42 +641,24 @@ exploration, unrelated in dimensions to the other parts in this folder.
 
 ### Overview
 
-A round rod, bent flat in one plane, from a hand sketch: a long straight
-shaft with a rounded, blunt bottom tip, sweeping through a wide bend at
-the top into a short run that turns 2 more corners — the sketch's "1
-side made rectangular" — before curling back on itself into a small
-round hook that does the actual catching. Reads overall as a round hook
-whose far end has been squared off into a small rectangular profile,
-with only the very tip staying a tight round curl. Built as a bent
-centerline (straight runs + partial-torus bends) with a round rod
-cross-section swept along it, so it comes out as a true round rod, not
-a flat plate — both ends get a rounded (sphere) cap. Meant for hanging
-the totem on a wall or rail, as an alternative to standing it on the
+A flat hook, simpler than the sketch it's based on: a straight foot
+standing on end, that bends 180 degrees at its top into a hook -- a
+plain cane/coat-hook silhouette. It's a 2D profile (a rectangle for the
+foot, plus a half-annulus for the bend) linear-extruded to a flat
+EXTRUDE_HEIGHT, not a round rod. Meant for hanging the totem on a wall
+or rail, as an alternative to standing it on the
 [Bottom Plug](#bottom-plug). A separate exploration, unrelated in
 dimensions to the other parts in this folder.
 
 ### Geometry
 
-- Rod diameter: `10 mm` (assumed — not dimensioned in the sketch)
-- Overall height: `180 mm`, tip to tip, including both rounded end caps
-  (matches the sketch's outer dimension line)
-- Top run: `24 mm` long (centerline), horizontal
-- Side run: `16 mm` long (centerline), down the right side of the top
-  section
-- Hook curl: `8 mm` radius (centerline) — the one round feature the
-  sketch dimensions explicitly, sweeping `270°` (assumed) so the tip
-  curls back and the opening faces upward, actually catching whatever
-  the hook is hung on
-- Top bend: `12 mm` radius (assumed — not dimensioned), the wide,
-  generous curve that turns the main shaft into the top run
-- Corner radius: rod radius `+ 1 mm` (assumed), the small corner that
-  gives the top section its "rectangular" look — kept just barely
-  larger than the rod radius (a torus needs its outer radius bigger
-  than its inner radius) so it reads as a snug, printable, near-square
-  corner rather than a knife edge
-- The straight shaft's own length is solved (not fixed) so the finished
-  piece's overall height comes out to exactly `180 mm` once the top
-  bend and both end caps are added
+- Bar width: `10 mm` (assumed — not specified)
+- Extrusion thickness: `5 mm` (flat profile, extruded straight up)
+- Foot: `180 mm` long, straight, standing on end
+- Bend: `180°` turn at the top, `8 mm` inner radius (given) / `18 mm`
+  outer radius (`= inner radius + bar width`)
+- Overall height: `198 mm` (`180 mm` foot `+ 18 mm` outer bend radius);
+  overall width `36 mm` (`-5` to `31 mm`, foot centered on `x = 0`)
 
 ### Source
 
