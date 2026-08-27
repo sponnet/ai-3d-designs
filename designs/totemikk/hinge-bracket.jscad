@@ -22,7 +22,9 @@ const THICKNESS = 5 // flat extrusion thickness, matching wall-hook.jscad
 
 const SEGMENTS = 64 // full-circle resolution
 
-const main = () => {
+// The 2D profile alone, exported so hinge-yoke.jscad can reuse it for
+// both of its 2 rings without duplicating this geometry.
+const profile2D = () => {
   // Angles must be given positive; going from 270deg to 90deg wraps
   // through 0deg, i.e. sweeps the right half (a plain circle() can't
   // express a negative startAngle).
@@ -34,9 +36,9 @@ const main = () => {
   // subtract-after-union pitfall found on the previous version of this
   // part (see OPENJSCAD_SKILL.md) -- subtracting from the already-
   // unioned outerShape silently produced no hole at all last time.
-  const profile2D = union(subtract(rightHalf, hole), subtract(leftSquare, hole))
-
-  return extrudeLinear({ height: THICKNESS }, profile2D)
+  return union(subtract(rightHalf, hole), subtract(leftSquare, hole))
 }
 
-module.exports = { main }
+const main = () => extrudeLinear({ height: THICKNESS }, profile2D())
+
+module.exports = { main, profile2D, OUTER_DIAMETER, OUTER_RADIUS, HOLE_DIAMETER, THICKNESS }

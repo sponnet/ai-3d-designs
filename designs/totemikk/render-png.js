@@ -222,3 +222,17 @@ const hingeBracketStlData = fs.readFileSync(path.join(__dirname, 'hinge-bracket.
 const hingeBracketPng = stl2png(hingeBracketStlData, { ...baseOptions, width: 600, height: 600, cameraPosition: [0, 0, 300] })
 fs.writeFileSync(path.join(__dirname, 'hinge-bracket-front.png'), hingeBracketPng)
 console.log('Wrote hinge-bracket-front.png')
+
+// --- hinge-yoke.stl ---
+// 2 hinge-bracket rings, spaced apart along Z, joined by a connecting
+// plate along their flat back edge -- a clevis/fork for an 8mm axle.
+const hingeYokeStlData = fs.readFileSync(path.join(__dirname, 'hinge-yoke.stl'))
+const hingeYokeViews = {
+  'hinge-yoke-iso.png': [80, -80, 40],
+  'hinge-yoke-front.png': [0, 0, 300]
+}
+for (const [file, cameraPosition] of Object.entries(hingeYokeViews)) {
+  const png = stl2png(hingeYokeStlData, { ...baseOptions, width: 700, height: 600, cameraPosition })
+  fs.writeFileSync(path.join(__dirname, file), png)
+  console.log('Wrote', file)
+}
