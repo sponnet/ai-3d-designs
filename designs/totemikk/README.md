@@ -72,6 +72,13 @@ assembly:
   hollow shape was listed first instead of last, and a Blender STL
   import quirk (`.data.users == 2` on a freshly imported mesh) that
   blocked `modifier_apply` until worked around.
+- **Bottom Plug redesigned**: the spherical-cap foot was replaced with
+  a plain flat cylinder (outer diameter `51 mm`, `2 mm` rounded bottom
+  edge), and the insertion plug was lengthened from `6.67 mm` to
+  `100 mm` (diameter simplified to `49 mm`, lead-in chamfer dropped).
+  The earlier spherical-foot previews were kept as
+  `bottom-plug-spherical-foot-{front,iso}.png` so the Blender-beautify
+  worked example below still has matching before/after images.
 
 ## Ring
 
@@ -350,35 +357,33 @@ fills the guts beam's own recess, with no gap or unfilled stretch.
 
 ### Overview
 
-Push-fit foot for the bottom of a tube: a short plug that fits up inside
-the tube's bottom opening, with a shallow rounded foot below it that ends
-up touching the ground once installed. The whole piece is a hollow
-shell, not solid. The foot is a shallow spherical cap rather than a full
-hemisphere — flat across its whole diameter, bulging only a little at
-its center. A relief slot cut through the plug's wall lets it flex a
-little if the push-fit ends up too tight. Modeled with the foot at
-`Z < 0` (dome pointing down, flat equator face at `Z = 0`) and the plug
-at `Z > 0`, matching the piece's physical orientation once installed —
-for printing, reorienting plug-side-down in the slicer gives a flat base
-and a self-supporting dome with no overhangs. A separate exploration,
-unrelated in dimensions to the Ring/Partition/Totemik Guts above.
+Push-fit foot for the bottom of a tube: a long plug that fits up inside
+the tube's bottom opening, with a flat cylindrical foot below it that
+ends up touching the ground once installed. The whole piece is a hollow
+shell, not solid. The foot's bottom outer edge is rounded off, rather
+than the shallow spherical cap used in an earlier version. A relief
+slot cut through the plug's wall lets it flex a little if the push-fit
+ends up too tight. Modeled with the foot at `Z < 0` (flat bottom,
+rounded edge) and the plug at `Z > 0`, matching the piece's physical
+orientation once installed — for printing, reorienting plug-side-down
+in the slicer gives a flat base with no overhangs. A separate
+exploration, unrelated in dimensions to the Ring/Partition/Totemik Guts
+above.
 
 ### Geometry
 
-- Tube inner diameter: `49.1 mm`
-- Plug diameter: `49.1 mm` (`0 mm` clearance — matches the tube ID
+- Tube inner diameter: `49 mm`
+- Plug diameter: `49 mm` (`0 mm` clearance — matches the tube ID
   exactly; the relief slot below is what gives it room to seat despite
   the zero clearance, adjust `PLUG_CLEARANCE` for a looser fit instead)
-- Plug height: `6.67 mm` (`20 / 3` — 1/3 of the original assumed `20 mm`)
-- Plug tip: `2 mm` tall lead-in chamfer, shrinking `2 mm` off the
-  diameter, to ease insertion (assumed)
-- Foot: a shallow spherical cap, `52 mm` across (a bit larger than the
-  `49.1 mm` tube, for margin) and only `10 mm` deep at its center —
-  computed from a much larger sphere (radius ≈ `38.8 mm`) so the curve
-  is gentle, not a hemisphere's full curvature
-- Wall thickness: `3 mm`, uniform through both the plug and the foot cap
-  (concentric inner surface, offset inward by `3 mm` along the same
-  sphere center for the foot, and by `3 mm` radius for the plug)
+- Plug height: `100 mm`
+- Foot: a flat cylinder, `51 mm` across and `6.67 mm` (`20 / 3`) tall,
+  with its bottom outer edge rounded off to a `2 mm` radius
+- Wall thickness: `3 mm`, uniform through both the plug and the foot
+  (concentric inner surface, offset inward by `3 mm` radius for both;
+  the foot's inner cavity floor stays flat rather than following the
+  outer edge's rounding, so the wall is `3 mm` or thicker everywhere,
+  never thinner)
 - Relief slot: `2 mm` wide (assumed), cut radially through the plug's
   wall along its full height, from the hollow cavity out past the outer
   surface — gives the plug wall a little compliance now that there's no
@@ -899,16 +904,24 @@ rerunning the script isn't the only way to retune it.
 
 ### Worked example
 
-Run against [`bottom-plug.stl`](./bottom-plug.stl) with the defaults
-shown above (`3718` verts / `7064` tris in, `35846` tris out after
-remesh + bevel + erosion + smooth + decimate):
+Run against an earlier version of [`bottom-plug.stl`](./bottom-plug.stl)
+— the spherical-foot design, before it was replaced with the current
+flat-foot cylinder — with the defaults shown above (`3718` verts /
+`7064` tris in, `35846` tris out after remesh + bevel + erosion +
+smooth + decimate). The before/after images below are historical,
+kept from that earlier spherical-foot version — see
+[`bottom-plug-spherical-foot-front.png`](./bottom-plug-spherical-foot-front.png)
+and
+[`bottom-plug-spherical-foot-iso.png`](./bottom-plug-spherical-foot-iso.png)
+for that version's own previews — and no longer match the current
+`bottom-plug.stl` or `bottom-plug-front.png`:
 
 - Output: [`bottom-plug-beautified.stl`](./bottom-plug-beautified.stl)
 - Editable: [`bottom-plug-beautified.blend`](./bottom-plug-beautified.blend)
 
 Before (plain JSCAD export) vs. after (Blender pipeline), same camera angle:
 
-![Bottom plug before](./bottom-plug-front.png)
+![Bottom plug before (spherical-foot version)](./bottom-plug-spherical-foot-front.png)
 ![Bottom plug after Blender beautify](./bottom-plug-beautified-front.png)
 
 ![Bottom plug beautified isometric](./bottom-plug-beautified-iso.png)
