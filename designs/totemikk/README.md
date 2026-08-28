@@ -32,6 +32,47 @@ assembly:
 - [`totemikk-logo-horizontal.svg`](./totemikk-logo-horizontal.svg) — wide/horizontal lockup (shown above)
 - [`totemikk-logo-vertical.svg`](./totemikk-logo-vertical.svg) — tall/vertical lockup, for narrow layouts
 
+## Progress
+
+- **Folder renamed** from `totemik/` to `totemikk/`, reframed around
+  the LED-totem concept, and given the logo shown above (both
+  horizontal and vertical lockups).
+- **Core totem parts** (Ring, Partition, Totemik Guts + Coupler, Bottom
+  Plug, Keypad, Gear Ring, Mic Holder, Bottom Support) were built and
+  refined earlier and haven't changed in this pass — see their own
+  sections below.
+- **Wall Hook**: iterated from an initial round-rod hook reading of a
+  hand sketch, simplified down to a plain flat bar bent 180° at the
+  top, then refined so only one side of that bend is squared off (the
+  other stays round, per a follow-up sketch).
+- **Hinge series**, built up step by step into a small assembly family:
+  - Hinge Bracket — a flat ring with a pivot hole, corners squared off
+    one at a time until 3 of its 4 corners were square and only one
+    stayed round.
+  - Hinge Yoke — 2 Hinge Bracket rings spaced apart with a connecting
+    plate, forming a clevis for an 8mm axle.
+  - Hinge Coupler — a plain spacer ring sized to fill that gap.
+  - Hinge Yoke Tube Mount — 3 Hinge Yoke clevises mounted radially
+    around a hollow tube (51mm ID), oriented to match a reference
+    photo of a real printed hinge; later fixed so the clevises always
+    sit flush on the ground plane regardless of tube height, and the
+    tube height was set to 50mm.
+- **`blender-beautify.py`**: a separate, from-scratch Blender pipeline
+  (Voxel Remesh → Bevel → Geometry Nodes noise erosion → Smooth →
+  Decimate) for organically post-processing any of these STLs. Run
+  against Bottom Plug (with erosion) and Hinge Yoke (rounding only) as
+  worked examples — see the section near the bottom of this README.
+- **All OpenJSCAD links** across every design README in the repo (not
+  just this folder) were switched from the old `?uri=...#` form to the
+  current `openjscad.xyz/v3/#...` form.
+- Several real JSCAD/Blender bugs were found and fixed along the way,
+  each documented in `OPENJSCAD_SKILL.md`'s totemik case-study section:
+  a 2D `subtract()` silently no-op'ing when run after a `union()`, a
+  3D `union()` silently sealing a hollow shape's cavity shut when that
+  hollow shape was listed first instead of last, and a Blender STL
+  import quirk (`.data.users == 2` on a freshly imported mesh) that
+  blocked `modifier_apply` until worked around.
+
 ## Ring
 
 ### Overview
