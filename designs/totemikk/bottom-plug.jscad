@@ -29,25 +29,30 @@ const FOOT_ROUND_RADIUS = 2 // rounds the foot's bottom outer edge
 
 const WALL_THICKNESS = 3
 const SEGMENTS = 96
-const CAVITY_OVERLAP = 1 // extra depth so the plug's and foot's inner
-// cavities overlap cleanly at Z=0 instead of just touching
 
 const SLOT_WIDTH = 2 // assumed -- not specified
-const SLOT_OVERSHOOT = 1 // clears past the outer surface and into the
-// already-hollow cavity, for a clean full-thickness cut regardless of
-// the plug's local radius
+const SLOT_OVERSHOOT = 1 // clears past the outer surface and past the
+// top face, for a clean full-thickness cut regardless of the plug's
+// local radius -- but never below Z=0, so the slot stays confined to
+// the (narrower) plug and doesn't cut into the (wider) foot below it
 
 const plugOuter3D = () =>
   translate([0, 0, PLUG_HEIGHT / 2], cylinder({ radius: PLUG_DIAMETER / 2, height: PLUG_HEIGHT, segments: SEGMENTS }))
 
-// Same shape as plugOuter3D, radius shrunk by WALL_THICKNESS -- the
-// cavity that makes the plug hollow. Extends CAVITY_OVERLAP below Z=0
-// so it overlaps cleanly with the foot's inner cavity.
+// Same radius as the plug's own cavity (PLUG_DIAMETER/2 - WALL_THICKNESS),
+// but extended all the way down to just inside the foot's rounded
+// bottom instead of stopping at Z=0. Keeping this a single cylinder of
+// constant radius -- rather than a narrower plug cavity sitting above a
+// separate, wider foot cavity -- avoids an inward-facing step/shelf at
+// their junction, which would otherwise be an unsupported overhang when
+// printed. The resulting wall is WALL_THICKNESS thick alongside the
+// plug and thicker than that alongside the foot, which is fine.
 const plugInner3D = () => {
-  const cavityHeight = PLUG_HEIGHT + CAVITY_OVERLAP
+  const bottom = -(FOOT_HEIGHT - WALL_THICKNESS)
+  const height = PLUG_HEIGHT - bottom
   return translate(
-    [0, 0, PLUG_HEIGHT / 2 - CAVITY_OVERLAP / 2],
-    cylinder({ radius: PLUG_DIAMETER / 2 - WALL_THICKNESS, height: cavityHeight, segments: SEGMENTS })
+    [0, 0, bottom + height / 2],
+    cylinder({ radius: PLUG_DIAMETER / 2 - WALL_THICKNESS, height, segments: SEGMENTS })
   )
 }
 
@@ -69,31 +74,19 @@ const footCylinder3D = (radius, roundRadius) => {
 // height -- lets the wall flex/compress a little if the push-fit into
 // the tube ends up too tight, instead of being a fully rigid ring.
 // Runs from near the center out along +X so it fully clears the wall at
-// any radius, without needing to track the local radius.
+// any radius, without needing to track the local radius. Stops exactly
+// at Z=0 (the plug/foot boundary) rather than overshooting below it, so
+// it never reaches into the wider foot.
 const slot3D = () => {
   const outerReach = PLUG_DIAMETER / 2 + SLOT_OVERSHOOT
   const xStart = -SLOT_OVERSHOOT
-  return translate(
-    [(xStart + outerReach) / 2, 0, PLUG_HEIGHT / 2],
-    cuboid({ size: [outerReach - xStart, SLOT_WIDTH, PLUG_HEIGHT + 2 * SLOT_OVERSHOOT] })
-  )
+  const height = PLUG_HEIGHT + SLOT_OVERSHOOT
+  return translate([(xStart + outerReach) / 2, 0, height / 2], cuboid({ size: [outerReach - xStart, SLOT_WIDTH, height] }))
 }
 
 const main = () => {
   const outer = union(plugOuter3D(), footCylinder3D(FOOT_DIAMETER / 2, FOOT_ROUND_RADIUS))
-  const footInnerHeight = FOOT_HEIGHT - WALL_THICKNESS + CAVITY_OVERLAP
-  const footInnerBottom = -(FOOT_HEIGHT - WALL_THICKNESS)
-  const inner = union(
-    plugInner3D(),
-    translate(
-      [0, 0, footInnerBottom + footInnerHeight / 2],
-      cylinder({
-        radius: FOOT_DIAMETER / 2 - WALL_THICKNESS,
-        height: footInnerHeight,
-        segments: SEGMENTS
-      })
-    )
-  )
+  const inner = plugInner3D()
   return subtract(outer, inner, slot3D())
 }
 
