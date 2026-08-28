@@ -1,5 +1,5 @@
-const { cylinder, roundedCylinder, cuboid } = require('@jscad/modeling').primitives
-const { union, intersect, subtract } = require('@jscad/modeling').booleans
+const { cylinder, torus, cuboid } = require('@jscad/modeling').primitives
+const { union, subtract } = require('@jscad/modeling').booleans
 const { translate } = require('@jscad/modeling').transforms
 
 // Bottom plug / foot for a tube with a 49mm inner diameter: a long plug
@@ -57,16 +57,22 @@ const plugInner3D = () => {
 }
 
 // A flat cylinder from Z=-FOOT_HEIGHT to Z=0, bottom outer edge rounded
-// off by roundRadius. Built as a roundedCylinder tall enough to round
-// both its ends, positioned so only its (correctly rounded) bottom end
-// falls within [-FOOT_HEIGHT, 0]; intersecting with that Z-range clips
-// away the fictitious top rounding, leaving a flat top at Z=0.
+// off by roundRadius, built from 3 pieces instead of jscad's own
+// roundedCylinder (which tapers its whole end cap to a point on the
+// axis, not a small edge fillet -- see OPENJSCAD_SKILL.md):
+//   - a full-radius body from the fillet's top down to Z=0
+//   - a torus bridging the body's bottom edge to the cap's edge
+//   - a (radius - roundRadius) cap filling in the flat bottom disc
 const footCylinder3D = (radius, roundRadius) => {
-  const totalHeight = FOOT_HEIGHT + roundRadius
-  const centerZ = roundRadius / 2 - FOOT_HEIGHT / 2
-  const rc = translate([0, 0, centerZ], roundedCylinder({ radius, height: totalHeight, roundRadius, segments: SEGMENTS }))
-  const clip = translate([0, 0, -FOOT_HEIGHT / 2], cuboid({ size: [2 * radius + 10, 2 * radius + 10, FOOT_HEIGHT] }))
-  return intersect(rc, clip)
+  const capRadius = radius - roundRadius
+  const bodyHeight = FOOT_HEIGHT - roundRadius
+  const body = translate([0, 0, -bodyHeight / 2], cylinder({ radius, height: bodyHeight, segments: SEGMENTS }))
+  const fillet = translate(
+    [0, 0, -FOOT_HEIGHT + roundRadius],
+    torus({ innerRadius: roundRadius, outerRadius: capRadius, innerSegments: SEGMENTS, outerSegments: SEGMENTS })
+  )
+  const cap = translate([0, 0, -FOOT_HEIGHT + roundRadius / 2], cylinder({ radius: capRadius, height: roundRadius, segments: SEGMENTS }))
+  return union(body, fillet, cap)
 }
 
 // A relief slot cut radially through the plug's wall, from the (already
