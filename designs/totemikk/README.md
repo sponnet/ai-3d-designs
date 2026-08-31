@@ -619,13 +619,15 @@ each end, open all the way through. 7 evenly-spaced notches are cut into
 that top ring at its inner edge, like a scalloped or castellated
 opening. The whole piece is cut in half through its central (X=0) plane,
 since printing it as 2 separate half-arcs was easier than the full ring.
-A `3 mm` hole goes radially through the wall at the angular middle of
-one half, and each half carries a glue lip at both of its seam ends —
-a rib that stays flush with (parallel to) the cutting plane, fully
-recessed within its own half rather than crossing the seam, reaching
-inward toward the cylinder's center. Both halves get the identical rib,
-so the extra material meets and adds glue contact area beyond the bare
-wall edge when the 2 flat seam faces are pressed together. A separate
+A ring of `3 mm` holes runs all the way around the wall (evenly spaced,
+same idea as the notches, offset half a step so none sit exactly on the
+seam); only the ones inside whichever half is kept end up in the final
+piece. Each half carries a glue lip at both of its seam ends — a rib
+that stays flush with (parallel to) the cutting plane, fully recessed
+within its own half rather than crossing the seam, reaching inward
+toward the cylinder's center. Both halves get the identical rib, so the
+extra material meets and adds glue contact area beyond the bare wall
+edge when the 2 flat seam faces are pressed together. A separate
 exploration, unrelated in dimensions to the other parts in this folder.
 
 ### Geometry
@@ -650,19 +652,21 @@ exploration, unrelated in dimensions to the other parts in this folder.
 - Split in half through the X=0 plane (`CUT_RIGHT_HALF` in the source,
   a plain boolean — `true` keeps the `x<=0` half, `false` keeps `x>=0`)
   so it prints as 2 half-arcs instead of one full ring
-- Radial hole: `3 mm` diameter, straight through the `2 mm` wall at the
-  angular middle of the `x<=0` half (`x=-34mm, y=0`, pointing along -X,
-  vertically centered). Fixed at that absolute position rather than
-  computed per half, so it lands in only the `x<=0` piece — generating
-  the other half simply doesn't reach that location
+- Radial holes: `20`, each `3 mm` diameter, straight through the `2 mm`
+  wall, evenly spaced (every `18°`) all the way around the full circle
+  at vertical center, starting `9°` off the seam so none straddle it.
+  Only the ~10 that land within whichever half `CUT_RIGHT_HALF` keeps
+  end up in the final piece — same trick the notches use, generating
+  the other half simply doesn't reach the ones on its far side
 - Glue lips: at both of the wall's seam crossings (`y = ±35mm`, the
   outer edge where the X=0 cutting plane meets the wall), from the
-  bottom up to `10 mm` short of the top (`40 mm` tall), reaching `6 mm`
+  bottom up to `10 mm` short of the top (`40 mm` tall), reaching `3 mm`
   radially inward from the outer edge (toward the cylinder's center,
-  down to `y = ±29mm`), `2 mm` deep in X — but recessed *into* its own
-  half (`x` from `-2` to `0` for the `x<=0` half, `0` to `2` for the
-  `x>=0` half) rather than crossing the seam. Identical on both halves
-  (mirrored), so the 2 ribs meet flush when the flat seam faces are
+  down to `y = ±32mm` — half the original `6 mm` reach), `2 mm` deep in
+  X — but recessed *into* its own half (`x` from `-2` to `0` for the
+  `x<=0` half, `0` to `2` for the `x>=0` half) rather than crossing the
+  seam. Identical on both halves (mirrored), so the 2 ribs meet flush
+  when the flat seam faces are
   pressed together
 
 ### Source
