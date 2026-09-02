@@ -15,6 +15,7 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
 - [**Totemikk**](./designs/totemikk/): parts for an LED totem — ring/partition shell segments, an internal ring+beam skeleton with a coupler, a push-fit bottom plug/foot, a 4-key keypad, a gear ring, a mic holder, a bottom support, and a wall-mount hook.
 - [**Adapter — BnD mount to tube**](./designs/adapter-BnD-mount/): matches a BnD 20Vmax tool mount's 60x65mm/3-hole back plate on one side, half-shell tube clamp (Ø51mm) with bolted end flanges on the other; 2 pieces sandwich the tube.
 - [**Insta360 tripod leg (sliding slot)**](./designs/insta360-tripod-leg/): variation on the Insta360 tripod mount's leg — flat tapered blade with a rounded hub-end knuckle, but the pivot hole is replaced by a lengthwise slot so the leg can pivot and slide up along the pole once folded. Proposal for a single leg; the central hub is not modeled yet.
+- [**Acid badge**](./designs/acid-badge/): circular band with 24 evenly-spaced 3mm holes, 5mm apart center-to-center.
 
 ## Outputs At A Glance
 
