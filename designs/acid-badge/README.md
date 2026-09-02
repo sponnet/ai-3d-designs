@@ -6,8 +6,8 @@ The classic acid-house smiley — traced from the supplied
 [`bad-smiley-bw.svg`](./bad-smiley-bw.svg) — with a ring of 24 evenly-
 spaced 3.1mm holes following the mouth's own curve, and a 5.1mm
 push-fit hole through each eye. The face ring, mouth and both eyes are
-connected by 3 thin snap-off strips so the whole badge prints as
-**one piece**.
+connected by thin snap-off strips (4 for the mouth, 3 for each eye) so
+the whole badge prints as **one piece**.
 
 ### How the SVG became this shape
 
@@ -48,19 +48,35 @@ single 5.1mm hole.
 
 ### Connecting strips (prints as one piece)
 
-3 thin strips glue the badge together: ring-to-mouth, ring-to-eyeLeft,
-ring-to-eyeRight (the mouth and eyes don't connect directly to each
-other — they don't need to, since they're all reachable through the
-ring). Each strip's endpoint is the closest point between the ring's
-inner boundary and the satellite shape's own outline. The strip is
-`2.5mm` wide through its middle, but necks down to `1mm` **exactly at
-the 2 "snijpunten"** — the points where it actually crosses each
-shape's traced boundary — so snapping it off by hand leaves almost no
-nub on either piece. Past each snijpunt the strip widens back out for
-a short stretch (`1.2mm`) into the shape's own solid material, purely
-so the geometry has real overlapping area to fuse against there (a
-strip that only touches a boundary at a single point doesn't merge
-into one solid — see "Real bugs found building this" below).
+10 thin strips glue the badge together: 4 from the mouth to the ring,
+3 from each eye to the ring (the mouth and eyes don't connect directly
+to each other — they don't need to, since they're all reachable
+through the ring). Each shape's strips are spread evenly by **angle
+from the face center** across that shape's own angular footprint —
+picking "nearest point on the ring" independently for each strip
+clusters badly, since a small shape sitting near a much bigger ring has
+almost every boundary direction pointing at roughly the same nearby
+patch of ring. A minimum separation is also enforced on the satellite
+side, since 2 different ring-side targets can otherwise still map to
+the same corner of a small shape as their nearest point.
+
+Each strip is `2.5mm` wide through its middle, but necks down to `1mm`
+**exactly at the 2 "snijpunten"** — the points where it actually
+crosses each shape's traced boundary — so snapping it off by hand
+leaves almost no nub on either piece. Past each snijpunt the strip
+widens back out for a short stretch (`1.2mm`) into the shape's own
+solid material, purely so the geometry has real overlapping area to
+fuse against there (a strip that only touches a boundary at a single
+point doesn't merge into one solid — see "Real bugs found building
+this" below).
+
+Between any 2 adjacent strips into the same shape there's a small,
+fully-enclosed pocket of open air. That's expected, not a defect: once
+a shape is tied to the ring by more than 1 strip, each additional strip
+topologically closes off one more such pocket — same as the gaps
+between the prongs of a fork. It shows up in the geometry as extra
+small "holes" beyond the 24 mouth + 2 eye holes, all handled by the
+same keyhole-merge step as everything else.
 
 ### Earlier versions
 
@@ -69,8 +85,9 @@ just a plain ring of 24 x 3mm holes with no other shape. The next pass
 (after the SVG) sat the 24 mouth holes on one constant-radius arc from
 the face center. The pass after that moved the holes onto the mouth's
 own centerline but still shipped as 4 disjoint solids with 3mm mouth
-holes and a 3mm extrusion. All are superseded by this one; see git
-history if any of them is ever needed again.
+holes and a 3mm extrusion. The pass after *that* joined the 4 pieces
+with exactly 1 connecting strip each. All are superseded by this one;
+see git history if any of them is ever needed again.
 
 ## Geometry
 
@@ -80,8 +97,8 @@ history if any of them is ever needed again.
   every hole
 - Eye holes: `1` per eye, `5.1 mm` diameter (`5 mm` + `0.1 mm` push-fit
   tolerance), centered on each eye's area-weighted centroid
-- Connecting strips: `3`, `2.5 mm` wide, necked to `1 mm` at each
-  "snijpunt" (see above)
+- Connecting strips: `10` total (`4` mouth-to-ring, `3` per eye-to-ring),
+  `2.5 mm` wide, necked to `1 mm` at each "snijpunt" (see above)
 - Extrusion height: `2 mm`
 - Overall face diameter: `≈180 mm` (derived from the hole spec + the
   SVG's own proportions, not an independently chosen size)
@@ -160,3 +177,19 @@ the shape's own solid interior, before widening back out — guaranteeing
 real overlapping area for `union()` to fuse against, while keeping the
 strip's narrowest point (1mm) exactly at the boundary crossing itself,
 which is what actually matters for a clean, low-nub snap-off.
+
+A fifth issue turned up going from 1 strip per shape to several: simply
+picking each strip's ring-side point as "nearest point on the ring"
+independently clusters badly — a small shape near a much bigger ring
+has nearly every boundary direction land on roughly the same nearby arc
+of that ring, so 3 "independent" strips end up anchored within a few mm
+of each other. That produced 2 large, unexpected extra holes near the
+eyes (18-26mm across) — real chunks bitten out of the eye's own hole
+boundary, not slivers, because an anchor embedding inward right next to
+the eye's own push-fit hole carved into it. Fix: pick ring-side points
+FIRST, evenly spaced by angle from the face center across each shape's
+angular span, then find each one's nearest point on the satellite —
+plus a minimum separation on the satellite side too, since different
+ring angles can still map to the same small corner of a shape as their
+closest point, and an explicit "stay away from this shape's own hole(s)"
+exclusion zone around every candidate anchor point.

@@ -470,6 +470,50 @@ shape) into JSCAD geometry, and 2 serious booleans bugs found doing it.
   the result polygon count is exactly 1 (or whatever's expected) before
   moving on to keyhole-merging — this bug is otherwise silent.
 
+### Connecting a small shape to a big one with several separate strips: 2 more gotchas
+
+- **Picking each strip's target point independently clusters them.**
+  If a small shape sits inside/near a much bigger one (e.g. a satellite
+  shape inside a ring) and each strip's far end is just "nearest point
+  on the big shape," several strips end up anchored within a few mm of
+  each other — nearly every direction around the small shape's boundary
+  has its single nearest point on the big shape in roughly the same
+  nearby patch, since the big shape is comparatively far away in every
+  direction. Symptom: unexpectedly large extra holes after `union()`
+  (tens of mm across, not slivers) where an anchor's embedded-inward
+  overlap zone (see above) accidentally carved into the small shape's
+  OWN interior hole because 2+ strips converged too close together
+  right next to it. **Fix:** choose the target points on the BIG shape
+  first, evenly spaced by angle from a shared center (e.g. the overall
+  design's center) across the small shape's own angular footprint, then
+  find each one's nearest point on the small shape — and still enforce
+  a minimum separation between the small-shape-side points too, since
+  different big-shape angles can still map to the same corner of a
+  small/pointy shape as their nearest point. Also carve out an explicit
+  "stay away from this shape's own interior hole(s)" exclusion zone
+  around every candidate small-shape-side point, sized to the anchor's
+  own embedded width — don't rely on separation-from-other-anchors
+  alone to keep clear of a hole.
+- **Every strip beyond the first, into the same 2 shapes, encloses a
+  new small pocket of open air between it and its neighbor — this is
+  topologically unavoidable, not a bug.** One strip between shape A and
+  shape B doesn't create a new closed loop (A, B and the strip together
+  stay simply-connected). A second strip between the *same* A and B
+  does: going out along strip 1, around part of B, back along strip 2,
+  around part of A traces a closed loop, and that loop necessarily
+  encloses whatever's between the 2 strips. With N strips into the same
+  shape, expect N-1 such pockets. They show up as extra entries in a
+  polygon-clipping `union()` result beyond the holes you actually
+  intended — legitimate ones, not something to "fix": they're just
+  empty space, the same as the gaps between the prongs of a fork, and
+  the same keyhole-merge step handles them like any other hole. Don't
+  spend time trying to eliminate them; do check that an unexpected
+  extra hole isn't instead the *previous* gotcha (a real chunk bitten
+  out of a shape's own hole) by inspecting its size and position —
+  topological pockets sit between 2 strips in otherwise-open space,
+  while a bitten chunk sits right at another hole's edge and is usually
+  much larger/oddly shaped.
+
 ## References
 
 - [JSCAD User Guide](https://openjscad.xyz/guide.html)
