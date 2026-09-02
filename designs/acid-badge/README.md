@@ -4,9 +4,9 @@
 
 The classic acid-house smiley — traced from the supplied
 [`bad-smiley-bw.svg`](./bad-smiley-bw.svg) — with a ring of 24 evenly-
-spaced 3mm holes drilled radially through its mouth, 5mm apart
-center-to-center. The badge is exported as 4 separate solids (the face
-outline ring, the mouth-with-holes, and the 2 eyes), since none of
+spaced 3mm holes following the mouth's own curve, and a 5.1mm push-fit
+hole through each eye. The badge is exported as 4 separate solids (the
+face outline ring, the mouth-with-holes, and the 2 eyes), since none of
 them touch each other.
 
 ### How the SVG became this shape
@@ -21,35 +21,48 @@ centered on the face circle's own center.
 
 ### Fitting the holes to the mouth
 
-The 24 holes sit on an arc centered on the outer face circle's own
-center, as asked ("radiaal ... ten opzichte van het centrum van de
-buitenste cirkel"). Because the mouth isn't a simple arc, the hole
-arc's own radius and angular span were found by checking every hole's
-*entire circle* (not just its center point) against the mouth's traced
-outline, at the radius/span combination that fits the most holes while
-maximizing the chord length between them (radius 140 SVG units, span
-133° out of the ~146° available). That chord length then had to become
-exactly 5mm once scaled to real size, which is what pins down the
-whole badge's final scale — HOLE_SPACING and HOLE_COUNT (given)
-determine the mm-per-SVG-unit scale everything else is built at, not
-the other way around.
+The 24 holes follow the mouth's own local middle rather than sitting on
+one constant-radius arc. For a dense set of angles from the face's own
+center, a ray is cast through the mouth's traced outline; the MIDPOINT
+of that ray's entry/exit crossing becomes a sample of the mouth's local
+centerline. The holes are then walked along that centerline by true
+chord distance (not raw arc length), so consecutive hole centers really
+are 5mm apart in a straight line — matching the original brief exactly.
+Each candidate placement is checked against the mouth's *actual*
+nearest-boundary distance in every direction (not just along the radial
+ray, which under-detects risk near the crescent's pointed tips), and
+the walked window is chosen so every one of the 24 holes keeps at least
+1mm of material on each side. The largest hole spacing that still
+satisfies that margin everywhere pins down the whole badge's scale
+(same principle as the previous constant-radius version, just measured
+along a curve instead of a circle).
 
-### An earlier, simpler version
+### Eye holes
+
+Each eye gets one 5.1mm-diameter hole (5mm + 0.1mm tolerance, sized for
+a push fit), centered on that eye's own area-weighted centroid — not
+just its bounding-box center. The full hole circle is checked the same
+way against the eye's true nearest-boundary distance; both eyes have
+generous margin (roughly 10-12mm) since they're much bigger than a
+single 5.1mm hole.
+
+### Earlier versions
 
 The very first pass at "acid badge" (before the SVG was supplied) was
-just a plain ring of 24 x 3mm holes with no other shape — 5mm apart,
-closing into a full circle since no partial-arc angle was given. That
-version is superseded by this one; see git history if it's ever
-needed again.
+just a plain ring of 24 x 3mm holes with no other shape. The next pass
+(after the SVG) sat the 24 mouth holes on one constant-radius arc from
+the face center. Both are superseded by this one; see git history if
+either is ever needed again.
 
 ## Geometry
 
-- Holes: `24`, each `3 mm` diameter, `5 mm` apart center-to-center
-  (chord distance between adjacent holes), on an arc centered on the
-  face's own center, `140 mm` radius (in the design's own SVG-derived
-  units) sweeping `133°`
-- Extrusion height: `3 mm` (assumed)
-- Overall face diameter: `≈183 mm` (derived from the hole spec + the
+- Mouth holes: `24`, each `3 mm` diameter, `5 mm` apart center-to-center
+  (true chord distance, walked along the mouth's own local centerline),
+  at least `1 mm` of material kept on every side of every hole
+- Eye holes: `1` per eye, `5.1 mm` diameter (`5 mm` + `0.1 mm` push-fit
+  tolerance), centered on each eye's area-weighted centroid
+- Extrusion height: `3 mm`
+- Overall face diameter: `≈180 mm` (derived from the hole spec + the
   SVG's own proportions, not an independently chosen size)
 
 ## Source
@@ -101,3 +114,18 @@ jscad boolean operations at all, just `polygon()` + `extrudeLinear()`.
 Since the 4 resulting pieces don't touch, `main()` returns an array of
 4 separately-extruded solids (jscad/the STL exporter fully support
 this) instead of trying to `union()` them into one.
+
+A third, subtler issue turned up while re-placing the mouth holes along
+its centerline instead of a fixed-radius arc: the first pass measured
+"is there enough material here for a hole" only along the *radial* ray
+from the face center (the same direction used to place the hole). That
+silently passed 2 of the 24 candidate holes right at the tips of the
+crescent, where the boundary curves back on itself and isn't
+perpendicular to the radial ray at all — their full circles actually
+poked outside the mouth outline in a direction the radial check never
+looked at, and `polygon-clipping`'s `difference()` correctly merged
+them into the exterior boundary instead of leaving them as separate
+holes (silently returning 22 holes instead of 24, no error). The fix:
+check each candidate hole's true nearest-boundary distance by casting
+rays in *every* direction from its center, not just the one it was
+placed along.

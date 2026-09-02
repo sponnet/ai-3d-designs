@@ -413,6 +413,35 @@ shape) into JSCAD geometry, and 2 serious booleans bugs found doing it.
   and its STL exporter fully support that (multiple disjoint solids in
   one STL is completely normal and prints fine).
 
+### Checking "enough material around a hole" only along the placement direction is not enough
+
+- A follow-up change moved acid-badge's 24 mouth holes off a fixed-
+  radius arc onto a variable-radius path following the mouth's own
+  local middle (samples built by ray-casting from the face center,
+  taking the midpoint of each ray's entry/exit crossing of the traced
+  mouth outline). The first pass validated each candidate hole by
+  checking material thickness **only along that same radial ray** (the
+  half-length of the entry/exit chord) — which is exactly the direction
+  the hole was placed along, so it reads as "plenty of room" even right
+  at a concave shape's pointed tip, where the boundary curves back and
+  isn't perpendicular to the ray at all.
+- Symptom: silently 2 holes short (22 instead of 24) after the
+  polygon-clipping `difference()` step — no error, no crash, just a
+  result with fewer hole rings than circles subtracted. Both "missing"
+  holes turned out to sit exactly at the two ends of the walked path,
+  right at the mouth's tapering tips, where their full circles actually
+  poked outside the outline in a direction the radial check never
+  looked at; `difference()` correctly merged them into the exterior
+  instead of leaving them as separate holes.
+- **Fix:** when checking whether a hole fits at a candidate point inside
+  *any* traced/organic (non-circular) boundary, measure the nearest-
+  boundary distance by casting rays in a full circle of directions from
+  that point (e.g. every 5-10°) and taking the minimum — not just the
+  one direction the point was derived/placed along. This is the same
+  principle as the earlier "check the hole's full circle, not just its
+  center" lesson above, one level deeper: even a whole-circle check is
+  only as good as the direction(s) it actually samples.
+
 ## References
 
 - [JSCAD User Guide](https://openjscad.xyz/guide.html)
