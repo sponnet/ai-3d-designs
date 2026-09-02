@@ -442,6 +442,34 @@ shape) into JSCAD geometry, and 2 serious booleans bugs found doing it.
   center" lesson above, one level deeper: even a whole-circle check is
   only as good as the direction(s) it actually samples.
 
+### `polygon-clipping`'s `union()` needs real overlapping area to fuse pieces — touching a boundary at one point isn't enough
+
+- A later change connected acid-badge's 4 separate pieces (ring, mouth,
+  2 eyes) with thin snap-off strips so the whole thing prints as one
+  part. The first version of each strip ended exactly *on* the
+  boundary curve of the piece it was joining — geometrically touching,
+  which sounds like it should be enough for a union. It isn't:
+  `polygon-clipping`'s `union()` (like most robust polygon-clipping
+  libraries) only merges shapes into a single polygon where they share
+  real overlapping *area*; a strip whose cross-section at the boundary
+  is a thin sliver that's mostly outside the target shape (because the
+  strip's width there isn't aligned with the boundary's local tangent)
+  can fail to fuse, leaving the union result with more separate
+  polygons than expected (4+ instead of 1) — no error, just an extra
+  entry in the result array.
+- **Fix:** don't end a connecting piece exactly at another shape's
+  boundary. Extend it a small amount (a bit over a millimeter is
+  plenty at this scale) *past* the boundary, into the target shape's
+  own solid interior, so there's guaranteed overlapping area for
+  `union()` to fuse against. If the design also wants a specific
+  narrow/thin point exactly at the boundary (e.g. a snap-off neck for
+  3D-printed parts), that's a separate width control point along the
+  same strip — the strip can neck down to 1mm exactly at the boundary
+  crossing and *then* widen back out again over the last bit of its
+  embedded length, purely to guarantee the fuse. After `union()`, check
+  the result polygon count is exactly 1 (or whatever's expected) before
+  moving on to keyhole-merging — this bug is otherwise silent.
+
 ## References
 
 - [JSCAD User Guide](https://openjscad.xyz/guide.html)

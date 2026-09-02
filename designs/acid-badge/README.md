@@ -4,10 +4,10 @@
 
 The classic acid-house smiley — traced from the supplied
 [`bad-smiley-bw.svg`](./bad-smiley-bw.svg) — with a ring of 24 evenly-
-spaced 3mm holes following the mouth's own curve, and a 5.1mm push-fit
-hole through each eye. The badge is exported as 4 separate solids (the
-face outline ring, the mouth-with-holes, and the 2 eyes), since none of
-them touch each other.
+spaced 3.1mm holes following the mouth's own curve, and a 5.1mm
+push-fit hole through each eye. The face ring, mouth and both eyes are
+connected by 3 thin snap-off strips so the whole badge prints as
+**one piece**.
 
 ### How the SVG became this shape
 
@@ -46,22 +46,43 @@ way against the eye's true nearest-boundary distance; both eyes have
 generous margin (roughly 10-12mm) since they're much bigger than a
 single 5.1mm hole.
 
+### Connecting strips (prints as one piece)
+
+3 thin strips glue the badge together: ring-to-mouth, ring-to-eyeLeft,
+ring-to-eyeRight (the mouth and eyes don't connect directly to each
+other — they don't need to, since they're all reachable through the
+ring). Each strip's endpoint is the closest point between the ring's
+inner boundary and the satellite shape's own outline. The strip is
+`2.5mm` wide through its middle, but necks down to `1mm` **exactly at
+the 2 "snijpunten"** — the points where it actually crosses each
+shape's traced boundary — so snapping it off by hand leaves almost no
+nub on either piece. Past each snijpunt the strip widens back out for
+a short stretch (`1.2mm`) into the shape's own solid material, purely
+so the geometry has real overlapping area to fuse against there (a
+strip that only touches a boundary at a single point doesn't merge
+into one solid — see "Real bugs found building this" below).
+
 ### Earlier versions
 
 The very first pass at "acid badge" (before the SVG was supplied) was
 just a plain ring of 24 x 3mm holes with no other shape. The next pass
 (after the SVG) sat the 24 mouth holes on one constant-radius arc from
-the face center. Both are superseded by this one; see git history if
-either is ever needed again.
+the face center. The pass after that moved the holes onto the mouth's
+own centerline but still shipped as 4 disjoint solids with 3mm mouth
+holes and a 3mm extrusion. All are superseded by this one; see git
+history if any of them is ever needed again.
 
 ## Geometry
 
-- Mouth holes: `24`, each `3 mm` diameter, `5 mm` apart center-to-center
-  (true chord distance, walked along the mouth's own local centerline),
-  at least `1 mm` of material kept on every side of every hole
+- Mouth holes: `24`, each `3.1 mm` diameter, `5 mm` apart
+  center-to-center (true chord distance, walked along the mouth's own
+  local centerline), at least `1 mm` of material kept on every side of
+  every hole
 - Eye holes: `1` per eye, `5.1 mm` diameter (`5 mm` + `0.1 mm` push-fit
   tolerance), centered on each eye's area-weighted centroid
-- Extrusion height: `3 mm`
+- Connecting strips: `3`, `2.5 mm` wide, necked to `1 mm` at each
+  "snijpunt" (see above)
+- Extrusion height: `2 mm`
 - Overall face diameter: `≈180 mm` (derived from the hole spec + the
   SVG's own proportions, not an independently chosen size)
 
@@ -109,11 +130,8 @@ uses the (separately installed, well-tested) `polygon-clipping` npm
 package to compute the real unions/differences, then merges each
 result's holes into its exterior with a "keyhole" bridge (a thin slit
 connecting a hole's boundary to the exterior, turning a polygon-with-
-holes into one simple loop) — producing point loops that need *no*
+holes into one simple loop) — producing a point loop that needs *no*
 jscad boolean operations at all, just `polygon()` + `extrudeLinear()`.
-Since the 4 resulting pieces don't touch, `main()` returns an array of
-4 separately-extruded solids (jscad/the STL exporter fully support
-this) instead of trying to `union()` them into one.
 
 A third, subtler issue turned up while re-placing the mouth holes along
 its centerline instead of a fixed-radius arc: the first pass measured
@@ -129,3 +147,16 @@ holes (silently returning 22 holes instead of 24, no error). The fix:
 check each candidate hole's true nearest-boundary distance by casting
 rays in *every* direction from its center, not just the one it was
 placed along.
+
+A fourth issue turned up gluing the 4 pieces into one with connecting
+strips: a strip whose endpoint sits exactly *on* a shape's boundary
+curve doesn't reliably fuse with `polygon-clipping`'s `union()` — a
+strip only overlapping a boundary at a single touching point stays a
+separate polygon in the result instead of merging into one (the
+perpendicular at that point isn't guaranteed to line up with the local
+boundary tangent, so the touching "contact" can be a sliver with ~0
+actual area). Fix: extend each strip `1.2mm` *past* the boundary, into
+the shape's own solid interior, before widening back out — guaranteeing
+real overlapping area for `union()` to fuse against, while keeping the
+strip's narrowest point (1mm) exactly at the boundary crossing itself,
+which is what actually matters for a clean, low-nub snap-off.
