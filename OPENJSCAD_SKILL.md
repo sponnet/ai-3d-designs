@@ -327,6 +327,92 @@ These were learned iterating a family of small parametric parts under `designs/t
 
 - Several of these parts hollow out a solid shape by building the *outer* surface and a *shrunk* copy of the same construction for the *inner* cavity, then `subtract(outer, inner)`. Writing the shared shape as a function taking the radius (or radii) as a parameter — rather than duplicating the geometry code once per outer/inner — keeps the two versions from drifting out of sync when a dimension changes, and made the later "also cut a through-hole" and "also add a relief slot" follow-up requests quick, additive changes instead of rewrites.
 
+## Case study learnings: acid-badge (SVG-traced smiley + hole arc)
+
+Converting a real SVG (a bezier-curve icon, not a simple parametric
+shape) into JSCAD geometry, and 2 serious booleans bugs found doing it.
+
+### Tracing an SVG path into JSCAD points
+
+- Parse the path `d` attribute's `M`/`L`/`C`/`Z` commands directly (a
+  ~40-line hand-rolled parser is enough; no SVG library was
+  available/needed) and flatten each cubic bezier into N line segments
+  (8 was plenty for a part in the 100-200mm range). `evenodd` fill with
+  multiple subpaths: figure out which subpaths are "solid" fills
+  (unioned) vs. paired outer/inner boundaries of a ring/stroke
+  (subtracted) by checking each subpath's bounding-box center and
+  radius-from-a-shared-center — subpaths sharing a center with very
+  different radius ranges are typically an outer/inner pair forming a
+  ring outline, not a filled disc.
+- SVG's Y axis grows **downward**; negate every traced Y coordinate
+  once (and don't rotate/mirror anything else) to get normal Y-up CAD
+  orientation. Do this negation consistently in one place (e.g. right
+  when building the point arrays) rather than juggling axis flips
+  through several downstream angle formulas.
+- When a design brief asks for a feature to sit "on an arc" within an
+  organic (hand-drawn) shape like a mouth, don't assume the shape is a
+  simple arc at one radius from some center — check the *actual*
+  radius-from-center range across the traced outline's own points
+  first (it can vary a lot). Then search numerically for the best-fit
+  (radius, angular span) by checking whether a full hole *circle*
+  (several sample points around its own circumference, not just its
+  center point) stays inside the target polygon at each candidate —
+  centers-only checks can pass while the hole's edge actually pokes
+  outside a concave boundary.
+
+### 2D `union()`/`subtract()` between 2 concave polygons can silently drop one operand
+
+- If both operands are non-convex and their bounding boxes overlap
+  (e.g. one shape nested inside another, like an eye inside a face
+  outline), `union()`/`subtract()` can return **just one of the 2
+  shapes**, discarding the other completely — no error, no warning.
+  Confirmed this isn't about self-intersections, duplicate points, or
+  vertex count (checked and ruled out); it reproduces with small,
+  clean, hand-written concave polygons (e.g. a 4-pointed star) placed
+  inside another concave shape's bbox, and disappears the moment
+  *either* operand is convex, or the 2 shapes' bounding boxes don't
+  overlap at all.
+- `union(a, b, c, d)` — 4+ arguments in one call — can also come back
+  completely empty even when every individual argument is independently
+  valid and pairwise unions of any 2-3 of them work. Folding
+  `array.reduce((acc, x) => union(acc, x))` instead of a single spread
+  call avoids *that* specific issue, but not the concave-concave one
+  above.
+- **Workaround that actually works:** decompose each concave polygon
+  into triangles first (`@jscad/modeling`'s own earcut triangulator,
+  used internally by `extrudeLinear`, is on disk at
+  `@jscad/modeling/src/operations/extrusions/earcut/index.js` — not
+  part of the public API, but there's no `exports` restriction in its
+  `package.json` blocking a direct `require()` of it), then
+  `union()`/fold every triangle back together. Once every piece fed
+  into `union()` is convex (a triangle always is), the result is
+  correct. This fixes the *silent wrong-answer* bug, but see next.
+- **That workaround has its own failure mode:** rebuilding a ~130+
+  point polygon from its individual triangles means ~130+ sequential
+  `union()` calls, and the floating-point drift from that many
+  boolean ops in a row can leave the final merged shape with real gaps
+  (`extrudeLinear` throwing `geometry is not closed at vertex ...`,
+  sometimes off by 10+ units — not just numerical noise). More
+  triangles (finer bezier flattening, more shapes to combine) makes
+  this worse, not better.
+- **What actually shipped:** for acid-badge.jscad, jscad's own booleans
+  were abandoned for this step entirely. An offline build script
+  (not part of the shipped `.jscad` file) used the separately-installed
+  `polygon-clipping` npm package (a mature, well-tested 2D polygon
+  clipping library) to compute the real unions/differences, then merged
+  each hole into its exterior boundary with a "keyhole" bridge (find
+  the nearest exterior/hole vertex pair whose connecting segment
+  doesn't cross any ring, splice the hole's loop in at that point) —
+  turning every polygon-with-holes into **one simple point loop**
+  needing no jscad boolean at all, just `polygon()` + `extrudeLinear()`.
+  The resulting loops were baked into the `.jscad` file as static point
+  arrays (`polygon-clipping` is a build-time-only tool, not a runtime
+  dependency of the shipped design). Pieces that don't touch each other
+  don't need `union()` at all for export purposes — `main()` can return
+  an **array** of separately-extruded solids, and both the JSCAD engine
+  and its STL exporter fully support that (multiple disjoint solids in
+  one STL is completely normal and prints fine).
+
 ## References
 
 - [JSCAD User Guide](https://openjscad.xyz/guide.html)
@@ -339,6 +425,7 @@ These were learned iterating a family of small parametric parts under `designs/t
 - **Foam cutter:** `designs/foamcutter/` — `npm run foamcutter:stl` / `npm run foamcutter:png` from repo root.
 - **Pill cutter:** `designs/pill-cutter/` — `node designs/pill-cutter/render-png.js` (see also learnings summarized in **Alignment, rotation & booleans** above).
 - **Totemik series:** `designs/totemikk/` — several small related parts (ring, coupler, keypad, mic-holder, bottom-support, bottom-plug), each with its own `.jscad` + STL/PNG outputs and a shared `render-png.js`; see also **Case study learnings: totemik series** above.
+- **Acid badge:** `designs/acid-badge/` — a real SVG traced into JSCAD point data, plus a hole arc; see **Case study learnings: acid-badge** above for the concave-polygon boolean bugs found building it.
 
 ---
 

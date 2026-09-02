@@ -9,7 +9,7 @@ const baseOptions = {
   height: 900,
   backgroundColor: 0xffffff,
   materials: [makeStandardMaterial(1, 0x3a7bd5)],
-  edgeMaterials: [makeEdgeMaterial(0.5, 0x1a1a1a)],
+  edgeMaterials: [makeEdgeMaterial(0.4, 0x1a1a1a)],
   lights: [
     makeAmbientLight(0xffffff, 0.6),
     makeDirectionalLight(1, 1, 1, 0xffffff, 0.8)
@@ -18,8 +18,8 @@ const baseOptions = {
 
 const stlData = fs.readFileSync(path.join(__dirname, 'acid-badge.stl'))
 const views = {
-  'acid-badge-top.png': [0, 0, 200],
-  'acid-badge-iso.png': [60, -60, 60]
+  'acid-badge-top.png': [0, 0, 300],
+  'acid-badge-iso.png': [80, -80, 90]
 }
 for (const [file, cameraPosition] of Object.entries(views)) {
   const png = stl2png(stlData, { ...baseOptions, cameraPosition })
