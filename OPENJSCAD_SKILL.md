@@ -514,6 +514,28 @@ shape) into JSCAD geometry, and 2 serious booleans bugs found doing it.
   while a bitten chunk sits right at another hole's edge and is usually
   much larger/oddly shaped.
 
+### A jagged/zigzag connector is just a chain of the same trick, and `union()` scales fine with many small pieces at once
+
+- Turning a straight connecting strip into an irregular zigzag ("draw
+  it like a lightning bolt with some random corners") doesn't need a
+  new technique: build it as a short straight rectangle per leg (corner
+  to corner), extend each rectangle a bit (a fraction of a mm at this
+  scale) past its own endpoints so consecutive legs genuinely overlap
+  at each corner rather than merely touch, and feed all the leg
+  rectangles into the same `polygon-clipping.union()` call as
+  everything else. The "extend past the endpoint into real overlap"
+  fix from the single-touching-point bug above applies identically
+  between a strip's own segments, not just where it meets another
+  shape.
+- This also confirms `polygon-clipping.union()` handles a big flat list
+  of inputs fine — 40+ small rectangle pieces plus the main shapes in
+  one call unioned correctly with no special batching needed, as long
+  as no individual pair in the mix hits the concave-vs-concave bug from
+  the very first entry in this section.
+- For an irregular/organic look with reproducible output (so a rebuild
+  doesn't shuffle the design every run), use a small seeded PRNG
+  (`mulberry32` is a common ~4-line one) instead of `Math.random()`.
+
 ## References
 
 - [JSCAD User Guide](https://openjscad.xyz/guide.html)
