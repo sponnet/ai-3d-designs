@@ -70,12 +70,16 @@ Each strip runs from its satellite shape (near the face center) out to
 the ring as an irregular zigzag — 2 to 4 corners, placed at randomized
 (but reproducible: seeded) points along the strip with alternating
 sideways jags of 1.5-5mm — instead of a straight line, so it reads as a
-little lightning bolt. Width stays a constant `2mm`, narrower than the
-old straight strips' `2.5mm`. These strips are meant to be **kept**, as
-hangers — there's no more snap-off necking; each end still embeds
-`1.2mm` into its shape's own solid material purely so the geometry has
-real overlapping area for `polygon-clipping`'s `union()` to fuse
-against (see "Real bugs found building this" below).
+little lightning bolt. Every corner is built as ONE clean, sharp vertex
+(a proper mitered stroke outline, not a chain of overlapping
+rectangles — see "Real bugs found building this" below for why that
+matters), so the transition from one zigzag leg to the next is crisp
+rather than leaving a stray overshoot nub. Width stays a constant
+`2mm`, narrower than the old straight strips' `2.5mm`. These strips are
+meant to be **kept**, as hangers — there's no more snap-off necking;
+each end still embeds `1.2mm` into its shape's own solid material
+purely so the geometry has real overlapping area for
+`polygon-clipping`'s `union()` to fuse against.
 
 Between any 2 adjacent strips into the same shape there's a small,
 fully-enclosed pocket of open air. That's expected, not a defect: once
@@ -203,16 +207,22 @@ ring angles can still map to the same small corner of a shape as their
 closest point, and an explicit "stay away from this shape's own hole(s)"
 exclusion zone around every candidate anchor point.
 
-Turning the straight strips into zigzags reused the same fusion trick
-from bug 4 (embedding each end into its shape's own material) rather
-than hitting a new bug: each zigzag is built as a chain of straight
-segments (one short rectangle per corner-to-corner leg), every
-rectangle extended `0.6mm` past its own endpoints so consecutive
-segments actually overlap at each corner instead of merely touching —
-otherwise the same "touching a boundary at one point doesn't fuse"
-problem happens *between the strip's own segments*, not just where it
-meets the ring/satellite. All the segments across all 10 zigzags, plus
-the ring and both satellites-with-holes, are combined in one single
-`polygon-clipping.union()` call — it turns out that's completely fine
-even with 40+ small polygon pieces going in at once, as long as none of
-them individually has the concave-vs-concave issue from bug 1.
+Turning the straight strips into zigzags first tried building each one
+as a chain of straight segments (one short rectangle per corner-to-
+corner leg), every rectangle extended `0.6mm` past its own endpoints so
+consecutive segments would actually overlap at each corner instead of
+merely touching (reusing the fusion trick from bug 4). That *did* fuse
+correctly, but left a small stray overshoot nub sticking out at every
+corner — visible up close in a render — because 2 rectangles extended
+independently past a shared corner don't have matching outer edges
+there; their union is still valid geometry, just visually messy right
+at the joint. The fix: build each zigzag as ONE proper mitered stroke
+polygon instead (offset each interior vertex along the bisector of its
+2 adjacent segment normals, scaled to stay exactly half-width from each
+segment line — a standard line-stroke technique), giving a single clean
+vertex per corner, with a bevel fallback for very acute corners (near a
+full direction reversal) to avoid an unbounded miter spike. All 10 of
+these strip polygons, plus the ring and both satellites-with-holes, are
+still combined in one single `polygon-clipping.union()` call — that
+part scales fine regardless of how each input polygon's own edges were
+built.

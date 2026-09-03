@@ -514,24 +514,37 @@ shape) into JSCAD geometry, and 2 serious booleans bugs found doing it.
   while a bitten chunk sits right at another hole's edge and is usually
   much larger/oddly shaped.
 
-### A jagged/zigzag connector is just a chain of the same trick, and `union()` scales fine with many small pieces at once
+### A jagged/zigzag connector: build ONE mitered stroke polygon, don't chain overlapping rectangles
 
 - Turning a straight connecting strip into an irregular zigzag ("draw
-  it like a lightning bolt with some random corners") doesn't need a
-  new technique: build it as a short straight rectangle per leg (corner
-  to corner), extend each rectangle a bit (a fraction of a mm at this
-  scale) past its own endpoints so consecutive legs genuinely overlap
-  at each corner rather than merely touch, and feed all the leg
-  rectangles into the same `polygon-clipping.union()` call as
-  everything else. The "extend past the endpoint into real overlap"
-  fix from the single-touching-point bug above applies identically
-  between a strip's own segments, not just where it meets another
-  shape.
-- This also confirms `polygon-clipping.union()` handles a big flat list
-  of inputs fine — 40+ small rectangle pieces plus the main shapes in
-  one call unioned correctly with no special batching needed, as long
-  as no individual pair in the mix hits the concave-vs-concave bug from
-  the very first entry in this section.
+  it like a lightning bolt with some random corners") is tempting to
+  build as a chain of short rectangles, one per leg (corner to corner),
+  each extended a bit past its own endpoints so consecutive legs
+  genuinely overlap at each corner rather than merely touch (reusing
+  the "extend past the endpoint into real overlap" fix from the
+  single-touching-point bug above). That union *is* geometrically
+  valid — but it leaves a small stray overshoot nub sticking out at
+  every corner, visible up close, because 2 independently-extended
+  rectangles meeting at a shared point don't have matching outer edges
+  right there.
+- **Better:** build the whole zigzag as ONE proper mitered stroke
+  polygon instead — a standard line-stroke technique. For each interior
+  vertex, take the 2 adjacent segments' normals, average and normalize
+  them into a bisector, then offset the vertex along that bisector by
+  `halfWidth / dot(bisector, eitherNormal)` (this keeps the offset edge
+  exactly `halfWidth` from each segment's own line, i.e. a true miter
+  join) — do this on both sides for the stroke's 2 edges, closing them
+  into one polygon. Cap the miter length (e.g. 4x the half-width) and
+  fall back to a 2-point bevel for very acute corners (near a full
+  direction reversal), where an uncapped miter would spike out
+  arbitrarily far. This gives one clean vertex per corner with no
+  overshoot, and is honestly not more code than the rectangle-chain
+  approach.
+- `polygon-clipping.union()` handles a big flat list of inputs fine
+  either way — 10+ strip polygons plus the main shapes in one call
+  unioned correctly with no special batching needed, as long as no
+  individual pair in the mix hits the concave-vs-concave bug from the
+  very first entry in this section.
 - For an irregular/organic look with reproducible output (so a rebuild
   doesn't shuffle the design every run), use a small seeded PRNG
   (`mulberry32` is a common ~4-line one) instead of `Math.random()`.
