@@ -1,25 +1,84 @@
-# Totemik
+# Totemikk
 
-Nine related explorations for the Totemik project:
+<img src="./totemikk-logo-horizontal.svg" alt="Totemikk logo" width="480">
 
-- **Ring** and **Partition**: a ring band with a push-fit partition strip
-  (see below).
-- **Totemik Guts**: a separate, independent exploration of a ring + beam
-  design (different dimensions from the Ring above — not interchangeable
-  with it).
-- **Totemik Guts Coupler**: a straight extension piece that joins 2
-  Totemik Guts beams end to end (same beam cross-section).
-- **Bottom Plug**: a push-fit foot for the bottom of a 49.1mm-ID tube,
-  unrelated in dimensions to the other explorations.
-- **Keypad**: a minimalist 4-key Cherry MX switch bar with mounting tabs,
-  also unrelated in dimensions to the other explorations.
-- **Gear Ring**: a toothed ring with a raised collar, also unrelated in
-  dimensions to the other explorations.
-- **Mic Holder**: an open-bottom tray for a microphone, also unrelated in
-  dimensions to the other explorations.
-- **Bottom Support**: a hollow cylinder with a through-hole, thicker end
-  rings and a thin 2mm-wall middle section, also unrelated in dimensions
-  to the other explorations.
+Totemikk is an LED totem: a modular, 3D-printed tube-shaped tower that
+carries LED strips/electronics inside it, stands on its own base, and
+gets user input through a small physical keypad and a microphone (for
+sound-reactive lighting effects). This folder holds fourteen related
+design explorations that make up that tower and its accessories — some
+are alternate/independent takes on the same idea (different dimensions,
+not interchangeable), rather than fourteen parts of one single finished
+assembly:
+
+| Part | Function in the totem |
+| --- | --- |
+| **Ring** + **Partition** | Outer ring band (with a push-fit partition strip across a notch in it) forming a segment of the totem's outer shell/structure. |
+| **Totemik Guts** | Internal ring + beam skeleton that runs up the inside of the totem tube, giving it a rigid spine to mount LEDs/electronics against. |
+| **Totemik Guts Coupler** | Straight joiner that extends 2 Totemik Guts spine sections end to end, letting the internal skeleton run taller than one printed piece. |
+| **Bottom Plug** | Push-fit foot that plugs into the bottom opening of the totem's tube and touches the ground, giving the standing totem a stable, closed base. |
+| **Keypad** | 4-key physical control panel (Cherry MX switches) mounted on the totem for user input — e.g. switching modes/colors/brightness. |
+| **Gear Ring** | Toothed ring with a raised hollow collar, sized to the same tube family — a mounting/adapter ring for a rotating or attachable feature at the top or along the tube. |
+| **Mic Holder** | Open-bottom tray that holds a microphone in/on the totem, feeding audio in for sound-reactive LED behavior. |
+| **Bottom Support** | Split-printable hollow cylinder (through-hole + notched top ring) that fits inside the tube near the bottom, giving the internal skeleton/wiring extra support close to the base. |
+| **Wall Hook** | Flat bent-bar hook, from a hand sketch, for hanging the totem on a wall or rail. |
+| **Hinge Bracket** | Flat ring with a pivot hole and 3 squared-off corners, from a hand sketch — a standalone hinge knuckle. |
+| **Hinge Yoke** | Two hinge-knuckle rings spaced apart on a connecting plate, forming a clevis/fork for an 8mm axle. |
+| **Hinge Coupler** | Plain spacer ring that rides on the axle in the gap between the Hinge Yoke's 2 rings. |
+| **Hinge Yoke Tube Mount** | A 51mm-ID tube with 3 hinge-yoke clevises evenly spaced around its outside, for mounting the totem hinge directly onto a tube. |
+
+### Logo
+
+- [`totemikk-logo-horizontal.svg`](./totemikk-logo-horizontal.svg) — wide/horizontal lockup (shown above)
+- [`totemikk-logo-vertical.svg`](./totemikk-logo-vertical.svg) — tall/vertical lockup, for narrow layouts
+
+## Progress
+
+- **Folder renamed** from `totemik/` to `totemikk/`, reframed around
+  the LED-totem concept, and given the logo shown above (both
+  horizontal and vertical lockups).
+- **Core totem parts** (Ring, Partition, Totemik Guts + Coupler, Bottom
+  Plug, Keypad, Gear Ring, Mic Holder, Bottom Support) were built and
+  refined earlier and haven't changed in this pass — see their own
+  sections below.
+- **Wall Hook**: iterated from an initial round-rod hook reading of a
+  hand sketch, simplified down to a plain flat bar bent 180° at the
+  top, then refined so only one side of that bend is squared off (the
+  other stays round, per a follow-up sketch).
+- **Hinge series**, built up step by step into a small assembly family:
+  - Hinge Bracket — a flat ring with a pivot hole, corners squared off
+    one at a time until 3 of its 4 corners were square and only one
+    stayed round.
+  - Hinge Yoke — 2 Hinge Bracket rings spaced apart with a connecting
+    plate, forming a clevis for an 8mm axle.
+  - Hinge Coupler — a plain spacer ring sized to fill that gap.
+  - Hinge Yoke Tube Mount — 3 Hinge Yoke clevises mounted radially
+    around a hollow tube (51mm ID), oriented to match a reference
+    photo of a real printed hinge; later fixed so the clevises always
+    sit flush on the ground plane regardless of tube height, and the
+    tube height was set to 50mm.
+- **`blender-beautify.py`**: a separate, from-scratch Blender pipeline
+  (Voxel Remesh → Bevel → Geometry Nodes noise erosion → Smooth →
+  Decimate) for organically post-processing any of these STLs. Run
+  against Bottom Plug (with erosion) and Hinge Yoke (rounding only) as
+  worked examples — see the section near the bottom of this README.
+- **All OpenJSCAD links** across every design README in the repo (not
+  just this folder) were switched from the old `?uri=...#` form to the
+  current `openjscad.xyz/v3/#...` form.
+- Several real JSCAD/Blender bugs were found and fixed along the way,
+  each documented in `OPENJSCAD_SKILL.md`'s totemik case-study section:
+  a 2D `subtract()` silently no-op'ing when run after a `union()`, a
+  3D `union()` silently sealing a hollow shape's cavity shut when that
+  hollow shape was listed first instead of last, and a Blender STL
+  import quirk (`.data.users == 2` on a freshly imported mesh) that
+  blocked `modifier_apply` until worked around.
+- **Bottom Plug redesigned**: the spherical-cap foot was replaced with
+  a plain flat cylinder (outer diameter `51 mm`, `2 mm` rounded bottom
+  edge), and the insertion plug was lengthened from `6.67 mm` to
+  `100 mm` (diameter simplified to `49 mm`, lead-in chamfer dropped).
+  The earlier spherical-foot previews were kept as
+  `bottom-plug-spherical-foot-{front,iso}.png` so the Blender-beautify
+  worked example below still has matching before/after images.
 
 ## Ring
 
@@ -72,7 +131,7 @@ and the 51 mm bore stays true (not obstructed) under any of them.
 ### Source
 
 - JSCAD: [`ring.jscad`](./ring.jscad)
-- OpenJSCAD: [Open `ring.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/ring.jscad#)
+- OpenJSCAD: [Open `ring.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/ring.jscad)
 
 ### Outputs
 
@@ -121,7 +180,7 @@ end is slotted.
 ### Source
 
 - JSCAD: [`partition.jscad`](./partition.jscad)
-- OpenJSCAD: [Open `partition.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/partition.jscad#)
+- OpenJSCAD: [Open `partition.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/partition.jscad)
 
 ### Outputs
 
@@ -220,7 +279,7 @@ openjscad.xyz UI, and can be set from the CLI with
 ### Source
 
 - JSCAD: [`totemik-guts.jscad`](./totemik-guts.jscad)
-- OpenJSCAD: [Open `totemik-guts.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/totemik-guts.jscad#)
+- OpenJSCAD: [Open `totemik-guts.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/totemik-guts.jscad)
 
 ### Outputs
 
@@ -283,7 +342,7 @@ fills the guts beam's own recess, with no gap or unfilled stretch.
 ### Source
 
 - JSCAD: [`totemik-guts-coupler.jscad`](./totemik-guts-coupler.jscad)
-- OpenJSCAD: [Open `totemik-guts-coupler.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/totemik-guts-coupler.jscad#)
+- OpenJSCAD: [Open `totemik-guts-coupler.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/totemik-guts-coupler.jscad)
 
 ### Outputs
 
@@ -298,35 +357,33 @@ fills the guts beam's own recess, with no gap or unfilled stretch.
 
 ### Overview
 
-Push-fit foot for the bottom of a tube: a short plug that fits up inside
-the tube's bottom opening, with a shallow rounded foot below it that ends
-up touching the ground once installed. The whole piece is a hollow
-shell, not solid. The foot is a shallow spherical cap rather than a full
-hemisphere — flat across its whole diameter, bulging only a little at
-its center. A relief slot cut through the plug's wall lets it flex a
-little if the push-fit ends up too tight. Modeled with the foot at
-`Z < 0` (dome pointing down, flat equator face at `Z = 0`) and the plug
-at `Z > 0`, matching the piece's physical orientation once installed —
-for printing, reorienting plug-side-down in the slicer gives a flat base
-and a self-supporting dome with no overhangs. A separate exploration,
-unrelated in dimensions to the Ring/Partition/Totemik Guts above.
+Push-fit foot for the bottom of a tube: a long plug that fits up inside
+the tube's bottom opening, with a flat cylindrical foot below it that
+ends up touching the ground once installed. The whole piece is a hollow
+shell, not solid. The foot's bottom outer edge is rounded off, rather
+than the shallow spherical cap used in an earlier version. A relief
+slot cut through the plug's wall lets it flex a little if the push-fit
+ends up too tight. Modeled with the foot at `Z < 0` (flat bottom,
+rounded edge) and the plug at `Z > 0`, matching the piece's physical
+orientation once installed — for printing, reorienting plug-side-down
+in the slicer gives a flat base with no overhangs. A separate
+exploration, unrelated in dimensions to the Ring/Partition/Totemik Guts
+above.
 
 ### Geometry
 
-- Tube inner diameter: `49.1 mm`
-- Plug diameter: `49.1 mm` (`0 mm` clearance — matches the tube ID
+- Tube inner diameter: `49 mm`
+- Plug diameter: `49 mm` (`0 mm` clearance — matches the tube ID
   exactly; the relief slot below is what gives it room to seat despite
   the zero clearance, adjust `PLUG_CLEARANCE` for a looser fit instead)
-- Plug height: `6.67 mm` (`20 / 3` — 1/3 of the original assumed `20 mm`)
-- Plug tip: `2 mm` tall lead-in chamfer, shrinking `2 mm` off the
-  diameter, to ease insertion (assumed)
-- Foot: a shallow spherical cap, `52 mm` across (a bit larger than the
-  `49.1 mm` tube, for margin) and only `10 mm` deep at its center —
-  computed from a much larger sphere (radius ≈ `38.8 mm`) so the curve
-  is gentle, not a hemisphere's full curvature
-- Wall thickness: `3 mm`, uniform through both the plug and the foot cap
-  (concentric inner surface, offset inward by `3 mm` along the same
-  sphere center for the foot, and by `3 mm` radius for the plug)
+- Plug height: `100 mm`
+- Foot: a flat cylinder, `51 mm` across and `6.67 mm` (`20 / 3`) tall,
+  with its bottom outer edge rounded off to a `2 mm` radius
+- Wall thickness: `3 mm`, uniform through both the plug and the foot
+  (concentric inner surface, offset inward by `3 mm` radius for both;
+  the foot's inner cavity floor stays flat rather than following the
+  outer edge's rounding, so the wall is `3 mm` or thicker everywhere,
+  never thinner)
 - Relief slot: `2 mm` wide (assumed), cut radially through the plug's
   wall along its full height, from the hollow cavity out past the outer
   surface — gives the plug wall a little compliance now that there's no
@@ -335,7 +392,7 @@ unrelated in dimensions to the Ring/Partition/Totemik Guts above.
 ### Source
 
 - JSCAD: [`bottom-plug.jscad`](./bottom-plug.jscad)
-- OpenJSCAD: [Open `bottom-plug.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/bottom-plug.jscad#)
+- OpenJSCAD: [Open `bottom-plug.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/bottom-plug.jscad)
 
 ### Outputs
 
@@ -419,7 +476,7 @@ dimensions to the other parts in this folder.
 ### Source
 
 - JSCAD: [`keypad.jscad`](./keypad.jscad)
-- OpenJSCAD: [Open `keypad.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/keypad.jscad#)
+- OpenJSCAD: [Open `keypad.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/keypad.jscad)
 
 ### Outputs
 
@@ -468,7 +525,7 @@ unrelated in dimensions to the other parts in this folder.
 ### Source
 
 - JSCAD: [`gear-ring.jscad`](./gear-ring.jscad)
-- OpenJSCAD: [Open `gear-ring.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/gear-ring.jscad#)
+- OpenJSCAD: [Open `gear-ring.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/gear-ring.jscad)
 
 ### Outputs
 
@@ -532,7 +589,7 @@ other parts in this folder.
 ### Source
 
 - JSCAD: [`mic-holder.jscad`](./mic-holder.jscad)
-- OpenJSCAD: [Open `mic-holder.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/mic-holder.jscad#)
+- OpenJSCAD: [Open `mic-holder.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/mic-holder.jscad)
 
 ### Outputs
 
@@ -562,13 +619,15 @@ each end, open all the way through. 7 evenly-spaced notches are cut into
 that top ring at its inner edge, like a scalloped or castellated
 opening. The whole piece is cut in half through its central (X=0) plane,
 since printing it as 2 separate half-arcs was easier than the full ring.
-A `3 mm` hole goes radially through the wall at the angular middle of
-one half, and each half carries a glue lip at both of its seam ends —
-a rib that stays flush with (parallel to) the cutting plane, fully
-recessed within its own half rather than crossing the seam, reaching
-inward toward the cylinder's center. Both halves get the identical rib,
-so the extra material meets and adds glue contact area beyond the bare
-wall edge when the 2 flat seam faces are pressed together. A separate
+A ring of `3 mm` holes runs all the way around the wall (evenly spaced,
+same idea as the notches, offset half a step so none sit exactly on the
+seam); only the ones inside whichever half is kept end up in the final
+piece. Each half carries a glue lip at both of its seam ends — a rib
+that stays flush with (parallel to) the cutting plane, fully recessed
+within its own half rather than crossing the seam, reaching inward
+toward the cylinder's center. Both halves get the identical rib, so the
+extra material meets and adds glue contact area beyond the bare wall
+edge when the 2 flat seam faces are pressed together. A separate
 exploration, unrelated in dimensions to the other parts in this folder.
 
 ### Geometry
@@ -593,25 +652,27 @@ exploration, unrelated in dimensions to the other parts in this folder.
 - Split in half through the X=0 plane (`CUT_RIGHT_HALF` in the source,
   a plain boolean — `true` keeps the `x<=0` half, `false` keeps `x>=0`)
   so it prints as 2 half-arcs instead of one full ring
-- Radial hole: `3 mm` diameter, straight through the `2 mm` wall at the
-  angular middle of the `x<=0` half (`x=-34mm, y=0`, pointing along -X,
-  vertically centered). Fixed at that absolute position rather than
-  computed per half, so it lands in only the `x<=0` piece — generating
-  the other half simply doesn't reach that location
+- Radial holes: `20`, each `3 mm` diameter, straight through the `2 mm`
+  wall, evenly spaced (every `18°`) all the way around the full circle
+  at vertical center, starting `9°` off the seam so none straddle it.
+  Only the ~10 that land within whichever half `CUT_RIGHT_HALF` keeps
+  end up in the final piece — same trick the notches use, generating
+  the other half simply doesn't reach the ones on its far side
 - Glue lips: at both of the wall's seam crossings (`y = ±35mm`, the
   outer edge where the X=0 cutting plane meets the wall), from the
-  bottom up to `10 mm` short of the top (`40 mm` tall), reaching `6 mm`
+  bottom up to `10 mm` short of the top (`40 mm` tall), reaching `3 mm`
   radially inward from the outer edge (toward the cylinder's center,
-  down to `y = ±29mm`), `2 mm` deep in X — but recessed *into* its own
-  half (`x` from `-2` to `0` for the `x<=0` half, `0` to `2` for the
-  `x>=0` half) rather than crossing the seam. Identical on both halves
-  (mirrored), so the 2 ribs meet flush when the flat seam faces are
+  down to `y = ±32mm` — half the original `6 mm` reach), `2 mm` deep in
+  X — but recessed *into* its own half (`x` from `-2` to `0` for the
+  `x<=0` half, `0` to `2` for the `x>=0` half) rather than crossing the
+  seam. Identical on both halves (mirrored), so the 2 ribs meet flush
+  when the flat seam faces are
   pressed together
 
 ### Source
 
 - JSCAD: [`bottom-support.jscad`](./bottom-support.jscad)
-- OpenJSCAD: [Open `bottom-support.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemik/bottom-support.jscad#)
+- OpenJSCAD: [Open `bottom-support.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/bottom-support.jscad)
 
 ### Outputs
 
@@ -629,3 +690,328 @@ exploration, unrelated in dimensions to the other parts in this folder.
 ![Bottom support isometric](./bottom-support-iso.png)
 ![Bottom support top view](./bottom-support-top.png)
 ![Bottom support cross-section](./bottom-support-cross-section.png)
+
+## Wall Hook
+
+### Overview
+
+A flat hook, from a hand sketch: a straight foot standing on end, that
+bends 180 degrees at its top into a hook. The bend's inner edge (the
+throat, where whatever it's hung on actually sits) stays a plain round
+curve the whole way round. Its outer edge is round only for the first
+quarter-turn coming off the foot — the sketch's "left side," which had
+to stay round — while the second quarter-turn, toward the open end, is
+squared off into a sharp corner instead of continuing the curve. It's a
+2D profile (foot rectangle + round outer quarter + squared outer
+quarter, with the round throat subtracted) linear-extruded to a flat
+EXTRUDE_HEIGHT, not a round rod. Meant for hanging the totem on a wall
+or rail. A separate exploration, unrelated in dimensions to the other
+parts in this folder.
+
+### Geometry
+
+- Bar width: `10 mm` (assumed — not specified)
+- Extrusion thickness: `5 mm` (flat profile, extruded straight up)
+- Foot: `180 mm` long, straight, standing on end
+- Bend: `180°` turn at the top, `8 mm` inner (throat) radius (given) /
+  `18 mm` outer reach (`= inner radius + bar width`) — outer edge round
+  for the quarter-turn off the foot, squared to a right angle for the
+  quarter-turn into the open end
+- Overall height: `198 mm` (`180 mm` foot `+ 18 mm` outer bend reach);
+  overall width `36 mm` (`-5` to `31 mm`, foot centered on `x = 0`)
+
+### Source
+
+- JSCAD: [`wall-hook.jscad`](./wall-hook.jscad)
+- OpenJSCAD: [Open `wall-hook.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/wall-hook.jscad)
+
+### Outputs
+
+- STL: [`wall-hook.stl`](./wall-hook.stl)
+- PNG preview (top-down, full length): [`wall-hook-front.png`](./wall-hook-front.png)
+- PNG preview (hook detail): [`wall-hook-detail.png`](./wall-hook-detail.png)
+
+### Preview
+
+![Wall hook full length](./wall-hook-front.png)
+![Wall hook detail](./wall-hook-detail.png)
+
+## Hinge Bracket
+
+### Overview
+
+A ring (round outer edge, round center hole) with 3 of its 4 outer
+corners squared off — bottom-left, top-left and bottom-right are all
+flattened into a square corner, while only the top-right corner stays
+a plain round curve. The center hole stays a full round circle
+throughout. A standalone part — the idea is a pin through the center
+hole would let something pivot against it. A separate exploration,
+unrelated in dimensions to the other parts in this folder.
+
+### Geometry
+
+- Outer diameter: `36 mm`
+- Center hole: `8 mm` diameter, round, centered
+- Extrusion thickness: `5 mm`
+- 3 corners squared off (bottom-left, top-left, bottom-right); only
+  the top-right corner is left as a plain round curve
+
+Built as the bottom half (a rectangle, squares both bottom corners)
+unioned with the top-left quarter (a square block, squares that
+corner) and the top-right quarter (a round pie slice, the one corner
+left round), with the round center hole subtracted from each piece
+individually before that union — subtracting it from the already-
+unioned outline instead silently produces no hole at all (see the
+case-study note in `OPENJSCAD_SKILL.md`).
+
+### Source
+
+- JSCAD: [`hinge-bracket.jscad`](./hinge-bracket.jscad)
+- OpenJSCAD: [Open `hinge-bracket.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/hinge-bracket.jscad)
+
+### Outputs
+
+- STL: [`hinge-bracket.stl`](./hinge-bracket.stl)
+- PNG preview: [`hinge-bracket-front.png`](./hinge-bracket-front.png)
+
+### Preview
+
+![Hinge bracket](./hinge-bracket-front.png)
+
+## Hinge Yoke
+
+### Overview
+
+Two identical rings (36mm outer diameter, 8mm center hole, 3 of the 4
+outer corners squared off, only the top-right corner round), side by
+side along the extrusion axis with a gap between them (wide enough for
+an 8mm axle to pass straight through both center holes, and for
+something to pivot in the gap), joined into one rigid piece by a
+connecting plate along their flat (squared) back edge. The plate sits
+flush against that flat edge and extends straight backward from it,
+away from the rings — it doesn't cut into or overlap the rings' own
+footprint at all, just adds onto their back face, and spans the full
+run from the front of the first ring to the back of the second,
+closing off the back of the gap too. A separate, self-contained
+exploration, unrelated in dimensions to the other parts in this
+folder.
+
+### Geometry
+
+- 2 rings, each `36mm` outer diameter, `8mm` center hole, `5mm` thick,
+  3 of the 4 outer corners squared off (only the top-right stays round)
+- Gap between the rings: `5.1 mm`
+- Connecting plate: `5 mm` thick (how far it sticks out backward from
+  the rings' flat edge), spanning the rings' full `36 mm` height and
+  the full depth from the first ring's front face to the second ring's
+  back face (`2 × 5 mm` rings `+ 5.1 mm` gap `= 15.1 mm`)
+
+### Source
+
+- JSCAD: [`hinge-yoke.jscad`](./hinge-yoke.jscad)
+- OpenJSCAD: [Open `hinge-yoke.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/hinge-yoke.jscad)
+
+### Outputs
+
+- STL: [`hinge-yoke.stl`](./hinge-yoke.stl)
+- PNG preview (isometric): [`hinge-yoke-iso.png`](./hinge-yoke-iso.png)
+- PNG preview (front): [`hinge-yoke-front.png`](./hinge-yoke-front.png)
+
+### Preview
+
+![Hinge yoke isometric](./hinge-yoke-iso.png)
+![Hinge yoke front](./hinge-yoke-front.png)
+
+## Hinge Coupler
+
+### Overview
+
+A plain round spacer ring, meant to ride on an 8mm axle in the gap
+between 2 hinge-knuckle rings, filling that gap so the axle stays
+centered. A separate, self-contained exploration, unrelated in
+dimensions to the other parts in this folder.
+
+### Geometry
+
+- Outer diameter: `16 mm`
+- Inner diameter: `8 mm`
+- Extrusion height: `5.1 mm`
+
+### Source
+
+- JSCAD: [`hinge-coupler.jscad`](./hinge-coupler.jscad)
+- OpenJSCAD: [Open `hinge-coupler.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/hinge-coupler.jscad)
+
+### Outputs
+
+- STL: [`hinge-coupler.stl`](./hinge-coupler.stl)
+- PNG preview: [`hinge-coupler.png`](./hinge-coupler.png)
+
+### Preview
+
+![Hinge coupler](./hinge-coupler.png)
+
+## Blender post-processing: `blender-beautify.py`
+
+A separate Blender pipeline (not JSCAD) that takes any of the STLs
+above and "organically" post-processes them: rounds every real corner
+a little, then erodes a small, noisy, random amount of material (never
+adds any) concentrated on edges and curved/organic regions while
+leaving large flat technical faces alone. Meant to run headless with
+Blender's own Python interpreter, not this repo's Node/JSCAD toolchain:
+
+```sh
+blender --background --python blender-beautify.py -- \
+  bottom-plug.stl bottom-plug-beautified.stl \
+  --rounding 1.4 --organic-scale 22 --erosion 0.8 --seed 437
+```
+
+### Pipeline
+
+```
+import STL
+  -> Voxel Remesh (OpenVDB)     -- cleans/unifies the raw CAD mesh
+  -> Bevel (angle-limited)      -- lightly rounds every real corner
+  -> Geometry Nodes erosion     -- 4D noise x curvature mask, along
+                                    the inward normal only (0 .. -erosion mm)
+  -> Smooth                     -- relaxes the eroded surface a touch
+  -> Decimate                   -- brings the triangle count back down
+  -> export STL
+```
+
+The curvature mask is built from a Geometry Nodes "Blur Attribute" on
+vertex position: how far a point sits from a locally-averaged version
+of itself is ~0 on a flat face and bigger on edges/corners/bumps, so
+that value gates how much the noise is allowed to erode at that point.
+The noise itself uses 4D Noise Texture with `seed` wired to the W axis
+(picking a different seed reshuffles the pattern without changing its
+scale), and `organic-scale` (mm) is converted to the noise's Scale
+input as `1 / organic-scale`, so a bigger number means bigger, coarser
+bumps rather than a higher frequency.
+
+Every run also saves an un-applied `<output>.blend` next to the output
+STL, with the whole modifier stack (Remesh / Bevel / the Geometry Nodes
+group / Smooth / Decimate) still live and editable in Blender's UI —
+rerunning the script isn't the only way to retune it.
+
+### Parameters
+
+| Flag | Default | Meaning |
+| --- | --- | --- |
+| `--rounding` | `1.4` mm | Bevel width on real edges/corners |
+| `--organic-scale` | `22` mm | Noise feature size (bigger = coarser bumps) |
+| `--erosion` | `0.8` mm | Max depth removed at a noise peak |
+| `--seed` | `437` | Noise seed — same scale, different pattern |
+| `--voxel-size` | `0.6` mm | Voxel Remesh detail |
+| `--decimate-ratio` | `0.5` | Fraction of triangles kept at the end |
+| `--save-blend` | *(next to output)* | Where to save the editable `.blend` |
+
+### Worked example
+
+Run against an earlier version of [`bottom-plug.stl`](./bottom-plug.stl)
+— the spherical-foot design, before it was replaced with the current
+flat-foot cylinder — with the defaults shown above (`3718` verts /
+`7064` tris in, `35846` tris out after remesh + bevel + erosion +
+smooth + decimate). The before/after images below are historical,
+kept from that earlier spherical-foot version — see
+[`bottom-plug-spherical-foot-front.png`](./bottom-plug-spherical-foot-front.png)
+and
+[`bottom-plug-spherical-foot-iso.png`](./bottom-plug-spherical-foot-iso.png)
+for that version's own previews — and no longer match the current
+`bottom-plug.stl` or `bottom-plug-front.png`:
+
+- Output: [`bottom-plug-beautified.stl`](./bottom-plug-beautified.stl)
+- Editable: [`bottom-plug-beautified.blend`](./bottom-plug-beautified.blend)
+
+Before (plain JSCAD export) vs. after (Blender pipeline), same camera angle:
+
+![Bottom plug before (spherical-foot version)](./bottom-plug-spherical-foot-front.png)
+![Bottom plug after Blender beautify](./bottom-plug-beautified-front.png)
+
+![Bottom plug beautified isometric](./bottom-plug-beautified-iso.png)
+
+Also run against [`hinge-yoke.stl`](./hinge-yoke.stl) with `--erosion 0`
+(rounding only, no noise texture — `634` verts / `1198` tris in,
+`26154` tris out after remesh + bevel + smooth + decimate; the 2 axle
+holes, the gap between the rings and the connecting plate all verified
+still open/solid via point probes on the output):
+
+- Output: [`hinge-yoke-beautified.stl`](./hinge-yoke-beautified.stl)
+- Editable: [`hinge-yoke-beautified.blend`](./hinge-yoke-beautified.blend)
+
+![Hinge yoke before](./hinge-yoke-iso.png)
+![Hinge yoke after Blender beautify, no erosion](./hinge-yoke-beautified-iso.png)
+![Hinge yoke after Blender beautify, front](./hinge-yoke-beautified-front.png)
+
+### Real bug found building this
+
+Freshly STL-imported mesh data reports `.data.users == 2` in this
+Blender build even though `bpy.data.user_map()` shows only the one
+object actually referencing it — looks like an internal reference-count
+quirk rather than a real second user, but `modifier_apply` refuses to
+run on anything it considers multi-user data and fails with
+`Modifiers cannot be applied to multi-user data`. Fixed by forcing the
+mesh single-user right after import (`obj.data = obj.data.copy()`
+whenever `obj.data.users > 1`) before adding or applying any modifiers.
+
+## Hinge Yoke Tube Mount
+
+### Overview
+
+A hollow tube with 3 hinge-yoke clevises evenly spaced around its
+outer surface, from a reference photo of a printed hinge mounted flush
+against a flat surface: each clevis's connecting plate sits flush
+(embedded slightly into the wall) against the tube, its 2 rings
+project straight outward from it, and the axle-hole axis runs
+tangentially around the tube — parallel to the surface, like the bolt
+in the reference photo — not radially into it. Each clevis is the same
+2-rings-plus-plate geometry as the standalone hinge-yoke shape,
+reoriented so the ring height lines up with the tube's own height and
+placed 120° apart around the tube's circumference. A separate,
+self-contained exploration, unrelated in dimensions to the other parts
+in this folder.
+
+### Geometry
+
+- Tube: `51 mm` inner diameter, `2 mm` wall (`55 mm` outer diameter),
+  `50 mm` tall, open through both ends
+- 3 clevises, evenly spaced (`120°` apart) around the tube
+- Each clevis: identical 2-ring-plus-plate geometry to the standalone
+  hinge yoke (`36 mm` ring diameter, `8 mm` axle hole, `5.1 mm` gap
+  between rings) — reoriented so the ring height (`36 mm`) runs along
+  the tube's axis, and the axle hole runs tangentially around the tube
+- Mounting: each clevis's flat plate face sits `1 mm` (assumed) inside
+  the tube's outer surface, within its `2 mm` wall — a real solid
+  overlap for the union, not just a touching surface
+- Each clevis's bottom always sits flush on the ground plane (`Z = 0`),
+  independent of `TUBE_HEIGHT` — the vertical offset is fixed at the
+  clevis's own half-height rather than half of `TUBE_HEIGHT`, so
+  changing the tube's height doesn't lift the clevises off the ground
+  or sink them below it. At the current `50 mm` tube height the
+  clevises (`36 mm` tall) stop `14 mm` short of the tube's own top
+
+### Source
+
+- JSCAD: [`hinge-yoke-tube-mount.jscad`](./hinge-yoke-tube-mount.jscad)
+- OpenJSCAD: [Open `hinge-yoke-tube-mount.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/totemikk/hinge-yoke-tube-mount.jscad)
+
+### Outputs
+
+- STL: [`hinge-yoke-tube-mount.stl`](./hinge-yoke-tube-mount.stl)
+- PNG preview (isometric): [`hinge-yoke-tube-mount-iso.png`](./hinge-yoke-tube-mount-iso.png)
+- PNG preview (top): [`hinge-yoke-tube-mount-top.png`](./hinge-yoke-tube-mount-top.png)
+
+### Preview
+
+![Hinge yoke tube mount isometric](./hinge-yoke-tube-mount-iso.png)
+![Hinge yoke tube mount top view](./hinge-yoke-tube-mount-top.png)
+
+### Real bug found building this
+
+`union(tube, ...mounts)` — the hollow tube listed *first* — silently
+sealed the tube's own hollow interior shut: a point probe at the
+tube's center came back solid even though the tube alone, and the 3
+mounts unioned by themselves, were each independently correct. Simply
+reordering to list the hollow tube *last* (`union(...mounts, tube)`)
+fixed it, confirmed by re-running the same probes (interior, wall
+between mounts, each clevis's gap and axle hole).

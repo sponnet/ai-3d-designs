@@ -13,7 +13,9 @@ Each subdirectory is a self-contained JSCAD design (source + optional `render-pn
 | Staircase with landing | [`starcase-with-landing/`](starcase-with-landing/) |
 | Mounting hook | [`mounting-hook/`](mounting-hook/) |
 | Focus rotaty knob | [`focus-rotaty-knob/`](focus-rotaty-knob/) |
-| Totemik (ring + partition + totemik-guts) | [`totemik/`](totemik/) |
+| Totemikk (LED totem parts) | [`totemikk/`](totemikk/) |
 | Adapter — BnD mount to tube clamp | [`adapter-BnD-mount/`](adapter-BnD-mount/) |
+| Insta360 tripod leg (sliding slot) | [`insta360-tripod-leg/`](insta360-tripod-leg/) |
+| Acid badge (24-hole circular band) | [`acid-badge/`](acid-badge/) |
 
 Shared tooling and conventions: [`../OPENJSCAD_SKILL.md`](../OPENJSCAD_SKILL.md).

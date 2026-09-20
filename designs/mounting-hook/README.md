@@ -15,7 +15,7 @@ Hook-like mounting profile based on the provided hand sketch, modeled as a 2D po
 ## Source
 
 - JSCAD: [`mounting-hook.jscad`](./mounting-hook.jscad)
-- OpenJSCAD: [Open `mounting-hook.jscad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/mounting-hook/mounting-hook.jscad#)
+- OpenJSCAD: [Open `mounting-hook.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/mounting-hook/mounting-hook.jscad)
 
 ## Outputs
 

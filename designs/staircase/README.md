@@ -3,7 +3,7 @@
 ## Source
 
 - JSCAD source: [`staircase.scad`](./staircase.scad)
-- OpenJSCAD: [Open `staircase.scad`](https://openjscad.xyz/?uri=https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/staircase/staircase.scad#)
+- OpenJSCAD: [Open `staircase.scad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/staircase/staircase.scad)
 
 ## Outputs
 

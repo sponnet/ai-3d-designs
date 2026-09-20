@@ -12,8 +12,10 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
 - [**Foamcutter v2**](./designs/foamcutter-v2/): updated foam cutter support assembly plus X-Acto No. 11 outline tooling model.
 - [**Staircase with landing**](./designs/starcase-with-landing/): parametric U-turn staircase model with landing and glue tabs.
 - [**Mounting hook**](./designs/mounting-hook/): 48 mm hook-profile part from sketch, extruded 20 mm.
-- [**Totemik**](./designs/totemik/): 51 mm inner-diameter ring band with a top notch and outer ridges, plus a 150 mm partition strip that push-fits onto the ring's ridges, plus a separate 49 mm ring + beam exploration ("totemik-guts").
+- [**Totemikk**](./designs/totemikk/): parts for an LED totem — ring/partition shell segments, an internal ring+beam skeleton with a coupler, a push-fit bottom plug/foot, a 4-key keypad, a gear ring, a mic holder, a bottom support, and a wall-mount hook.
 - [**Adapter — BnD mount to tube**](./designs/adapter-BnD-mount/): matches a BnD 20Vmax tool mount's 60x65mm/3-hole back plate on one side, half-shell tube clamp (Ø51mm) with bolted end flanges on the other; 2 pieces sandwich the tube.
+- [**Insta360 tripod leg (sliding slot)**](./designs/insta360-tripod-leg/): variation on the Insta360 tripod mount's leg — flat tapered blade with a rounded hub-end knuckle, but the pivot hole is replaced by a lengthwise slot so the leg can pivot and slide up along the pole once folded. Proposal for a single leg; the central hub is not modeled yet.
+- [**Acid badge**](./designs/acid-badge/): circular band with 24 evenly-spaced 3mm holes, 5mm apart center-to-center.
 
 ## Outputs At A Glance
 
@@ -59,20 +61,26 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
   - [`designs/mounting-hook/mounting-hook.png`](./designs/mounting-hook/mounting-hook.png)
   - ![Mounting hook preview](./designs/mounting-hook/mounting-hook.png)
 - Totemik ring STL/PNG:
-  - [`designs/totemik/ring.stl`](./designs/totemik/ring.stl)
-  - [`designs/totemik/ring.png`](./designs/totemik/ring.png)
-  - ![Totemik ring preview](./designs/totemik/ring.png)
+  - [`designs/totemikk/ring.stl`](./designs/totemikk/ring.stl)
+  - [`designs/totemikk/ring.png`](./designs/totemikk/ring.png)
+  - ![Totemik ring preview](./designs/totemikk/ring.png)
 - Totemik partition STL/PNG:
-  - [`designs/totemik/partition.stl`](./designs/totemik/partition.stl)
-  - [`designs/totemik/partition-detail.png`](./designs/totemik/partition-detail.png)
-  - ![Partition slot detail preview](./designs/totemik/partition-detail.png)
+  - [`designs/totemikk/partition.stl`](./designs/totemikk/partition.stl)
+  - [`designs/totemikk/partition-detail.png`](./designs/totemikk/partition-detail.png)
+  - ![Partition slot detail preview](./designs/totemikk/partition-detail.png)
 - Totemik guts (ring + beam) STL/PNG:
-  - [`designs/totemik/totemik-guts.stl`](./designs/totemik/totemik-guts.stl)
-  - [`designs/totemik/totemik-guts.png`](./designs/totemik/totemik-guts.png)
-  - ![Totemik guts preview](./designs/totemik/totemik-guts.png)
+  - [`designs/totemikk/totemik-guts.stl`](./designs/totemikk/totemik-guts.stl)
+  - [`designs/totemikk/totemik-guts.png`](./designs/totemikk/totemik-guts.png)
+  - ![Totemik guts preview](./designs/totemikk/totemik-guts.png)
 - Adapter — BnD mount to tube STL/PNG:
   - [`designs/adapter-BnD-mount/adapter.stl`](./designs/adapter-BnD-mount/adapter.stl)
   - [`designs/adapter-BnD-mount/adapter-iso.png`](./designs/adapter-BnD-mount/adapter-iso.png)
   - ![Adapter preview](./designs/adapter-BnD-mount/adapter-iso.png)
   - [`designs/adapter-BnD-mount/assembly-iso.png`](./designs/adapter-BnD-mount/assembly-iso.png)
   - ![Adapter assembly preview](./designs/adapter-BnD-mount/assembly-iso.png)
+- Insta360 tripod leg STL/PNG:
+  - [`designs/insta360-tripod-leg/leg.stl`](./designs/insta360-tripod-leg/leg.stl)
+  - [`designs/insta360-tripod-leg/leg-top.png`](./designs/insta360-tripod-leg/leg-top.png)
+  - ![Insta360 tripod leg top view](./designs/insta360-tripod-leg/leg-top.png)
+  - [`designs/insta360-tripod-leg/leg-iso.png`](./designs/insta360-tripod-leg/leg-iso.png)
+  - ![Insta360 tripod leg isometric view](./designs/insta360-tripod-leg/leg-iso.png)

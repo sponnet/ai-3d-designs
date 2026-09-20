@@ -262,7 +262,13 @@ These were learned while building `designs/sketched-plate/` from a hand sketch.
 
 ## Case study learnings: totemik series (ring, coupler, keypad, mic-holder, bottom-support, bottom-plug)
 
-These were learned iterating a family of small parametric parts under `designs/totemik/`, each refined over many small user-directed edits.
+These were learned iterating a family of small parametric parts under `designs/totemikk/`, each refined over many small user-directed edits.
+
+### 3D `union()` argument order matters when one shape is hollow
+
+- `union(hollowShape, ...otherShapes)` — a hollow/enclosing shape listed **first** — can silently seal that shape's own cavity shut, even when the hollow shape alone and the other shapes unioned by themselves are each independently correct. Listing the hollow shape **last** instead (`union(...otherShapes, hollowShape)`) fixed it.
+- Found in `hinge-yoke-tube-mount.jscad`: a hollow tube unioned with 3 solid clevis mounts came out fully solid at the tube's own center when the tube was the first argument; reordering so the tube came last gave the correct, still-hollow result.
+- **Takeaway:** when unioning a hollow/enclosing shape with other solids, list the hollow shape last, and verify with a point probe at its cavity (not just a bounding-box or polygon-count check — both stayed unchanged either way here).
 
 ### `cylinder()` silently ignores `radiusStart`/`radiusEnd` — use `cylinderElliptic`
 
@@ -270,6 +276,12 @@ These were learned iterating a family of small parametric parts under `designs/t
 - This bug sat undetected in `bottom-plug.jscad`'s lead-in chamfer for an entire earlier session (looked fine at a glance in low-res previews) until a bounding-box check on the isolated chamfer piece exposed the ~1mm radius.
 - Correct API for a tapered cylinder/frustum: `cylinderElliptic({ startRadius: [r1, r1], endRadius: [r2, r2], height, segments })` (elliptic because X/Y radii are given separately; use equal pairs for a circular taper).
 - **Takeaway:** when a primitive call uses parameter names you're not 100% sure exist, dump the function's own source (`primitives.cylinder.toString()` in a quick `node -e`) or check its `measureBoundingBox()` in isolation before trusting the render.
+
+### 2D `subtract()` after a `union()` can silently no-op
+
+- `subtract(union(shapeA, shapeB), hole)` can return a result with **no hole at all** — even when `hole` is a perfectly valid, correctly-positioned 2D circle, and even when `subtract(shapeB, hole)` alone (without the prior union) works correctly. The bug is silent: no error, and the returned area is only off by rounding noise, not by the hole's area — easy to miss without an explicit area/probe check.
+- Found in `hinge-bracket.jscad`: cutting an 8mm pivot hole from a boss-shape-unioned-with-a-base plate did nothing, but cutting the same hole from the boss alone, *then* unioning with the base, worked.
+- **Takeaway:** when a hole only touches one of several unioned pieces, subtract it from that piece first, then union in the rest — don't build the full unioned outline before cutting. Verify with `measureArea()` before/after (should drop by the hole's own area) or a point probe at the hole's center, not just a bounding-box check (the bbox doesn't change either way).
 
 ### Winding order flips what `subtract()` does with a hole shape
 
@@ -315,6 +327,228 @@ These were learned iterating a family of small parametric parts under `designs/t
 
 - Several of these parts hollow out a solid shape by building the *outer* surface and a *shrunk* copy of the same construction for the *inner* cavity, then `subtract(outer, inner)`. Writing the shared shape as a function taking the radius (or radii) as a parameter — rather than duplicating the geometry code once per outer/inner — keeps the two versions from drifting out of sync when a dimension changes, and made the later "also cut a through-hole" and "also add a relief slot" follow-up requests quick, additive changes instead of rewrites.
 
+## Case study learnings: acid-badge (SVG-traced smiley + hole arc)
+
+Converting a real SVG (a bezier-curve icon, not a simple parametric
+shape) into JSCAD geometry, and 2 serious booleans bugs found doing it.
+
+### Tracing an SVG path into JSCAD points
+
+- Parse the path `d` attribute's `M`/`L`/`C`/`Z` commands directly (a
+  ~40-line hand-rolled parser is enough; no SVG library was
+  available/needed) and flatten each cubic bezier into N line segments
+  (8 was plenty for a part in the 100-200mm range). `evenodd` fill with
+  multiple subpaths: figure out which subpaths are "solid" fills
+  (unioned) vs. paired outer/inner boundaries of a ring/stroke
+  (subtracted) by checking each subpath's bounding-box center and
+  radius-from-a-shared-center — subpaths sharing a center with very
+  different radius ranges are typically an outer/inner pair forming a
+  ring outline, not a filled disc.
+- SVG's Y axis grows **downward**; negate every traced Y coordinate
+  once (and don't rotate/mirror anything else) to get normal Y-up CAD
+  orientation. Do this negation consistently in one place (e.g. right
+  when building the point arrays) rather than juggling axis flips
+  through several downstream angle formulas.
+- When a design brief asks for a feature to sit "on an arc" within an
+  organic (hand-drawn) shape like a mouth, don't assume the shape is a
+  simple arc at one radius from some center — check the *actual*
+  radius-from-center range across the traced outline's own points
+  first (it can vary a lot). Then search numerically for the best-fit
+  (radius, angular span) by checking whether a full hole *circle*
+  (several sample points around its own circumference, not just its
+  center point) stays inside the target polygon at each candidate —
+  centers-only checks can pass while the hole's edge actually pokes
+  outside a concave boundary.
+
+### 2D `union()`/`subtract()` between 2 concave polygons can silently drop one operand
+
+- If both operands are non-convex and their bounding boxes overlap
+  (e.g. one shape nested inside another, like an eye inside a face
+  outline), `union()`/`subtract()` can return **just one of the 2
+  shapes**, discarding the other completely — no error, no warning.
+  Confirmed this isn't about self-intersections, duplicate points, or
+  vertex count (checked and ruled out); it reproduces with small,
+  clean, hand-written concave polygons (e.g. a 4-pointed star) placed
+  inside another concave shape's bbox, and disappears the moment
+  *either* operand is convex, or the 2 shapes' bounding boxes don't
+  overlap at all.
+- `union(a, b, c, d)` — 4+ arguments in one call — can also come back
+  completely empty even when every individual argument is independently
+  valid and pairwise unions of any 2-3 of them work. Folding
+  `array.reduce((acc, x) => union(acc, x))` instead of a single spread
+  call avoids *that* specific issue, but not the concave-concave one
+  above.
+- **Workaround that actually works:** decompose each concave polygon
+  into triangles first (`@jscad/modeling`'s own earcut triangulator,
+  used internally by `extrudeLinear`, is on disk at
+  `@jscad/modeling/src/operations/extrusions/earcut/index.js` — not
+  part of the public API, but there's no `exports` restriction in its
+  `package.json` blocking a direct `require()` of it), then
+  `union()`/fold every triangle back together. Once every piece fed
+  into `union()` is convex (a triangle always is), the result is
+  correct. This fixes the *silent wrong-answer* bug, but see next.
+- **That workaround has its own failure mode:** rebuilding a ~130+
+  point polygon from its individual triangles means ~130+ sequential
+  `union()` calls, and the floating-point drift from that many
+  boolean ops in a row can leave the final merged shape with real gaps
+  (`extrudeLinear` throwing `geometry is not closed at vertex ...`,
+  sometimes off by 10+ units — not just numerical noise). More
+  triangles (finer bezier flattening, more shapes to combine) makes
+  this worse, not better.
+- **What actually shipped:** for acid-badge.jscad, jscad's own booleans
+  were abandoned for this step entirely. An offline build script
+  (not part of the shipped `.jscad` file) used the separately-installed
+  `polygon-clipping` npm package (a mature, well-tested 2D polygon
+  clipping library) to compute the real unions/differences, then merged
+  each hole into its exterior boundary with a "keyhole" bridge (find
+  the nearest exterior/hole vertex pair whose connecting segment
+  doesn't cross any ring, splice the hole's loop in at that point) —
+  turning every polygon-with-holes into **one simple point loop**
+  needing no jscad boolean at all, just `polygon()` + `extrudeLinear()`.
+  The resulting loops were baked into the `.jscad` file as static point
+  arrays (`polygon-clipping` is a build-time-only tool, not a runtime
+  dependency of the shipped design). Pieces that don't touch each other
+  don't need `union()` at all for export purposes — `main()` can return
+  an **array** of separately-extruded solids, and both the JSCAD engine
+  and its STL exporter fully support that (multiple disjoint solids in
+  one STL is completely normal and prints fine).
+
+### Checking "enough material around a hole" only along the placement direction is not enough
+
+- A follow-up change moved acid-badge's 24 mouth holes off a fixed-
+  radius arc onto a variable-radius path following the mouth's own
+  local middle (samples built by ray-casting from the face center,
+  taking the midpoint of each ray's entry/exit crossing of the traced
+  mouth outline). The first pass validated each candidate hole by
+  checking material thickness **only along that same radial ray** (the
+  half-length of the entry/exit chord) — which is exactly the direction
+  the hole was placed along, so it reads as "plenty of room" even right
+  at a concave shape's pointed tip, where the boundary curves back and
+  isn't perpendicular to the ray at all.
+- Symptom: silently 2 holes short (22 instead of 24) after the
+  polygon-clipping `difference()` step — no error, no crash, just a
+  result with fewer hole rings than circles subtracted. Both "missing"
+  holes turned out to sit exactly at the two ends of the walked path,
+  right at the mouth's tapering tips, where their full circles actually
+  poked outside the outline in a direction the radial check never
+  looked at; `difference()` correctly merged them into the exterior
+  instead of leaving them as separate holes.
+- **Fix:** when checking whether a hole fits at a candidate point inside
+  *any* traced/organic (non-circular) boundary, measure the nearest-
+  boundary distance by casting rays in a full circle of directions from
+  that point (e.g. every 5-10°) and taking the minimum — not just the
+  one direction the point was derived/placed along. This is the same
+  principle as the earlier "check the hole's full circle, not just its
+  center" lesson above, one level deeper: even a whole-circle check is
+  only as good as the direction(s) it actually samples.
+
+### `polygon-clipping`'s `union()` needs real overlapping area to fuse pieces — touching a boundary at one point isn't enough
+
+- A later change connected acid-badge's 4 separate pieces (ring, mouth,
+  2 eyes) with thin snap-off strips so the whole thing prints as one
+  part. The first version of each strip ended exactly *on* the
+  boundary curve of the piece it was joining — geometrically touching,
+  which sounds like it should be enough for a union. It isn't:
+  `polygon-clipping`'s `union()` (like most robust polygon-clipping
+  libraries) only merges shapes into a single polygon where they share
+  real overlapping *area*; a strip whose cross-section at the boundary
+  is a thin sliver that's mostly outside the target shape (because the
+  strip's width there isn't aligned with the boundary's local tangent)
+  can fail to fuse, leaving the union result with more separate
+  polygons than expected (4+ instead of 1) — no error, just an extra
+  entry in the result array.
+- **Fix:** don't end a connecting piece exactly at another shape's
+  boundary. Extend it a small amount (a bit over a millimeter is
+  plenty at this scale) *past* the boundary, into the target shape's
+  own solid interior, so there's guaranteed overlapping area for
+  `union()` to fuse against. If the design also wants a specific
+  narrow/thin point exactly at the boundary (e.g. a snap-off neck for
+  3D-printed parts), that's a separate width control point along the
+  same strip — the strip can neck down to 1mm exactly at the boundary
+  crossing and *then* widen back out again over the last bit of its
+  embedded length, purely to guarantee the fuse. After `union()`, check
+  the result polygon count is exactly 1 (or whatever's expected) before
+  moving on to keyhole-merging — this bug is otherwise silent.
+
+### Connecting a small shape to a big one with several separate strips: 2 more gotchas
+
+- **Picking each strip's target point independently clusters them.**
+  If a small shape sits inside/near a much bigger one (e.g. a satellite
+  shape inside a ring) and each strip's far end is just "nearest point
+  on the big shape," several strips end up anchored within a few mm of
+  each other — nearly every direction around the small shape's boundary
+  has its single nearest point on the big shape in roughly the same
+  nearby patch, since the big shape is comparatively far away in every
+  direction. Symptom: unexpectedly large extra holes after `union()`
+  (tens of mm across, not slivers) where an anchor's embedded-inward
+  overlap zone (see above) accidentally carved into the small shape's
+  OWN interior hole because 2+ strips converged too close together
+  right next to it. **Fix:** choose the target points on the BIG shape
+  first, evenly spaced by angle from a shared center (e.g. the overall
+  design's center) across the small shape's own angular footprint, then
+  find each one's nearest point on the small shape — and still enforce
+  a minimum separation between the small-shape-side points too, since
+  different big-shape angles can still map to the same corner of a
+  small/pointy shape as their nearest point. Also carve out an explicit
+  "stay away from this shape's own interior hole(s)" exclusion zone
+  around every candidate small-shape-side point, sized to the anchor's
+  own embedded width — don't rely on separation-from-other-anchors
+  alone to keep clear of a hole.
+- **Every strip beyond the first, into the same 2 shapes, encloses a
+  new small pocket of open air between it and its neighbor — this is
+  topologically unavoidable, not a bug.** One strip between shape A and
+  shape B doesn't create a new closed loop (A, B and the strip together
+  stay simply-connected). A second strip between the *same* A and B
+  does: going out along strip 1, around part of B, back along strip 2,
+  around part of A traces a closed loop, and that loop necessarily
+  encloses whatever's between the 2 strips. With N strips into the same
+  shape, expect N-1 such pockets. They show up as extra entries in a
+  polygon-clipping `union()` result beyond the holes you actually
+  intended — legitimate ones, not something to "fix": they're just
+  empty space, the same as the gaps between the prongs of a fork, and
+  the same keyhole-merge step handles them like any other hole. Don't
+  spend time trying to eliminate them; do check that an unexpected
+  extra hole isn't instead the *previous* gotcha (a real chunk bitten
+  out of a shape's own hole) by inspecting its size and position —
+  topological pockets sit between 2 strips in otherwise-open space,
+  while a bitten chunk sits right at another hole's edge and is usually
+  much larger/oddly shaped.
+
+### A jagged/zigzag connector: build ONE mitered stroke polygon, don't chain overlapping rectangles
+
+- Turning a straight connecting strip into an irregular zigzag ("draw
+  it like a lightning bolt with some random corners") is tempting to
+  build as a chain of short rectangles, one per leg (corner to corner),
+  each extended a bit past its own endpoints so consecutive legs
+  genuinely overlap at each corner rather than merely touch (reusing
+  the "extend past the endpoint into real overlap" fix from the
+  single-touching-point bug above). That union *is* geometrically
+  valid — but it leaves a small stray overshoot nub sticking out at
+  every corner, visible up close, because 2 independently-extended
+  rectangles meeting at a shared point don't have matching outer edges
+  right there.
+- **Better:** build the whole zigzag as ONE proper mitered stroke
+  polygon instead — a standard line-stroke technique. For each interior
+  vertex, take the 2 adjacent segments' normals, average and normalize
+  them into a bisector, then offset the vertex along that bisector by
+  `halfWidth / dot(bisector, eitherNormal)` (this keeps the offset edge
+  exactly `halfWidth` from each segment's own line, i.e. a true miter
+  join) — do this on both sides for the stroke's 2 edges, closing them
+  into one polygon. Cap the miter length (e.g. 4x the half-width) and
+  fall back to a 2-point bevel for very acute corners (near a full
+  direction reversal), where an uncapped miter would spike out
+  arbitrarily far. This gives one clean vertex per corner with no
+  overshoot, and is honestly not more code than the rectangle-chain
+  approach.
+- `polygon-clipping.union()` handles a big flat list of inputs fine
+  either way — 10+ strip polygons plus the main shapes in one call
+  unioned correctly with no special batching needed, as long as no
+  individual pair in the mix hits the concave-vs-concave bug from the
+  very first entry in this section.
+- For an irregular/organic look with reproducible output (so a rebuild
+  doesn't shuffle the design every run), use a small seeded PRNG
+  (`mulberry32` is a common ~4-line one) instead of `Math.random()`.
+
 ## References
 
 - [JSCAD User Guide](https://openjscad.xyz/guide.html)
@@ -326,7 +560,8 @@ These were learned iterating a family of small parametric parts under `designs/t
 - **Staircase:** `designs/staircase/` — `npm run staircase:stl` / `npm run staircase:png` from repo root.
 - **Foam cutter:** `designs/foamcutter/` — `npm run foamcutter:stl` / `npm run foamcutter:png` from repo root.
 - **Pill cutter:** `designs/pill-cutter/` — `node designs/pill-cutter/render-png.js` (see also learnings summarized in **Alignment, rotation & booleans** above).
-- **Totemik series:** `designs/totemik/` — several small related parts (ring, coupler, keypad, mic-holder, bottom-support, bottom-plug), each with its own `.jscad` + STL/PNG outputs and a shared `render-png.js`; see also **Case study learnings: totemik series** above.
+- **Totemik series:** `designs/totemikk/` — several small related parts (ring, coupler, keypad, mic-holder, bottom-support, bottom-plug), each with its own `.jscad` + STL/PNG outputs and a shared `render-png.js`; see also **Case study learnings: totemik series** above.
+- **Acid badge:** `designs/acid-badge/` — a real SVG traced into JSCAD point data, plus a hole arc; see **Case study learnings: acid-badge** above for the concave-polygon boolean bugs found building it.
 
 ---
 

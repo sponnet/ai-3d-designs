@@ -183,3 +183,79 @@ const bottomSupportSlicedPng = stl2png(toBuffer(bottomSupportSliced), {
 })
 fs.writeFileSync(path.join(__dirname, 'bottom-support-cross-section.png'), bottomSupportSlicedPng)
 console.log('Wrote bottom-support-cross-section.png')
+
+// --- wall-hook.stl ---
+// Round rod bent flat in one plane: long shaft (180mm tall), rounded
+// tip at the bottom, a wide bend into a short "rectangular" top section
+// (24 x 16mm) that curls back into a small round hook (8mm radius) at
+// the tip. Unrelated in dimensions to the other parts in this folder.
+const wallHookStlData = fs.readFileSync(path.join(__dirname, 'wall-hook.stl'))
+// Flat profile lying in the XY plane (only 5mm thick in Z), so a
+// top-down camera (looking down the Z axis) is the view that actually
+// shows its silhouette, not an edge-on sliver.
+const wallHookPng = stl2png(wallHookStlData, { ...baseOptions, width: 400, height: 1000, cameraPosition: [13, 99, 400] })
+fs.writeFileSync(path.join(__dirname, 'wall-hook-front.png'), wallHookPng)
+console.log('Wrote wall-hook-front.png')
+
+const { main: wallHookMain } = require('./wall-hook.jscad')
+// Crop to just the top bend (roughly y = 160..200), where the 180-degree
+// hook actually lives -- at the part's full 180mm foot length that
+// detail renders too small to read.
+const wallHookDetail = intersect(wallHookMain(), cuboid({ size: [50, 50, 15], center: [13, 180, 2.5] }))
+const wallHookDetailPng = stl2png(toBuffer(wallHookDetail), {
+  width: 900,
+  height: 700,
+  backgroundColor: 0xffffff,
+  cameraPosition: [13, 180, 200],
+  materials: [makeStandardMaterial(1, 0x3a7bd5)],
+  edgeMaterials: [makeEdgeMaterial(1.5, 0x000000)],
+  lights: [makeAmbientLight(0xffffff, 0.7), makeDirectionalLight(0, -1, 1, 0xffffff, 0.7)]
+})
+fs.writeFileSync(path.join(__dirname, 'wall-hook-detail.png'), wallHookDetailPng)
+console.log('Wrote wall-hook-detail.png (top bend detail)')
+
+// --- hinge-bracket.stl ---
+// Flat mounting base necking into a narrower, rounded-corner boss with
+// a pivot hole. Standalone part, unrelated in dimensions to the other
+// parts in this folder (not yet coupled to wall-hook.jscad).
+const hingeBracketStlData = fs.readFileSync(path.join(__dirname, 'hinge-bracket.stl'))
+const hingeBracketPng = stl2png(hingeBracketStlData, { ...baseOptions, width: 600, height: 600, cameraPosition: [0, 0, 300] })
+fs.writeFileSync(path.join(__dirname, 'hinge-bracket-front.png'), hingeBracketPng)
+console.log('Wrote hinge-bracket-front.png')
+
+// --- hinge-yoke.stl ---
+// 2 hinge-bracket rings, spaced apart along Z, joined by a connecting
+// plate along their flat back edge -- a clevis/fork for an 8mm axle.
+const hingeYokeStlData = fs.readFileSync(path.join(__dirname, 'hinge-yoke.stl'))
+const hingeYokeViews = {
+  'hinge-yoke-iso.png': [80, -80, 40],
+  'hinge-yoke-front.png': [0, 0, 300]
+}
+for (const [file, cameraPosition] of Object.entries(hingeYokeViews)) {
+  const png = stl2png(hingeYokeStlData, { ...baseOptions, width: 700, height: 600, cameraPosition })
+  fs.writeFileSync(path.join(__dirname, file), png)
+  console.log('Wrote', file)
+}
+
+// --- hinge-coupler.stl ---
+// Plain spacer ring (8mm ID, 16mm OD, 5.1mm tall) that rides on the
+// axle in the gap between hinge-yoke.jscad's 2 rings.
+const hingeCouplerStlData = fs.readFileSync(path.join(__dirname, 'hinge-coupler.stl'))
+const hingeCouplerPng = stl2png(hingeCouplerStlData, { ...baseOptions, width: 500, height: 500, cameraPosition: [40, -40, 30] })
+fs.writeFileSync(path.join(__dirname, 'hinge-coupler.png'), hingeCouplerPng)
+console.log('Wrote hinge-coupler.png')
+
+// --- hinge-yoke-tube-mount.stl ---
+// 51mm-ID tube with 3 hinge-yoke clevises spaced 120 degrees apart
+// around its outside, each mounted per the reference-photo orientation
+// (plate flush against the tube, axle hole running tangentially).
+const hingeYokeTubeMountStlData = fs.readFileSync(path.join(__dirname, 'hinge-yoke-tube-mount.stl'))
+const hingeYokeTubeMountViews = {
+  'hinge-yoke-tube-mount-iso.png': [150, -150, 120],
+  'hinge-yoke-tube-mount-top.png': [0, 0, 300]
+}
+for (const [file, cameraPosition] of Object.entries(hingeYokeTubeMountViews)) {
+  const png = stl2png(hingeYokeTubeMountStlData, { ...baseOptions, width: 900, height: 900, cameraPosition })
+  fs.writeFileSync(path.join(__dirname, file), png)
+  console.log('Wrote', file)
+}

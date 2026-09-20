@@ -1,0 +1,228 @@
+# Acid Badge
+
+## Overview
+
+The classic acid-house smiley — traced from the supplied
+[`bad-smiley-bw.svg`](./bad-smiley-bw.svg) — with a ring of 22 evenly-
+spaced 3.1mm holes following the mouth's own curve, and a 5.1mm
+push-fit hole through each eye. The face ring, mouth and both eyes are
+connected by irregular zigzag "lightning bolt" strips (4 for the mouth,
+3 for each eye) so the whole badge prints as **one piece**, meant to be
+hung by those strips rather than have them snapped off.
+
+### How the SVG became this shape
+
+The SVG's single `evenodd` path has 5 subpaths: the face outline (drawn
+as 2 nested circles, i.e. a ring/"stroke" rather than a filled disc),
+the 2 eyes, and the mouth (an organic crescent — its distance from the
+face center actually varies from about 89 to 169 SVG units around its
+own outline, so it's *not* a simple arc at one fixed radius). Each was
+traced by flattening the SVG's bezier curves into line segments,
+centered on the face circle's own center.
+
+### Fitting the holes to the mouth
+
+The mouth holes follow the mouth's own local middle rather than sitting
+on one constant-radius arc. For a dense set of angles from the face's
+own center, a ray is cast through the mouth's traced outline; the
+MIDPOINT of that ray's entry/exit crossing becomes a sample of the
+mouth's local centerline. 24 holes are walked along that centerline by
+true chord distance (not raw arc length), so consecutive hole centers
+really are 5mm apart in a straight line — matching the original brief
+exactly. Each candidate placement is checked against the mouth's
+*actual* nearest-boundary distance in every direction (not just along
+the radial ray, which under-detects risk near the crescent's pointed
+tips), and the walked window is chosen so every one of the 24 holes
+keeps at least 1mm of material on each side. The largest hole spacing
+that still satisfies that margin everywhere pins down the whole badge's
+scale (same principle as the previous constant-radius version, just
+measured along a curve instead of a circle).
+
+The 2 outermost of those 24 (the ones at the very ends of the walked
+path, closest to the crescent's tips) are then dropped, leaving 22.
+Every other hole — mouth and both eyes — sits at the exact same
+position as before; only the connecting strips changed in this pass.
+
+### Eye holes
+
+Each eye gets one 5.1mm-diameter hole (5mm + 0.1mm tolerance, sized for
+a push fit), centered on that eye's own area-weighted centroid — not
+just its bounding-box center. The full hole circle is checked the same
+way against the eye's true nearest-boundary distance; both eyes have
+generous margin (roughly 10-12mm) since they're much bigger than a
+single 5.1mm hole.
+
+### Connecting strips: zigzag "lightning bolts" (prints as one piece)
+
+10 zigzag strips glue the badge together: 4 from the mouth to the ring,
+3 from each eye to the ring (the mouth and eyes don't connect directly
+to each other — they don't need to, since they're all reachable
+through the ring). Each shape's strips are spread evenly by **angle
+from the face center** across that shape's own angular footprint —
+picking "nearest point on the ring" independently for each strip
+clusters badly, since a small shape sitting near a much bigger ring has
+almost every boundary direction pointing at roughly the same nearby
+patch of ring. A minimum separation is also enforced on the satellite
+side, since 2 different ring-side targets can otherwise still map to
+the same corner of a small shape as their nearest point.
+
+Each strip runs from its satellite shape (near the face center) out to
+the ring as an irregular zigzag — 2 to 4 corners, placed at randomized
+(but reproducible: seeded) points along the strip with alternating
+sideways jags of 1.5-5mm — instead of a straight line, so it reads as a
+little lightning bolt. Every corner is built as ONE clean, sharp vertex
+(a proper mitered stroke outline, not a chain of overlapping
+rectangles — see "Real bugs found building this" below for why that
+matters), so the transition from one zigzag leg to the next is crisp
+rather than leaving a stray overshoot nub. Width stays a constant
+`2mm`, narrower than the old straight strips' `2.5mm`. These strips are
+meant to be **kept**, as hangers — there's no more snap-off necking;
+each end still embeds `1.2mm` into its shape's own solid material
+purely so the geometry has real overlapping area for
+`polygon-clipping`'s `union()` to fuse against.
+
+Between any 2 adjacent strips into the same shape there's a small,
+fully-enclosed pocket of open air. That's expected, not a defect: once
+a shape is tied to the ring by more than 1 strip, each additional strip
+topologically closes off one more such pocket — same as the gaps
+between the prongs of a fork. It shows up in the geometry as extra
+small "holes" beyond the 22 mouth + 2 eye holes, all handled by the
+same keyhole-merge step as everything else.
+
+### Earlier versions
+
+The very first pass at "acid badge" (before the SVG was supplied) was
+just a plain ring of 24 x 3mm holes with no other shape. The next pass
+(after the SVG) sat the 24 mouth holes on one constant-radius arc from
+the face center. The pass after that moved the holes onto the mouth's
+own centerline but still shipped as 4 disjoint solids with 3mm mouth
+holes and a 3mm extrusion. The pass after *that* joined the 4 pieces
+with exactly 1 connecting strip each. The pass after *that* gave the
+mouth 4 strips and each eye 3, all still straight with a snap-off neck.
+All are superseded by this one; see git history if any of them is ever
+needed again.
+
+## Geometry
+
+- Mouth holes: `22` (24 minus the 2 outermost), each `3.1 mm` diameter,
+  `5 mm` apart center-to-center (true chord distance, walked along the
+  mouth's own local centerline), at least `1 mm` of material kept on
+  every side of every hole
+- Eye holes: `1` per eye, `5.1 mm` diameter (`5 mm` + `0.1 mm` push-fit
+  tolerance), centered on each eye's area-weighted centroid
+- Connecting strips: `10` total (`4` mouth-to-ring, `3` per eye-to-ring),
+  zigzag "lightning bolt" shape (2-4 corners, randomized), `2 mm` wide
+- Extrusion height: `2 mm`
+- Overall face diameter: `≈180 mm` (derived from the hole spec + the
+  SVG's own proportions, not an independently chosen size)
+
+## Source
+
+- Original artwork: [`bad-smiley-bw.svg`](./bad-smiley-bw.svg)
+- JSCAD: [`acid-badge.jscad`](./acid-badge.jscad)
+- OpenJSCAD: [Open `acid-badge.jscad`](https://openjscad.xyz/v3/#https://raw.githubusercontent.com/sponnet/ai-3d-designs/refs/heads/main/designs/acid-badge/acid-badge.jscad)
+
+## Outputs
+
+- STL: [`acid-badge.stl`](./acid-badge.stl)
+- PNG preview (top): [`acid-badge-top.png`](./acid-badge-top.png)
+- PNG preview (isometric): [`acid-badge-iso.png`](./acid-badge-iso.png)
+
+## Preview
+
+![Acid badge top view](./acid-badge-top.png)
+![Acid badge isometric](./acid-badge-iso.png)
+
+## Real bugs found building this
+
+Two separate, serious bugs in `@jscad/modeling`'s 2D booleans, both
+specific to combining *non-convex* traced/organic polygons:
+
+1. **`union()`/`subtract()` between 2 concave polygons whose bounding
+   boxes overlap silently drops one operand entirely** — returns just
+   the *other* shape, no error. Confirmed it's not about self-
+   intersections, duplicate points, or vertex count (all clean here);
+   reproduces even with small hand-written concave polygons placed
+   inside each other's bbox, and disappears once both shapes are
+   convex. `union(a, b, c, d)` with 4+ arguments also came back
+   completely empty in one case even though every argument measured
+   fine alone and pairwise unions of any 2-3 worked.
+2. Triangulating each shape (via `@jscad/modeling`'s own internal
+   earcut, so every piece fed into `union()` is convex) fixed bug 1,
+   but then accumulating ~130+ sequential `union()` calls per shape
+   introduced enough floating-point drift that `extrudeLinear` failed
+   with `geometry is not closed at vertex ...` — genuine, sometimes
+   large (10+ unit) gaps, not just numerical noise.
+
+Given jscad's own booleans couldn't reliably combine these shapes
+either way, the actual fix bypasses them for this: an offline script
+uses the (separately installed, well-tested) `polygon-clipping` npm
+package to compute the real unions/differences, then merges each
+result's holes into its exterior with a "keyhole" bridge (a thin slit
+connecting a hole's boundary to the exterior, turning a polygon-with-
+holes into one simple loop) — producing a point loop that needs *no*
+jscad boolean operations at all, just `polygon()` + `extrudeLinear()`.
+
+A third, subtler issue turned up while re-placing the mouth holes along
+its centerline instead of a fixed-radius arc: the first pass measured
+"is there enough material here for a hole" only along the *radial* ray
+from the face center (the same direction used to place the hole). That
+silently passed 2 of the 24 candidate holes right at the tips of the
+crescent, where the boundary curves back on itself and isn't
+perpendicular to the radial ray at all — their full circles actually
+poked outside the mouth outline in a direction the radial check never
+looked at, and `polygon-clipping`'s `difference()` correctly merged
+them into the exterior boundary instead of leaving them as separate
+holes (silently returning 22 holes instead of 24, no error). The fix:
+check each candidate hole's true nearest-boundary distance by casting
+rays in *every* direction from its center, not just the one it was
+placed along.
+
+A fourth issue turned up gluing the 4 pieces into one with connecting
+strips: a strip whose endpoint sits exactly *on* a shape's boundary
+curve doesn't reliably fuse with `polygon-clipping`'s `union()` — a
+strip only overlapping a boundary at a single touching point stays a
+separate polygon in the result instead of merging into one (the
+perpendicular at that point isn't guaranteed to line up with the local
+boundary tangent, so the touching "contact" can be a sliver with ~0
+actual area). Fix: extend each strip `1.2mm` *past* the boundary, into
+the shape's own solid interior, before widening back out — guaranteeing
+real overlapping area for `union()` to fuse against, while keeping the
+strip's narrowest point (1mm) exactly at the boundary crossing itself,
+which is what actually matters for a clean, low-nub snap-off.
+
+A fifth issue turned up going from 1 strip per shape to several: simply
+picking each strip's ring-side point as "nearest point on the ring"
+independently clusters badly — a small shape near a much bigger ring
+has nearly every boundary direction land on roughly the same nearby arc
+of that ring, so 3 "independent" strips end up anchored within a few mm
+of each other. That produced 2 large, unexpected extra holes near the
+eyes (18-26mm across) — real chunks bitten out of the eye's own hole
+boundary, not slivers, because an anchor embedding inward right next to
+the eye's own push-fit hole carved into it. Fix: pick ring-side points
+FIRST, evenly spaced by angle from the face center across each shape's
+angular span, then find each one's nearest point on the satellite —
+plus a minimum separation on the satellite side too, since different
+ring angles can still map to the same small corner of a shape as their
+closest point, and an explicit "stay away from this shape's own hole(s)"
+exclusion zone around every candidate anchor point.
+
+Turning the straight strips into zigzags first tried building each one
+as a chain of straight segments (one short rectangle per corner-to-
+corner leg), every rectangle extended `0.6mm` past its own endpoints so
+consecutive segments would actually overlap at each corner instead of
+merely touching (reusing the fusion trick from bug 4). That *did* fuse
+correctly, but left a small stray overshoot nub sticking out at every
+corner — visible up close in a render — because 2 rectangles extended
+independently past a shared corner don't have matching outer edges
+there; their union is still valid geometry, just visually messy right
+at the joint. The fix: build each zigzag as ONE proper mitered stroke
+polygon instead (offset each interior vertex along the bisector of its
+2 adjacent segment normals, scaled to stay exactly half-width from each
+segment line — a standard line-stroke technique), giving a single clean
+vertex per corner, with a bevel fallback for very acute corners (near a
+full direction reversal) to avoid an unbounded miter spike. All 10 of
+these strip polygons, plus the ring and both satellites-with-holes, are
+still combined in one single `polygon-clipping.union()` call — that
+part scales fine regardless of how each input polygon's own edges were
+built.
