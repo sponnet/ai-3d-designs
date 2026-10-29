@@ -4,7 +4,8 @@
 // One short wall has a 10 x 4 mm slot, level with the inner floor, centered.
 // The long wall to its right (counterclockwise seen from above) has a 6 mm
 // round hole touching the inner floor, 15 mm from the slot wall's inner face.
-// The lid has a lip that slides inside the box opening (friction fit).
+// The lid has a lip that slides inside the box opening (friction fit) and a
+// round speaker-style grille of parallel slots.
 // The box is made taller by LIP_HEIGHT so the full 46 x 21 x 8 mm stays
 // free below the lip.
 //
@@ -23,14 +24,21 @@ const INNER_Y = 21
 const INNER_Z = 8
 const WALL = 1.5 // side walls, box floor and lid plate
 const LIP_HEIGHT = 2.5 // how deep the lid lip reaches into the box
-const LIP_WALL = 1.2 // thickness of the lid lip
-const FIT_CLEARANCE = 0.15 // gap per side between lip and box wall (push fit)
+const LIP_WALL = 1.4 // thickness of the lid lip
+// Nominal gap per side between lip and box wall (negative = slight overlap).
+// A first print with 0.15 had ~0.5 mm total play, i.e. the printer runs
+// ~0.2 mm loose overall, so the lip is now 0.4 mm wider in X and Y.
+const FIT_CLEARANCE = -0.05
 const CORNER_RADIUS = 1.5 // outer corner rounding (= WALL keeps corners 1.5 thick)
 const PRINT_GAP = 8 // spacing between box and lid in the print layout
 const SLOT_WIDTH = 10 // rectangular hole in the +X short wall, centered in Y
 const SLOT_HEIGHT = 4 // measured up from the inner floor (z = WALL)
 const ROUND_HOLE_DIAMETER = 6 // round hole in the +Y long wall, touching the inner floor
 const ROUND_HOLE_OFFSET = 15 // hole center distance from the +X wall's inner face
+const GRILLE_DIAMETER = 17 // circle the lid slots are cut within, centered on the lid
+const GRILLE_SLOT_WIDTH = 1 // slots run along Y, rounded ends
+const GRILLE_SLOT_PITCH = 1.9 // center-to-center along X (bar = pitch - width)
+const GRILLE_MIN_SLOT_LENGTH = 3 // drop slots near the circle edge shorter than this
 
 // --- Derived dimensions ---
 const OUTER_X = INNER_X + 2 * WALL
@@ -68,8 +76,36 @@ const buildBox = () => {
   return subtract(outer, cavity, slot, roundHole)
 }
 
+// Slot X positions and lengths: a slot at x stays inside the grille circle
+// when its rounded end-cap circles do, so
+// halfLength = w/2 + sqrt((r - w/2)^2 - x^2).
+const grilleSlots = () => {
+  const r = GRILLE_DIAMETER / 2
+  const w = GRILLE_SLOT_WIDTH
+  const slots = []
+  for (let i = 0; i * GRILLE_SLOT_PITCH + w / 2 < r; i++) {
+    const x = i * GRILLE_SLOT_PITCH
+    const length = 2 * (w / 2 + Math.sqrt((r - w / 2) ** 2 - x ** 2))
+    if (length < GRILLE_MIN_SLOT_LENGTH) break
+    slots.push({ x, length })
+    if (i > 0) slots.push({ x: -x, length })
+  }
+  return slots.sort((a, b) => a.x - b.x)
+}
+
 const buildLid = () => {
-  const plate = roundedBlock(OUTER_X, OUTER_Y, WALL, CORNER_RADIUS)
+  const slots = grilleSlots()
+  const cutters = slots.map(({ x, length }) =>
+    translate(
+      [x, 0, -1],
+      extrudeLinear(
+        { height: WALL + 2 },
+        roundedRectangle({ size: [GRILLE_SLOT_WIDTH, length], roundRadius: GRILLE_SLOT_WIDTH / 2 - EPS, segments: 16 })
+      )
+    )
+  )
+  // Cut the slots from the plate alone, then add the lip.
+  const plate = subtract(roundedBlock(OUTER_X, OUTER_Y, WALL, CORNER_RADIUS), ...cutters)
   const lip = subtract(
     block(LIP_OUTER_X, LIP_OUTER_Y, LIP_HEIGHT + EPS, WALL - EPS),
     block(LIP_INNER_X, LIP_INNER_Y, LIP_HEIGHT + 2 * EPS, WALL - EPS)
@@ -94,6 +130,8 @@ const main = (params = {}) => {
 
   console.log(`Box outer: ${OUTER_X} x ${OUTER_Y} x ${BOX_HEIGHT} mm, inner: ${INNER_X} x ${INNER_Y} x ${INNER_Z} mm (+${LIP_HEIGHT} lip zone)`)
   console.log(`Lid lip: ${LIP_OUTER_X.toFixed(2)} x ${LIP_OUTER_Y.toFixed(2)} mm, clearance ${FIT_CLEARANCE} mm/side`)
+  const slots = grilleSlots()
+  console.log(`Grille: ${slots.length} slots of ${GRILLE_SLOT_WIDTH} mm in a ${GRILLE_DIAMETER} mm circle, lengths ${slots.map((s) => s.length.toFixed(1)).join(' / ')} mm`)
 
   const box = buildBox()
   const lid = buildLid()

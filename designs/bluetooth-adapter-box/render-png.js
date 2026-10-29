@@ -35,6 +35,7 @@ const write = (file, stlData, cameraPosition) => {
 write('bluetooth-adapter-box.png', toBuffer(main({ part: 'print' })), [70, 70, 80])
 write('box.png', toBuffer(main({ part: 'box' })), [55, 30, -50]) // +X and +Y sides show both holes
 write('lid.png', toBuffer(main({ part: 'lid' })), [-40, 60, 60])
+write('lid-outside.png', toBuffer(main({ part: 'lid' })), [0, -70, 8]) // plate side with the grille, nearly straight on
 
 // Assembled, cut in half at y = 0 to show the lid lip seated in the box.
 const half = cuboid({ size: [60, 20, 30], center: [0, 10, 10] })
