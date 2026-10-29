@@ -16,6 +16,7 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
 - [**Adapter — BnD mount to tube**](./designs/adapter-BnD-mount/): matches a BnD 20Vmax tool mount's 60x65mm/3-hole back plate on one side, half-shell tube clamp (Ø51mm) with bolted end flanges on the other; 2 pieces sandwich the tube.
 - [**Insta360 tripod leg (sliding slot)**](./designs/insta360-tripod-leg/): variation on the Insta360 tripod mount's leg — flat tapered blade with a rounded hub-end knuckle, but the pivot hole is replaced by a lengthwise slot so the leg can pivot and slide up along the pole once folded. Proposal for a single leg; the central hub is not modeled yet.
 - [**Acid badge**](./designs/acid-badge/): circular band with 24 evenly-spaced 3mm holes, 5mm apart center-to-center.
+- [**Bluetooth adapter box**](./designs/bluetooth-adapter-box/): small box with 46x21x8mm inner space, 1.5mm walls, a 10x4mm hole in one short wall, a 6mm round hole in a long wall and a separate push-fit lid with a slotted round grille.
 
 ## Outputs At A Glance
 
@@ -84,3 +85,8 @@ Each design lives in its own folder under [`designs/`](./designs/) with source a
   - ![Insta360 tripod leg top view](./designs/insta360-tripod-leg/leg-top.png)
   - [`designs/insta360-tripod-leg/leg-iso.png`](./designs/insta360-tripod-leg/leg-iso.png)
   - ![Insta360 tripod leg isometric view](./designs/insta360-tripod-leg/leg-iso.png)
+- Bluetooth adapter box STL/PNG:
+  - [`designs/bluetooth-adapter-box/box.stl`](./designs/bluetooth-adapter-box/box.stl)
+  - [`designs/bluetooth-adapter-box/lid.stl`](./designs/bluetooth-adapter-box/lid.stl)
+  - [`designs/bluetooth-adapter-box/bluetooth-adapter-box.png`](./designs/bluetooth-adapter-box/bluetooth-adapter-box.png)
+  - ![Bluetooth adapter box preview](./designs/bluetooth-adapter-box/bluetooth-adapter-box.png)
