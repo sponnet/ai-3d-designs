@@ -2,6 +2,8 @@
 //
 // Inner clear space: 46 x 21 x 8 mm, wall thickness 1.5 mm.
 // One short wall has a 10 x 4 mm slot, level with the inner floor, centered.
+// The long wall to its right (counterclockwise seen from above) has a 6 mm
+// round hole touching the inner floor, 15 mm from the slot wall's inner face.
 // The lid has a lip that slides inside the box opening (friction fit).
 // The box is made taller by LIP_HEIGHT so the full 46 x 21 x 8 mm stays
 // free below the lip.
@@ -9,7 +11,7 @@
 // Z up, all units mm. Box: floor on z = 0, opening up.
 // Lid: modeled in print orientation (top plate on z = 0, lip pointing up).
 const { primitives, booleans, transforms, extrusions, colors } = require('@jscad/modeling')
-const { cuboid, roundedRectangle } = primitives
+const { cuboid, cylinder, roundedRectangle } = primitives
 const { subtract, union } = booleans
 const { translate, rotateX } = transforms
 const { extrudeLinear } = extrusions
@@ -27,6 +29,8 @@ const CORNER_RADIUS = 1.5 // outer corner rounding (= WALL keeps corners 1.5 thi
 const PRINT_GAP = 8 // spacing between box and lid in the print layout
 const SLOT_WIDTH = 10 // rectangular hole in the +X short wall, centered in Y
 const SLOT_HEIGHT = 4 // measured up from the inner floor (z = WALL)
+const ROUND_HOLE_DIAMETER = 6 // round hole in the +Y long wall, touching the inner floor
+const ROUND_HOLE_OFFSET = 15 // hole center distance from the +X wall's inner face
 
 // --- Derived dimensions ---
 const OUTER_X = INNER_X + 2 * WALL
@@ -55,7 +59,13 @@ const buildBox = () => {
     size: [slotDepth, SLOT_WIDTH, SLOT_HEIGHT],
     center: [INNER_X / 2 - EPS + slotDepth / 2, 0, WALL + SLOT_HEIGHT / 2]
   })
-  return subtract(outer, cavity, slot)
+  // Round hole through the +Y long wall; axis along Y, bottom of the circle
+  // tangent to the inner floor.
+  const roundHole = translate(
+    [INNER_X / 2 - ROUND_HOLE_OFFSET, INNER_Y / 2 - EPS + slotDepth / 2, WALL + ROUND_HOLE_DIAMETER / 2],
+    rotateX(Math.PI / 2, cylinder({ radius: ROUND_HOLE_DIAMETER / 2, height: slotDepth, segments: 48 }))
+  )
+  return subtract(outer, cavity, slot, roundHole)
 }
 
 const buildLid = () => {

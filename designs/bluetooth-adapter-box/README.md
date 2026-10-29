@@ -13,11 +13,12 @@ Small box for a Bluetooth adapter with a separate push-fit lid. The lid has a li
 - Push-fit clearance: `0.15 mm` per side (lip outside `45.7 x 20.7 mm`)
 - Closed size: `49 x 24 x 13.5 mm`
 - Rectangular hole in one short wall: `10 mm` wide, `4 mm` high, bottom edge level with the inner floor (1.5 mm above the bottom face), centered horizontally
+- Round hole `Ø6 mm` in the long wall to the right of that short wall (counterclockwise seen from above): circle touches the inner floor, center `15 mm` from the inner face of the short wall with the rectangular hole
 - The box is `2.5 mm` taller than wall + 8 mm, so the lid lip does not take space from the 8 mm inner height
 
 All dimensions are `const` values at the top of the `.jscad` file. If the lid is too tight or too loose on your printer, change `FIT_CLEARANCE` (e.g. `0.1` for tighter, `0.2` for looser).
 
-The hole is set by `SLOT_WIDTH` and `SLOT_HEIGHT`.
+The holes are set by `SLOT_WIDTH`, `SLOT_HEIGHT`, `ROUND_HOLE_DIAMETER` and `ROUND_HOLE_OFFSET`.
 
 Print both parts flat: the box with its opening up, the lid with its plate on the bed and the lip up. No supports needed.
 
