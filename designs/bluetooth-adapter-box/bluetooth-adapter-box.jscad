@@ -1,7 +1,7 @@
 // Bluetooth adapter box: small open box + separate push-fit lid.
 //
 // Inner clear space: 46 x 21 x 8 mm, wall thickness 1.5 mm.
-// One short wall has a 10 x 4 mm slot, open at the bottom face, centered.
+// One short wall has a 10 x 4 mm slot, level with the inner floor, centered.
 // The lid has a lip that slides inside the box opening (friction fit).
 // The box is made taller by LIP_HEIGHT so the full 46 x 21 x 8 mm stays
 // free below the lip.
@@ -26,7 +26,7 @@ const FIT_CLEARANCE = 0.15 // gap per side between lip and box wall (push fit)
 const CORNER_RADIUS = 1.5 // outer corner rounding (= WALL keeps corners 1.5 thick)
 const PRINT_GAP = 8 // spacing between box and lid in the print layout
 const SLOT_WIDTH = 10 // rectangular hole in the +X short wall, centered in Y
-const SLOT_HEIGHT = 4 // measured up from the box's bottom face (z = 0)
+const SLOT_HEIGHT = 4 // measured up from the inner floor (z = WALL)
 
 // --- Derived dimensions ---
 const OUTER_X = INNER_X + 2 * WALL
@@ -48,12 +48,12 @@ const block = (x, y, height, z0 = 0) => cuboid({ size: [x, y, height], center: [
 const buildBox = () => {
   const outer = roundedBlock(OUTER_X, OUTER_Y, BOX_HEIGHT, CORNER_RADIUS)
   const cavity = block(INNER_X, INNER_Y, BOX_HEIGHT, WALL) // overshoots the top
-  // Slot through the +X short wall only (cutter starts at the inner wall face,
-  // overshoots outward and below z = 0 to avoid coplanar faces).
+  // Slot through the +X short wall only, bottom edge flush with the inner
+  // floor. The cutter starts slightly inside the cavity and overshoots outward.
   const slotDepth = WALL + 2
   const slot = cuboid({
-    size: [slotDepth, SLOT_WIDTH, SLOT_HEIGHT + 1],
-    center: [INNER_X / 2 + slotDepth / 2, 0, (SLOT_HEIGHT - 1) / 2]
+    size: [slotDepth, SLOT_WIDTH, SLOT_HEIGHT],
+    center: [INNER_X / 2 - EPS + slotDepth / 2, 0, WALL + SLOT_HEIGHT / 2]
   })
   return subtract(outer, cavity, slot)
 }
