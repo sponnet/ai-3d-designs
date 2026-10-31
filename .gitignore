@@ -17,3 +17,6 @@ designs/staircase/staircase.png
 # foamcutter build artifacts
 designs/foamcutter/foamcutter.stl
 designs/foamcutter/foamcutter.png
+
+# SolidCraft lock files next to open designs
+.~*.lock
